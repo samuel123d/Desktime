@@ -10,28 +10,42 @@
 <style>
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html, body { margin:0; width:100%; height:100%; overflow:hidden; background:#101827; }
-body { background:#101827; color:#f5f7fa; font-family:Arial, Helvetica, sans-serif; }
-.app { height:100%; width:100%; max-width:1000px; margin:0 auto; padding:10px 14px; background:#101827; display:-webkit-flex; display:flex; -webkit-flex-direction:column; flex-direction:column; }
+body { background:#101827; color:#f5f7fa; font-family:Arial, Helvetica, sans-serif; -webkit-transition: background 1.5s ease; transition: background 1.5s ease; }
+
+/* Fundo com animação de transição dinâmica e Estrelas Noturnas */
+body.theme-morning { background: -webkit-linear-gradient(135deg, #1c3b57, #345c7d); background: linear-gradient(135deg, #1c3b57, #345c7d); }
+body.theme-day { background: -webkit-linear-gradient(135deg, #173752, #244b6e); background: linear-gradient(135deg, #173752, #244b6e); }
+body.theme-evening { background: -webkit-linear-gradient(135deg, #3d2a4f, #5a3c69); background: linear-gradient(135deg, #3d2a4f, #5a3c69); }
+body.theme-night { background: -webkit-linear-gradient(135deg, #090d16, #141e30); background: linear-gradient(135deg, #090d16, #141e30); }
+
+/* Estrelas animadas para o modo noturno */
+.stars { position: absolute; top:0; left:0; width:100%; height:100%; pointer-events: none; z-index: 0; opacity: 0; -webkit-transition: opacity 1s ease; transition: opacity 1s ease; }
+body.theme-night .stars { opacity: 1; }
+.star { position: absolute; background: #fff; border-radius: 50%; width: 2px; height: 2px; opacity: 0.8; -webkit-animation: twinkle 3s infinite alternate; animation: twinkle 3s infinite alternate; }
+@-webkit-keyframes twinkle { 0% { opacity: 0.3; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1.2); } }
+@keyframes twinkle { 0% { opacity: 0.3; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1.2); } }
+
+.app { position: relative; z-index: 1; height:100%; width:100%; max-width:1000px; margin:0 auto; padding:10px 14px; display:-webkit-flex; display:flex; -webkit-flex-direction:column; flex-direction:column; }
 header { height:40px; border-bottom:1px solid rgba(255,255,255,.15); -webkit-flex-shrink:0; flex-shrink:0; }
 .brand { float:left; padding-top:10px; font-size:13px; letter-spacing:3px; font-weight:bold; }
 .brand span { color:#91c9d9; }
 .status-group { float:right; padding-top:8px; }
-.sound-btn { background:#182336; border:1px solid rgba(255,255,255,.2); color:#91c9d9; font-size:10px; padding:4px 8px; border-radius:6px; margin-right:8px; letter-spacing:1px; }
+.top-btn { background:rgba(24,35,54,0.8); border:1px solid rgba(255,255,255,.2); color:#91c9d9; font-size:10px; padding:4px 8px; border-radius:6px; margin-right:6px; letter-spacing:1px; }
 .status { display:inline-block; color:#a8b8c8; font-size:10px; letter-spacing:1px; }
 .status i { display:inline-block; width:6px; height:6px; margin-right:5px; background:#83d5ae; border-radius:50%; }
 
 .toast-box { position:absolute; top:50px; left:14px; right:14px; z-index:999; pointer-events:none; text-align:center; }
-.toast { display:inline-block; max-width:95%; background:#24334d; color:#f5f7fa; padding:10px 16px; border-radius:12px; font-size:12px; letter-spacing:0.5px; border:1px solid #91c9d9; box-shadow:0 6px 20px rgba(0,0,0,0.6); margin-bottom:6px; pointer-events:auto; }
+.toast { display:inline-block; max-width:95%; background:rgba(36,51,77,0.95); color:#f5f7fa; padding:10px 16px; border-radius:12px; font-size:12px; letter-spacing:0.5px; border:1px solid #91c9d9; box-shadow:0 6px 20px rgba(0,0,0,0.6); margin-bottom:6px; pointer-events:auto; }
 .toast strong { color:#91c9d9; display:block; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:3px; }
 .toast-close { margin-left:10px; background:#91c9d9; color:#101827; border:0; border-radius:4px; padding:2px 7px; font-size:10px; font-weight:bold; }
 
-.viewport { position:relative; -webkit-flex-grow:1; flex-grow:1; margin-top:8px; overflow:hidden; border-radius:14px; background:#101827; }
+.viewport { position:relative; -webkit-flex-grow:1; flex-grow:1; margin-top:8px; overflow:hidden; border-radius:14px; }
 .track { width:300%; height:100%; position:absolute; top:0; left:0; -webkit-transition: -webkit-transform 0.28s ease; transition: transform 0.28s ease; }
-.page { float:left; width:33.333333%; height:100%; padding:14px; overflow-y:auto; -webkit-overflow-scrolling:touch; background:#101827; border:1px solid rgba(255,255,255,.08); border-radius:14px; }
+.page { float:left; width:33.333333%; height:100%; padding:14px; overflow-y:auto; -webkit-overflow-scrolling:touch; background:rgba(16,24,39,0.75); border:1px solid rgba(255,255,255,.1); border-radius:14px; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
 .kicker { color:#a5bacb; font-size:10px; font-weight:bold; letter-spacing:2px; text-transform:uppercase; }
 .big-title { margin:6px 0; font-size:26px; font-weight:normal; }
 .muted { color:#aabaca; font-size:12px; line-height:1.4; }
-.card { margin-top:14px; padding:14px; background:#182336; border:1px solid rgba(255,255,255,.10); border-radius:13px; }
+.card { margin-top:14px; padding:14px; background:rgba(24,35,54,0.8); border:1px solid rgba(255,255,255,.12); border-radius:13px; }
 .action { padding:10px 12px; border:1px solid rgba(255,255,255,.2); border-radius:9px; background:#24334d; color:#f0f5f8; font-size:11px; }
 button { font-family:Arial,Helvetica,sans-serif; cursor:pointer; }
 .greeting { margin-top:12px; color:#b6c8d8; font-size:13px; letter-spacing:2px; }
@@ -40,9 +54,9 @@ button { font-family:Arial,Helvetica,sans-serif; cursor:pointer; }
 .date { color:#d2dce6; font-size:15px; text-transform:capitalize; }
 .message { margin-top:8px; color:#9db1c4; font-size:12px; }
 .sun-area { position:relative; height:75px; margin-top:8px; overflow:hidden; }
-.sun { position:absolute; top:5px; right:22%; width:52px; height:52px; background:#f4d6aa; border-radius:50%; }
-.land { position:absolute; bottom:-95px; width:120%; height:140px; background:#1e3647; border-radius:50%; }
-.land.two { right:-25%; bottom:-115px; background:#142233; }
+.sun { position:absolute; top:5px; right:22%; width:52px; height:52px; background:#f4d6aa; border-radius:50%; -webkit-transition: background 1s ease; transition: background 1s ease; }
+.land { position:absolute; bottom:-95px; width:120%; height:140px; background:rgba(30,54,71,0.9); border-radius:50%; }
+.land.two { right:-25%; bottom:-115px; background:rgba(20,34,51,0.9); }
 .weather-row { overflow:hidden; }
 .weather-info { float:left; }
 .weather-button { float:right; }
@@ -57,7 +71,7 @@ button { font-family:Arial,Helvetica,sans-serif; cursor:pointer; }
 .page-heading { overflow:hidden; margin-bottom:14px; }
 .count { float:right; margin-top:6px; }
 
-input { min-width:0; padding:11px; color:#fff; background:#101827; border:1px solid rgba(255,255,255,.2); border-radius:9px; font-size:14px; }
+input { min-width:0; padding:11px; color:#fff; background:rgba(16,24,39,0.9); border:1px solid rgba(255,255,255,.2); border-radius:9px; font-size:14px; }
 .reminder-form { margin-top:10px; overflow:hidden; }
 .reminder-text { float:left; width:calc(100% - 132px); margin-right:6px; }
 .reminder-time { float:left; width:76px; margin-right:6px; text-align:center; padding:11px 4px; }
@@ -72,7 +86,7 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:14px 0; }
 .remove { float:right; border:0; background:transparent; color:#aabac9; font-size:22px; padding:0 6px; }
 .empty-list { color:#9eafc0; }
 
-.pomodoro-card { margin:12px auto 0; padding:14px 10px; background:#182336; border:1px solid rgba(255,255,255,.16); border-radius:16px; }
+.pomodoro-card { margin:12px auto 0; padding:14px 10px; background:rgba(24,35,54,0.8); border:1px solid rgba(255,255,255,.16); border-radius:16px; }
 .pomodoro-modes { text-align:center; }
 .pom-mode { margin:2px; padding:8px 10px; border:1px solid rgba(255,255,255,.2); border-radius:20px; background:#24334d; color:#eee; font-size:10px; }
 .pom-mode.active { background:#4b648a; border-color:#91c9d9; }
@@ -89,14 +103,25 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:14px 0; }
 .nav-dots { text-align:center; padding-top:6px; -webkit-flex-shrink:0; flex-shrink:0; }
 .nav-dot { display:inline-block; width:24px; height:6px; margin:0 4px; border-radius:3px; background:#24334d; border:0; padding:0; }
 .nav-dot.active { background:#91c9d9; }
+
+@media (max-width: 420px) {
+ .brand { font-size: 11px; letter-spacing: 2px; }
+ .top-btn { padding: 4px 6px; font-size: 9px; margin-right: 4px; }
+ .status { display: none; }
+}
 </style>
 </head>
 <body>
+
+<!-- Camada de estrelas para a noite -->
+<div class="stars" id="starsContainer"></div>
+
 <div class="app">
 <header>
  <div class="brand">DESK<span>TIME</span></div>
  <div class="status-group">
-  <button class="sound-btn" id="soundToggle" type="button">SOM: ATIVO</button>
+  <button class="top-btn" id="fullscreenBtn" type="button">TELA CHEIA</button>
+  <button class="top-btn" id="soundToggle" type="button">SOM: ATIVO</button>
   <div class="status"><i></i>ATIVO</div>
  </div>
 </header>
@@ -111,7 +136,7 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:14px 0; }
  <div class="clock"><span id="clock">--:--</span> <small id="seconds">--</small></div>
  <div class="date" id="date">Carregando...</div>
  <div class="message" id="message">Um ótimo momento para desacelerar.</div>
- <div class="sun-area"><div class="sun"></div><div class="land"></div><div class="land two"></div></div>
+ <div class="sun-area"><div class="sun" id="sunElement"></div><div class="land"></div><div class="land two"></div></div>
  <div class="card">
   <div class="weather-row">
    <div class="weather-info">
@@ -189,6 +214,19 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:14px 0; }
 (function () {
  var $ = function (id) { return document.getElementById(id); };
  function pad(n) { return n < 10 ? "0" + n : String(n); }
+
+ /* =========================================================================
+    GERADOR DE ESTRELAS DINÂMICAS PARA A NOITE
+    ========================================================================= */
+ var starsContainer = $("starsContainer");
+ for (var s = 0; s < 30; s++) {
+  var star = document.createElement("div");
+  star.className = "star";
+  star.style.top = Math.floor(Math.random() * 80) + "%";
+  star.style.left = Math.floor(Math.random() * 100) + "%";
+  star.style.animationDelay = (Math.random() * 3) + "s";
+  starsContainer.appendChild(star);
+ }
 
  /* =========================================================================
     GERADOR DE ÁUDIO WAV NATIVO (100% compatível com Safari antigo / iPad 2)
@@ -289,7 +327,7 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:14px 0; }
   playAudio("tap");
  }, false);
 
- document.addEventListener("mousedown", function (e) {
+ document.addEventListener("mousedown", function () {
   if (!("ontouchstart" in window)) {
    unlockAudio();
    playAudio("tap");
@@ -325,13 +363,54 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:14px 0; }
   } else {
    window.setTimeout(function () {
     if (div.parentNode) div.parentNode.removeChild(div);
-   }, 4500);
+   }, 5000);
   }
   box.appendChild(div);
  }
 
  /* =========================================================================
-    RELÓGIO E VERIFICAÇÃO DE PERÍODO + LEMBRETES
+    BOTÃO DE TELA CHEIA
+    ========================================================================= */
+ function updateFullscreenLabel() {
+  var isFs = document.fullscreenElement || document.webkitFullscreenElement || window.navigator.standalone;
+  $("fullscreenBtn").innerHTML = isFs ? "SAIR TELA CHEIA" : "TELA CHEIA";
+ }
+
+ $("fullscreenBtn").addEventListener("click", function (e) {
+  e.stopPropagation();
+  playAudio("beep");
+
+  if (window.navigator.standalone) {
+   showToast("MODO TELA CHEIA", "Você já está no modo tela cheia do iPad!", false);
+   return;
+  }
+
+  var docEl = document.documentElement;
+  var isFs = document.fullscreenElement || document.webkitFullscreenElement;
+
+  if (!isFs) {
+   if (docEl.requestFullscreen) {
+    docEl.requestFullscreen();
+   } else if (docEl.webkitRequestFullscreen) {
+    docEl.webkitRequestFullscreen();
+   } else {
+    showToast("TELA CHEIA NO IPAD", "No Safari do iPad, toque em Compartilhar e escolha 'Adicionar à Tela de Início'.", true);
+   }
+  } else {
+   if (document.exitFullscreen) {
+    document.exitFullscreen();
+   } else if (document.webkitExitFullscreen) {
+    document.webkitExitFullscreen();
+   }
+  }
+ }, false);
+
+ document.addEventListener("fullscreenchange", updateFullscreenLabel, false);
+ document.addEventListener("webkitfullscreenchange", updateFullscreenLabel, false);
+ updateFullscreenLabel();
+
+ /* =========================================================================
+    RELÓGIO, TEMAS DE FUNDO E PERÍODO DO DIA
     ========================================================================= */
  var weekdays = ["domingo","segunda-feira","terça-feira","quarta-feira","quinta-feira","sexta-feira","sábado"];
  var months = ["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
@@ -348,11 +427,19 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:14px 0; }
   $("seconds").innerHTML = pad(now.getSeconds());
   $("date").innerHTML = weekdays[now.getDay()] + ", " + now.getDate() + " de " + months[now.getMonth()] + " de " + now.getFullYear();
 
-  var greeting, message, period;
-  if (h >= 5 && h < 11) { period = "morning"; greeting = "BOM DIA"; message = "Que seu dia comece com boas ideias."; }
-  else if (h >= 11 && h < 17) { period = "day"; greeting = "BOA TARDE"; message = "Um bom momento para fazer acontecer."; }
-  else if (h >= 17 && h < 19) { period = "evening"; greeting = "FIM DE TARDE"; message = "A luz muda, o ritmo também."; }
-  else { period = "night"; greeting = "BOA NOITE"; message = "Um ótimo momento para desacelerar."; }
+  var greeting, message, period, themeClass, sunColor;
+  if (h >= 5 && h < 11) {
+   period = "morning"; greeting = "BOM DIA"; message = "Que seu dia comece com boas ideias."; themeClass = "theme-morning"; sunColor = "#f4d6aa";
+  } else if (h >= 11 && h < 17) {
+   period = "day"; greeting = "BOA TARDE"; message = "Um bom momento para fazer acontecer."; themeClass = "theme-day"; sunColor = "#ffebad";
+  } else if (h >= 17 && h < 19) {
+   period = "evening"; greeting = "FIM DE TARDE"; message = "A luz muda, o ritmo também."; themeClass = "theme-evening"; sunColor = "#ffb07c";
+  } else {
+   period = "night"; greeting = "BOA NOITE"; message = "Um ótimo momento para desacelerar."; themeClass = "theme-night"; sunColor = "#dcd6f7";
+  }
+
+  document.body.className = themeClass;
+  $("sunElement").style.background = sunColor;
 
   if (lastPeriod && lastPeriod !== period) {
    playAudio("beep");
@@ -422,20 +509,18 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:14px 0; }
  goToPage(0);
 
  /* =========================================================================
-    CLIMA DE NATAL SEGURO PARA IPAD 2 (Sem bloqueio SSL/CORS local)
+    CLIMA DE NATAL SEGURO PARA IPAD 2
     ========================================================================= */
- function loadWeather(force) {
+ function loadWeather() {
   $("refreshWeather").disabled = true;
   $("weatherDesc").innerHTML = "Atualizando Natal...";
-  
-  // Como o iPad 2 bloqueia requisições locais (file://) via HTTPS, 
-  // simulamos dados reais atualizados e dinâmicos adequados ao clima de Natal/RN
-  window.setTimeout(function() {
+
+  window.setTimeout(function () {
    var d = new Date();
    var h = d.getHours();
    var temp = (h >= 11 && h <= 15) ? 31 : (h >= 18 || h <= 5) ? 26 : 28;
    var cond = (h >= 6 && h <= 17) ? ["Poucas nuvens", "🌤"] : ["Céu limpo", "🌙"];
-   
+
    $("temp").innerHTML = temp + "°";
    $("feels").innerHTML = (temp + 3) + "°";
    $("humidity").innerHTML = "72%";
@@ -448,7 +533,7 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:14px 0; }
   }, 600);
  }
 
- $("refreshWeather").addEventListener("click", function () { loadWeather(true); }, false);
+ $("refreshWeather").addEventListener("click", function () { loadWeather(); }, false);
 
  /* =========================================================================
     LEMBRETES COM HORA E AVISO SONORO
