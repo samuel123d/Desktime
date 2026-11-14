@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="DeskTime">
+<meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#101827">
 <title>DeskTime</title>
 <style>
@@ -12,7 +14,7 @@
 html, body { margin:0; width:100%; height:100%; overflow:hidden; background:#101827; }
 body { background:#101827; color:#f5f7fa; font-family:Arial, Helvetica, sans-serif; -webkit-transition: background 1.5s ease; transition: background 1.5s ease; }
 
-/* Fundo com animação de transição dinâmica e Estrelas Noturnas */
+/* Temas dinâmicos por período do dia */
 body.theme-morning { background: -webkit-linear-gradient(135deg, #1c3b57, #345c7d); background: linear-gradient(135deg, #1c3b57, #345c7d); }
 body.theme-day { background: -webkit-linear-gradient(135deg, #173752, #244b6e); background: linear-gradient(135deg, #173752, #244b6e); }
 body.theme-evening { background: -webkit-linear-gradient(135deg, #3d2a4f, #5a3c69); background: linear-gradient(135deg, #3d2a4f, #5a3c69); }
@@ -22,62 +24,109 @@ body.theme-night { background: -webkit-linear-gradient(135deg, #090d16, #141e30)
 .stars { position: absolute; top:0; left:0; width:100%; height:100%; pointer-events: none; z-index: 0; opacity: 0; -webkit-transition: opacity 1s ease; transition: opacity 1s ease; }
 body.theme-night .stars { opacity: 1; }
 .star { position: absolute; background: #fff; border-radius: 50%; width: 2px; height: 2px; opacity: 0.8; -webkit-animation: twinkle 3s infinite alternate; animation: twinkle 3s infinite alternate; }
-@-webkit-keyframes twinkle { 0% { opacity: 0.3; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1.2); } }
-@keyframes twinkle { 0% { opacity: 0.3; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1.2); } }
+@-webkit-keyframes twinkle { 0% { opacity: 0.25; -webkit-transform: scale(0.8); } 100% { opacity: 1; -webkit-transform: scale(1.25); } }
+@keyframes twinkle { 0% { opacity: 0.25; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1.25); } }
 
-.app { position: relative; z-index: 1; height:100%; width:100%; max-width:1000px; margin:0 auto; padding:10px 14px; display:-webkit-flex; display:flex; -webkit-flex-direction:column; flex-direction:column; }
-header { height:40px; border-bottom:1px solid rgba(255,255,255,.15); -webkit-flex-shrink:0; flex-shrink:0; }
-.brand { float:left; padding-top:10px; font-size:13px; letter-spacing:3px; font-weight:bold; }
+.app { position: relative; z-index: 1; height:100%; width:100%; max-width:1024px; margin:0 auto; padding:10px 14px; display:-webkit-flex; display:flex; -webkit-flex-direction:column; flex-direction:column; }
+
+/* Cabeçalho com Logo SVG */
+header { height:42px; border-bottom:1px solid rgba(255,255,255,.15); -webkit-flex-shrink:0; flex-shrink:0; }
+.brand { float:left; padding-top:6px; font-size:13px; letter-spacing:3px; font-weight:bold; line-height:26px; }
+.brand-logo { float:left; width:26px; height:26px; margin-right:8px; }
+.brand-text { float:left; }
 .brand span { color:#91c9d9; }
-.status-group { float:right; padding-top:8px; }
-.top-btn { background:rgba(24,35,54,0.8); border:1px solid rgba(255,255,255,.2); color:#91c9d9; font-size:10px; padding:4px 8px; border-radius:6px; margin-right:6px; letter-spacing:1px; }
-.status { display:inline-block; color:#a8b8c8; font-size:10px; letter-spacing:1px; }
+.status-group { float:right; padding-top:7px; }
+.top-btn { background:rgba(24,35,54,0.85); border:1px solid rgba(255,255,255,.22); color:#91c9d9; font-size:10px; padding:5px 8px; border-radius:6px; margin-right:5px; letter-spacing:1px; }
+.top-btn.highlight { background:#243b57; border-color:#91c9d9; color:#ffffff; }
+.status { display:inline-block; color:#a8b8c8; font-size:10px; letter-spacing:1px; margin-left:3px; }
 .status i { display:inline-block; width:6px; height:6px; margin-right:5px; background:#83d5ae; border-radius:50%; }
 
-.toast-box { position:absolute; top:50px; left:14px; right:14px; z-index:999; pointer-events:none; text-align:center; }
-.toast { display:inline-block; max-width:95%; background:rgba(36,51,77,0.95); color:#f5f7fa; padding:10px 16px; border-radius:12px; font-size:12px; letter-spacing:0.5px; border:1px solid #91c9d9; box-shadow:0 6px 20px rgba(0,0,0,0.6); margin-bottom:6px; pointer-events:auto; }
+/* Notificações Toast */
+.toast-box { position:absolute; top:52px; left:14px; right:14px; z-index:999; pointer-events:none; text-align:center; }
+.toast { display:inline-block; max-width:95%; background:rgba(36,51,77,0.96); color:#f5f7fa; padding:10px 16px; border-radius:12px; font-size:12px; letter-spacing:0.5px; border:1px solid #91c9d9; box-shadow:0 6px 20px rgba(0,0,0,0.6); margin-bottom:6px; pointer-events:auto; }
 .toast strong { color:#91c9d9; display:block; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:3px; }
-.toast-close { margin-left:10px; background:#91c9d9; color:#101827; border:0; border-radius:4px; padding:2px 7px; font-size:10px; font-weight:bold; }
+.toast-close { margin-left:10px; background:#91c9d9; color:#101827; border:0; border-radius:4px; padding:3px 8px; font-size:10px; font-weight:bold; }
 
+/* Área principal deslizante (4 páginas = 400%) */
 .viewport { position:relative; -webkit-flex-grow:1; flex-grow:1; margin-top:8px; overflow:hidden; border-radius:14px; }
-.track { width:300%; height:100%; position:absolute; top:0; left:0; -webkit-transition: -webkit-transform 0.28s ease; transition: transform 0.28s ease; }
-.page { float:left; width:33.333333%; height:100%; padding:14px; overflow-y:auto; -webkit-overflow-scrolling:touch; background:rgba(16,24,39,0.75); border:1px solid rgba(255,255,255,.1); border-radius:14px; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+.track { width:400%; height:100%; position:absolute; top:0; left:0; -webkit-transition: -webkit-transform 0.28s ease; transition: transform 0.28s ease; }
+.page { float:left; width:25%; height:100%; padding:14px; overflow-y:auto; -webkit-overflow-scrolling:touch; background:rgba(16,24,39,0.76); border:1px solid rgba(255,255,255,.1); border-radius:14px; }
+
 .kicker { color:#a5bacb; font-size:10px; font-weight:bold; letter-spacing:2px; text-transform:uppercase; }
-.big-title { margin:6px 0; font-size:26px; font-weight:normal; }
+.big-title { margin:4px 0; font-size:24px; font-weight:normal; }
 .muted { color:#aabaca; font-size:12px; line-height:1.4; }
-.card { margin-top:14px; padding:14px; background:rgba(24,35,54,0.8); border:1px solid rgba(255,255,255,.12); border-radius:13px; }
-.action { padding:10px 12px; border:1px solid rgba(255,255,255,.2); border-radius:9px; background:#24334d; color:#f0f5f8; font-size:11px; }
+.card { margin-top:12px; padding:13px; background:rgba(24,35,54,0.82); border:1px solid rgba(255,255,255,.12); border-radius:13px; }
+.action { padding:9px 11px; border:1px solid rgba(255,255,255,.22); border-radius:9px; background:#24334d; color:#f0f5f8; font-size:11px; letter-spacing:0.5px; }
+.action.active-btn { background:#4b648a; border-color:#91c9d9; color:#ffffff; font-weight:bold; }
 button { font-family:Arial,Helvetica,sans-serif; cursor:pointer; }
-.greeting { margin-top:12px; color:#b6c8d8; font-size:13px; letter-spacing:2px; }
-.clock { margin-top:6px; color:#f4f7fb; font-size:68px; font-weight:normal; letter-spacing:-3px; white-space:nowrap; }
+
+/* Página 1: Início */
+.greeting { margin-top:8px; color:#b6c8d8; font-size:13px; letter-spacing:2px; }
+.clock { margin-top:4px; color:#f4f7fb; font-size:64px; font-weight:normal; letter-spacing:-3px; white-space:nowrap; }
 .clock small { color:#a8bdce; font-size:20px; letter-spacing:0; }
 .date { color:#d2dce6; font-size:15px; text-transform:capitalize; }
-.message { margin-top:8px; color:#9db1c4; font-size:12px; }
-.sun-area { position:relative; height:75px; margin-top:8px; overflow:hidden; }
-.sun { position:absolute; top:5px; right:22%; width:52px; height:52px; background:#f4d6aa; border-radius:50%; -webkit-transition: background 1s ease; transition: background 1s ease; }
-.land { position:absolute; bottom:-95px; width:120%; height:140px; background:rgba(30,54,71,0.9); border-radius:50%; }
-.land.two { right:-25%; bottom:-115px; background:rgba(20,34,51,0.9); }
+.message { margin-top:6px; color:#9db1c4; font-size:12px; }
+.sun-area { position:relative; height:64px; margin-top:6px; overflow:hidden; }
+.sun { position:absolute; top:4px; right:22%; width:48px; height:48px; background:#f4d6aa; border-radius:50%; -webkit-transition: background 1s ease; transition: background 1s ease; }
+.land { position:absolute; bottom:-98px; width:120%; height:140px; background:rgba(30,54,71,0.9); border-radius:50%; }
+.land.two { right:-25%; bottom:-116px; background:rgba(20,34,51,0.9); }
+
 .weather-row { overflow:hidden; }
 .weather-info { float:left; }
 .weather-button { float:right; }
-.weather-main { margin-top:6px; }
-.temperature { display:inline-block; margin-right:8px; font-size:30px; }
-.weather-icon { display:inline-block; font-size:22px; }
+.weather-main { margin-top:4px; }
+.temperature { display:inline-block; margin-right:8px; font-size:28px; }
+.weather-icon { display:inline-block; font-size:21px; }
 .weather-description { color:#aabaca; font-size:11px; }
-.weather-details { margin-top:12px; padding-top:10px; border-top:1px solid rgba(255,255,255,.12); overflow:hidden; }
+.weather-details { margin-top:10px; padding-top:8px; border-top:1px solid rgba(255,255,255,.12); overflow:hidden; }
 .weather-details div { float:left; width:33.33%; }
 .weather-details small { display:block; color:#9aafc1; font-size:10px; }
-.weather-details strong { display:block; margin-top:4px; font-size:13px; }
-.page-heading { overflow:hidden; margin-bottom:14px; }
-.count { float:right; margin-top:6px; }
+.weather-details strong { display:block; margin-top:3px; font-size:13px; }
 
+/* Mini Porta-Retrato na Tela Inicial */
+.mini-frame-card { margin-top:12px; padding:12px; background:rgba(24,35,54,0.82); border:1px solid rgba(255,255,255,.12); border-radius:13px; overflow:hidden; }
+.mini-frame-box { position:relative; float:left; width:130px; height:96px; background:#090e17; border-radius:9px; border:1px solid rgba(255,255,255,.18); overflow:hidden; margin-right:12px; }
+.mini-frame-box img { position:absolute; top:0; bottom:0; left:0; right:0; margin:auto; max-width:100%; max-height:100%; width:auto; height:auto; }
+.mini-frame-info { overflow:hidden; }
+.mini-frame-actions { margin-top:8px; }
+.mini-frame-actions button { padding:6px 9px; font-size:10px; margin-right:4px; margin-bottom:4px; }
+
+/* Página 2: Porta-Retrato & Carrossel */
+.frame-header { overflow:hidden; margin-bottom:8px; }
+.frame-header-left { float:left; }
+.frame-header-right { float:right; padding-top:4px; }
+.mode-pill { display:inline-block; padding:4px 9px; border-radius:12px; font-size:10px; font-weight:bold; letter-spacing:1px; background:#243b57; color:#91c9d9; border:1px solid #91c9d9; }
+.mode-pill.fixed { background:#3d2f4d; color:#f4d6aa; border-color:#f4d6aa; }
+
+.photo-stage { position:relative; width:100%; height:310px; background: -webkit-radial-gradient(center, ellipse cover, #182336 0%, #070b12 100%); background: radial-gradient(ellipse at center, #182336 0%, #070b12 100%); border:1px solid rgba(255,255,255,.18); border-radius:14px; overflow:hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.45); }
+.photo-stage img { position:absolute; top:0; bottom:0; left:0; right:0; margin:auto; max-width:100%; max-height:100%; width:auto; height:auto; -webkit-transition: opacity 0.45s ease; transition: opacity 0.45s ease; }
+.photo-stage img.fit-cover { width:100%; height:100%; max-width:none; max-height:none; object-fit:cover; }
+.photo-stage img.fading { opacity: 0.15; }
+
+.stage-badge { position:absolute; top:10px; left:10px; background:rgba(10,16,28,0.78); color:#f5f7fa; font-size:10px; letter-spacing:1.5px; padding:5px 9px; border-radius:8px; border:1px solid rgba(255,255,255,.16); z-index:2; }
+.stage-fullscreen-btn { position:absolute; top:10px; right:10px; background:rgba(10,16,28,0.82); color:#91c9d9; font-size:10px; font-weight:bold; letter-spacing:1px; padding:6px 10px; border-radius:8px; border:1px solid #91c9d9; z-index:2; }
+.stage-progress { position:absolute; bottom:0; left:0; width:100%; height:4px; background:rgba(255,255,255,0.12); z-index:2; }
+.stage-progress-bar { height:4px; width:0%; background:#91c9d9; }
+
+.frame-controls { margin-top:10px; padding:10px; background:rgba(24,35,54,0.82); border:1px solid rgba(255,255,255,.12); border-radius:12px; text-align:center; }
+.control-row { margin-bottom:8px; }
+.control-row:last-child { margin-bottom:0; }
+.frame-controls button { margin:2px; }
+
+.thumbs-strip { margin-top:10px; overflow:hidden; text-align:center; }
+.thumb-item { display:inline-block; position:relative; width:14.5%; height:58px; margin:0 0.8%; background:#080d16; border:2px solid rgba(255,255,255,.18); border-radius:8px; overflow:hidden; vertical-align:top; cursor:pointer; }
+.thumb-item.active { border-color:#91c9d9; box-shadow:0 0 10px rgba(145,201,217,0.55); }
+.thumb-item img { position:absolute; top:0; bottom:0; left:0; right:0; margin:auto; max-width:100%; max-height:100%; width:auto; height:auto; }
+
+/* Página 3: Lembretes */
+.page-heading { overflow:hidden; margin-bottom:12px; }
+.count { float:right; margin-top:6px; }
 input { min-width:0; padding:11px; color:#fff; background:rgba(16,24,39,0.9); border:1px solid rgba(255,255,255,.2); border-radius:9px; font-size:14px; }
 .reminder-form { margin-top:10px; overflow:hidden; }
 .reminder-text { float:left; width:calc(100% - 132px); margin-right:6px; }
 .reminder-time { float:left; width:76px; margin-right:6px; text-align:center; padding:11px 4px; }
 .add { float:right; width:44px; height:41px; border:0; border-radius:9px; background:#c3dce6; color:#182b3c; font-size:22px; font-weight:bold; }
-
-hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:14px 0; }
+hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
 .reminders { list-style:none; margin:0; padding:0; }
 .reminders li { min-height:44px; padding:10px 4px; border-bottom:1px solid rgba(255,255,255,.10); font-size:13px; overflow:hidden; }
 .reminders li .rem-content { float:left; width:82%; overflow-wrap:break-word; }
@@ -86,40 +135,75 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:14px 0; }
 .remove { float:right; border:0; background:transparent; color:#aabac9; font-size:22px; padding:0 6px; }
 .empty-list { color:#9eafc0; }
 
-.pomodoro-card { margin:12px auto 0; padding:14px 10px; background:rgba(24,35,54,0.8); border:1px solid rgba(255,255,255,.16); border-radius:16px; }
+/* Página 4: Pomodoro */
+.pomodoro-card { margin:12px auto 0; padding:14px 10px; background:rgba(24,35,54,0.82); border:1px solid rgba(255,255,255,.16); border-radius:16px; }
 .pomodoro-modes { text-align:center; }
 .pom-mode { margin:2px; padding:8px 10px; border:1px solid rgba(255,255,255,.2); border-radius:20px; background:#24334d; color:#eee; font-size:10px; }
 .pom-mode.active { background:#4b648a; border-color:#91c9d9; }
-.timer-face { padding:20px 0 15px; text-align:center; }
-.timer-time { color:#fff; font-size:64px; font-weight:normal; letter-spacing:-3px; }
+.timer-face { padding:18px 0 14px; text-align:center; }
+.timer-time { color:#fff; font-size:62px; font-weight:normal; letter-spacing:-3px; }
 .timer-caption { margin-top:6px; color:#b6c8d8; font-size:11px; letter-spacing:2px; }
 .pom-progress { max-width:500px; height:5px; margin:0 auto; overflow:hidden; background:#24334d; border-radius:5px; }
 .pom-progress div { height:5px; width:100%; background:#91c9d9; }
-.pom-controls { margin-top:15px; text-align:center; }
+.pom-controls { margin-top:14px; text-align:center; }
 .pom-controls button { margin:3px; min-width:85px; }
 .pom-status { margin:12px auto 0; text-align:center; }
 .pomodoro-tip { margin:12px 4px; }
 .pomodoro-tip p { color:#aabaca; font-size:11px; line-height:1.5; }
-.nav-dots { text-align:center; padding-top:6px; -webkit-flex-shrink:0; flex-shrink:0; }
-.nav-dot { display:inline-block; width:24px; height:6px; margin:0 4px; border-radius:3px; background:#24334d; border:0; padding:0; }
-.nav-dot.active { background:#91c9d9; }
 
-@media (max-width: 420px) {
+/* Barra de navegação inferior */
+.nav-bar { text-align:center; padding-top:7px; -webkit-flex-shrink:0; flex-shrink:0; }
+.nav-tab { display:inline-block; padding:5px 10px; margin:0 3px; border-radius:12px; background:rgba(36,51,77,0.85); border:1px solid rgba(255,255,255,.14); color:#9eb2c4; font-size:10px; letter-spacing:1px; }
+.nav-tab.active { background:#2c4666; border-color:#91c9d9; color:#ffffff; font-weight:bold; }
+
+/* Modo Quadro Tela Cheia (Zen Digital Frame) */
+.zen-frame { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#04070d; z-index:900; overflow:hidden; }
+.zen-frame.open { display:block; }
+.zen-frame img { position:absolute; top:0; bottom:0; left:0; right:0; margin:auto; max-width:100%; max-height:100%; width:auto; height:auto; -webkit-transition: opacity 0.5s ease; transition: opacity 0.5s ease; }
+.zen-frame img.fit-cover { width:100%; height:100%; max-width:none; max-height:none; object-fit:cover; }
+.zen-frame img.fading { opacity:0.1; }
+
+.zen-clock-widget { position:absolute; bottom:18px; left:18px; background:rgba(10,16,28,0.68); border:1px solid rgba(255,255,255,.16); border-radius:14px; padding:10px 16px; z-index:910; pointer-events:none; }
+.zen-clock-time { font-size:34px; color:#f5f7fa; letter-spacing:-1px; }
+.zen-clock-date { font-size:11px; color:#b6c8d8; text-transform:capitalize; margin-top:2px; }
+
+.zen-hud { position:absolute; top:16px; left:16px; right:16px; text-align:center; z-index:920; -webkit-transition: opacity 0.35s ease; transition: opacity 0.35s ease; }
+.zen-hud.hidden { opacity:0; pointer-events:none; }
+.zen-hud-inner { display:inline-block; background:rgba(12,19,33,0.85); border:1px solid rgba(145,201,217,0.45); border-radius:14px; padding:8px 12px; }
+.zen-hud button { margin:2px; }
+
+@media (max-width: 480px) {
  .brand { font-size: 11px; letter-spacing: 2px; }
- .top-btn { padding: 4px 6px; font-size: 9px; margin-right: 4px; }
+ .top-btn { padding: 4px 6px; font-size: 9px; margin-right: 3px; }
  .status { display: none; }
+ .photo-stage { height: 230px; }
+ .thumb-item { height: 44px; }
 }
 </style>
 </head>
 <body>
 
-<!-- Camada de estrelas para a noite -->
 <div class="stars" id="starsContainer"></div>
 
 <div class="app">
 <header>
- <div class="brand">DESK<span>TIME</span></div>
+ <div class="brand">
+  <svg class="brand-logo" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+   <defs>
+    <linearGradient id="dtGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+     <stop offset="0%" stop-color="#2b4c6f"/>
+     <stop offset="100%" stop-color="#132238"/>
+    </linearGradient>
+   </defs>
+   <rect x="1" y="1" width="34" height="34" rx="9" fill="url(#dtGrad)" stroke="#91c9d9" stroke-width="1.5"/>
+   <circle cx="18" cy="18" r="10" fill="none" stroke="#91c9d9" stroke-width="1.8" opacity="0.85"/>
+   <circle cx="24" cy="11" r="2.6" fill="#f4d6aa"/>
+   <path d="M18 12 L18 18 L22.5 20.5" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  <div class="brand-text">DESK<span>TIME</span></div>
+ </div>
  <div class="status-group">
+  <button class="top-btn highlight" id="openZenTopBtn" type="button">QUADRO</button>
   <button class="top-btn" id="fullscreenBtn" type="button">TELA CHEIA</button>
   <button class="top-btn" id="soundToggle" type="button">SOM: ATIVO</button>
   <div class="status"><i></i>ATIVO</div>
@@ -130,6 +214,8 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:14px 0; }
 
 <main class="viewport" id="viewport">
 <div class="track" id="track">
+
+<!-- PÁGINA 1: INÍCIO -->
 <section class="page" aria-label="Início">
  <div class="kicker">SEU ESPAÇO</div>
  <div class="greeting" id="greeting">BOA NOITE</div>
@@ -137,24 +223,83 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:14px 0; }
  <div class="date" id="date">Carregando...</div>
  <div class="message" id="message">Um ótimo momento para desacelerar.</div>
  <div class="sun-area"><div class="sun" id="sunElement"></div><div class="land"></div><div class="land two"></div></div>
+
  <div class="card">
   <div class="weather-row">
    <div class="weather-info">
     <div class="kicker">NATAL · RIO GRANDE DO NORTE</div>
-    <div class="weather-main"><span class="temperature" id="temp">29°</span><span class="weather-icon" id="weatherIcon">🌤</span><div class="weather-description" id="weatherDesc">Poucas nuvens</div></div>
+    <div class="weather-main"><span class="temperature" id="temp">28°</span><span class="weather-icon" id="weatherIcon">🌤</span><div class="weather-description" id="weatherDesc">Poucas nuvens</div></div>
    </div>
    <button class="action weather-button" id="refreshWeather" type="button">ATUALIZAR</button>
   </div>
   <div class="weather-details">
-   <div><small>Sensação</small><strong id="feels">32°</strong></div>
-   <div><small>Umidade</small><strong id="humidity">75%</strong></div>
+   <div><small>Sensação</small><strong id="feels">31°</strong></div>
+   <div><small>Umidade</small><strong id="humidity">72%</strong></div>
    <div><small>Chuva agora</small><strong id="rain">Não</strong></div>
   </div>
   <div class="muted" id="weatherFoot" style="margin-top:8px">Clima de Natal · Sincronizado</div>
  </div>
- <p class="muted" style="margin-top:12px;">Deslize para o lado ou toque nas barras abaixo para navegar.</p>
+
+ <div class="mini-frame-card">
+  <div class="mini-frame-box" id="miniFrameBox">
+   <img id="miniPhotoImg" referrerpolicy="no-referrer" alt="Foto em destaque">
+  </div>
+  <div class="mini-frame-info">
+   <div class="kicker">PORTA-RETRATO · <span id="miniModeLabel">CARROSSEL</span></div>
+   <div class="muted" id="miniPhotoCaption" style="margin-top:4px;">Foto 1 de 6 (Inteira)</div>
+   <div class="mini-frame-actions">
+    <button class="action" id="miniPrevBtn" type="button">◀</button>
+    <button class="action" id="miniNextBtn" type="button">▶</button>
+    <button class="action active-btn" id="miniOpenGalleryBtn" type="button">GALERIA</button>
+    <button class="action" id="miniOpenZenBtn" type="button">QUADRO CHEIO</button>
+   </div>
+  </div>
+ </div>
 </section>
 
+<!-- PÁGINA 2: FOTOS (CARROSSEL & QUADRO FIXO) -->
+<section class="page" aria-label="Fotos">
+ <div class="frame-header">
+  <div class="frame-header-left">
+   <div class="kicker">PORTA-RETRATO DIGITAL</div>
+   <div class="big-title">Galeria &amp; Quadro</div>
+  </div>
+  <div class="frame-header-right">
+   <span class="mode-pill" id="frameModeBadge">CARROSSEL AUTO</span>
+  </div>
+ </div>
+
+ <div class="photo-stage" id="photoStage">
+  <div class="stage-badge" id="stageCounter">FOTO 1 / 6</div>
+  <button class="stage-fullscreen-btn" id="stageZenBtn" type="button">TELA CHEIA</button>
+  <img id="mainPhotoImg" referrerpolicy="no-referrer" alt="Foto do porta-retrato">
+  <div class="stage-progress" id="stageProgressWrap"><div class="stage-progress-bar" id="stageProgressBar"></div></div>
+ </div>
+
+ <div class="frame-controls">
+  <div class="control-row">
+   <button class="action active-btn" id="modeCarouselBtn" type="button">MODO CARROSSEL</button>
+   <button class="action" id="modeFixedBtn" type="button">QUADRO FIXO (RETRATO)</button>
+  </div>
+  <div class="control-row">
+   <button class="action" id="prevPhotoBtn" type="button">◀ ANTERIOR</button>
+   <button class="action" id="playPausePhotoBtn" type="button">PAUSAR</button>
+   <button class="action" id="nextPhotoBtn" type="button">PRÓXIMA ▶</button>
+   <button class="action" id="fitToggleBtn" type="button">FOTO: INTEIRA</button>
+  </div>
+  <div class="control-row" id="intervalRow">
+   <span class="kicker" style="margin-right:6px;">TEMPO:</span>
+   <button class="action interval-btn" data-sec="5" type="button">5s</button>
+   <button class="action interval-btn active-btn" data-sec="10" type="button">10s</button>
+   <button class="action interval-btn" data-sec="20" type="button">20s</button>
+   <button class="action interval-btn" data-sec="60" type="button">60s</button>
+  </div>
+ </div>
+
+ <div class="thumbs-strip" id="thumbsStrip"></div>
+</section>
+
+<!-- PÁGINA 3: LEMBRETES -->
 <section class="page" aria-label="Agenda">
  <div class="page-heading">
   <div class="count kicker" id="count">0 ITENS</div>
@@ -176,6 +321,7 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:14px 0; }
  <p class="muted">Os avisos tocam na hora exata marcada.</p>
 </section>
 
+<!-- PÁGINA 4: POMODORO -->
 <section class="page" aria-label="Pomodoro">
  <div class="kicker">FOCO E PRODUTIVIDADE</div>
  <div class="big-title">Seu momento de foco.</div>
@@ -200,14 +346,35 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:14px 0; }
  </div>
  <div class="pomodoro-tip"><span class="kicker">DICA</span><p>Ao clicar em começar, uma contagem 1, 2, 3 tocará antes do tempo iniciar.</p></div>
 </section>
+
 </div>
 </main>
 
-<div class="nav-dots" id="navDots">
- <button class="nav-dot active" data-page="0" type="button" aria-label="Início"></button>
- <button class="nav-dot" data-page="1" type="button" aria-label="Lembretes"></button>
- <button class="nav-dot" data-page="2" type="button" aria-label="Pomodoro"></button>
+<div class="nav-bar" id="navBar">
+ <button class="nav-tab active" data-page="0" type="button">INÍCIO</button>
+ <button class="nav-tab" data-page="1" type="button">FOTOS</button>
+ <button class="nav-tab" data-page="2" type="button">LEMBRETES</button>
+ <button class="nav-tab" data-page="3" type="button">FOCO</button>
 </div>
+</div>
+
+<!-- MODO QUADRO TELA CHEIA (ZEN FRAME) -->
+<div class="zen-frame" id="zenFrame">
+ <img id="zenPhotoImg" referrerpolicy="no-referrer" alt="Quadro Tela Cheia">
+ <div class="zen-clock-widget">
+  <div class="zen-clock-time" id="zenClock">--:--</div>
+  <div class="zen-clock-date" id="zenDate">--</div>
+ </div>
+ <div class="zen-hud" id="zenHud">
+  <div class="zen-hud-inner">
+   <button class="action" id="zenPrevBtn" type="button">◀</button>
+   <button class="action" id="zenPlayPauseBtn" type="button">PAUSAR</button>
+   <button class="action" id="zenModeToggleBtn" type="button">CARROSSEL</button>
+   <button class="action" id="zenFitToggleBtn" type="button">INTEIRA</button>
+   <button class="action" id="zenNextBtn" type="button">▶</button>
+   <button class="action active-btn" id="zenCloseBtn" type="button">SAIR DO QUADRO</button>
+  </div>
+ </div>
 </div>
 
 <script type="text/javascript">
@@ -216,7 +383,58 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:14px 0; }
  function pad(n) { return n < 10 ? "0" + n : String(n); }
 
  /* =========================================================================
-    GERADOR DE ESTRELAS DINÂMICAS PARA A NOITE
+    GERADOR DE ÍCONE DINÂMICO PARA TELA DE INÍCIO DO IPAD
+    ========================================================================= */
+ (function generateAppIcon() {
+  try {
+   var canvas = document.createElement("canvas");
+   canvas.width = 180;
+   canvas.height = 180;
+   var ctx = canvas.getContext("2d");
+   if (!ctx) return;
+
+   var grad = ctx.createLinearGradient(0, 0, 180, 180);
+   grad.addColorStop(0, "#244b6e");
+   grad.addColorStop(1, "#0d1626");
+   ctx.fillStyle = grad;
+   ctx.fillRect(0, 0, 180, 180);
+
+   ctx.strokeStyle = "#91c9d9";
+   ctx.lineWidth = 7;
+   ctx.beginPath();
+   ctx.arc(90, 90, 52, 0, Math.PI * 2, false);
+   ctx.stroke();
+
+   ctx.fillStyle = "#f4d6aa";
+   ctx.beginPath();
+   ctx.arc(128, 48, 12, 0, Math.PI * 2, false);
+   ctx.fill();
+
+   ctx.strokeStyle = "#ffffff";
+   ctx.lineWidth = 8;
+   ctx.lineCap = "round";
+   ctx.lineJoin = "round";
+   ctx.beginPath();
+   ctx.moveTo(90, 58);
+   ctx.lineTo(90, 90);
+   ctx.lineTo(114, 104);
+   ctx.stroke();
+
+   var dataUrl = canvas.toDataURL("image/png");
+   var linkTouch = document.createElement("link");
+   linkTouch.rel = "apple-touch-icon";
+   linkTouch.href = dataUrl;
+   document.getElementsByTagName("head")[0].appendChild(linkTouch);
+
+   var linkIcon = document.createElement("link");
+   linkIcon.rel = "icon";
+   linkIcon.href = dataUrl;
+   document.getElementsByTagName("head")[0].appendChild(linkIcon);
+  } catch (e) {}
+ })();
+
+ /* =========================================================================
+    ESTRELAS DINÂMICAS PARA A NOITE
     ========================================================================= */
  var starsContainer = $("starsContainer");
  for (var s = 0; s < 30; s++) {
@@ -224,12 +442,13 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:14px 0; }
   star.className = "star";
   star.style.top = Math.floor(Math.random() * 80) + "%";
   star.style.left = Math.floor(Math.random() * 100) + "%";
+  star.style.webkitAnimationDelay = (Math.random() * 3) + "s";
   star.style.animationDelay = (Math.random() * 3) + "s";
   starsContainer.appendChild(star);
  }
 
  /* =========================================================================
-    GERADOR DE ÁUDIO WAV NATIVO (100% compatível com Safari antigo / iPad 2)
+    ÁUDIO WAV NATIVO (100% compatível com Safari antigo / iPad 2)
     ========================================================================= */
  var soundEnabled = true;
  var sounds = {};
@@ -290,7 +509,7 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:14px 0; }
  }
 
  try {
-  sounds.tap = new Audio(createWavDataURI(750, 0.045, 0.35));
+  sounds.tap = new Audio(createWavDataURI(750, 0.04, 0.3));
   sounds.beep = new Audio(createWavDataURI(520, 0.14, 0.55));
   sounds.go = new Audio(createWavDataURI(880, 0.28, 0.65));
   sounds.alarm = new Audio(createWavDataURI(980, 0.35, 0.75));
@@ -342,7 +561,7 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:14px 0; }
  }, false);
 
  /* =========================================================================
-    NOTIFICAÇÕES NA TELA (Toasts)
+    NOTIFICAÇÕES TOAST
     ========================================================================= */
  function showToast(title, text, persistent) {
   var box = $("toastBox");
@@ -363,7 +582,7 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:14px 0; }
   } else {
    window.setTimeout(function () {
     if (div.parentNode) div.parentNode.removeChild(div);
-   }, 5000);
+   }, 4500);
   }
   box.appendChild(div);
  }
@@ -410,6 +629,330 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:14px 0; }
  updateFullscreenLabel();
 
  /* =========================================================================
+    PORTA-RETRATO DIGITAL & CARROSSEL DE FOTOS (6 FOTOS INTEIRAS)
+    ========================================================================= */
+ var PHOTOS = [
+  "https://i.imgur.com/7nzMxXZ.jpeg",
+  "https://i.imgur.com/wljNssa.png",
+  "https://i.imgur.com/ezxXsV1.jpeg",
+  "https://i.imgur.com/FWNYSS3.jpeg",
+  "https://i.imgur.com/DQ9yS7M.jpeg",
+  "https://i.imgur.com/5SXBXwJ.jpeg"
+ ];
+
+ // Pré-carregamento em segundo plano para troca instantânea no iPad 2
+ var preloadedImgs = [];
+ for (var p = 0; p < PHOTOS.length; p++) {
+  var pre = new Image();
+  pre.referrerPolicy = "no-referrer";
+  pre.src = PHOTOS[p];
+  preloadedImgs.push(pre);
+ }
+
+ var FRAME_PREFS_KEY = "desktime_frame_prefs_v1";
+ var frameState = {
+  index: 0,
+  mode: "carousel", // "carousel" ou "fixed"
+  playing: true,
+  intervalSec: 10,
+  fit: "contain" // "contain" (foto inteira) por padrão
+ };
+
+ try {
+  var savedFrame = localStorage.getItem(FRAME_PREFS_KEY);
+  if (savedFrame) {
+   var parsed = JSON.parse(savedFrame);
+   if (parsed) {
+    if (typeof parsed.index === "number" && parsed.index >= 0 && parsed.index < PHOTOS.length) frameState.index = parsed.index;
+    if (parsed.mode === "carousel" || parsed.mode === "fixed") frameState.mode = parsed.mode;
+    if (typeof parsed.playing === "boolean") frameState.playing = parsed.playing;
+    if (typeof parsed.intervalSec === "number" && parsed.intervalSec >= 3) frameState.intervalSec = parsed.intervalSec;
+    if (parsed.fit === "contain" || parsed.fit === "cover") frameState.fit = parsed.fit;
+   }
+  }
+ } catch (e) {}
+
+ function saveFrameState() {
+  try { localStorage.setItem(FRAME_PREFS_KEY, JSON.stringify(frameState)); } catch (e) {}
+ }
+
+ // Construir miniaturas
+ var thumbsStrip = $("thumbsStrip");
+ for (var t = 0; t < PHOTOS.length; t++) {
+  var tBox = document.createElement("div");
+  tBox.className = "thumb-item";
+  tBox.setAttribute("data-idx", t);
+  var tImg = document.createElement("img");
+  tImg.referrerPolicy = "no-referrer";
+  tImg.src = PHOTOS[t];
+  tImg.alt = "Miniatura " + (t + 1);
+  tBox.appendChild(tImg);
+  tBox.addEventListener("click", function () {
+   var chosen = parseInt(this.getAttribute("data-idx"), 10);
+   if (!isNaN(chosen)) {
+    selectPhoto(chosen, true);
+    playAudio("beep");
+   }
+  }, false);
+  thumbsStrip.appendChild(tBox);
+ }
+
+ var slideElapsedMs = 0;
+ var SLIDE_TICK_MS = 100;
+
+ function applyPhotoFit() {
+  var cls = frameState.fit === "cover" ? "fit-cover" : "";
+  $("mainPhotoImg").className = cls;
+  $("zenPhotoImg").className = cls;
+  $("fitToggleBtn").innerHTML = frameState.fit === "contain" ? "FOTO: INTEIRA" : "FOTO: PREENCHER";
+  $("zenFitToggleBtn").innerHTML = frameState.fit === "contain" ? "INTEIRA" : "PREENCHER";
+ }
+
+ function updateFrameUI() {
+  var idx = frameState.index;
+  var total = PHOTOS.length;
+  var isCarousel = frameState.mode === "carousel";
+
+  $("stageCounter").innerHTML = "FOTO " + (idx + 1) + " / " + total;
+  $("miniPhotoCaption").innerHTML = "Foto " + (idx + 1) + " de " + total + (frameState.fit === "contain" ? " (Inteira)" : " (Preencher)");
+
+  var badge = $("frameModeBadge");
+  if (isCarousel) {
+   badge.className = "mode-pill";
+   badge.innerHTML = frameState.playing ? "CARROSSEL (" + frameState.intervalSec + "s)" : "CARROSSEL PAUSADO";
+   $("miniModeLabel").innerHTML = frameState.playing ? "CARROSSEL" : "PAUSADO";
+   $("zenModeToggleBtn").innerHTML = "MODO: CARROSSEL";
+  } else {
+   badge.className = "mode-pill fixed";
+   badge.innerHTML = "QUADRO FIXO";
+   $("miniModeLabel").innerHTML = "QUADRO FIXO";
+   $("zenModeToggleBtn").innerHTML = "MODO: QUADRO FIXO";
+  }
+
+  $("modeCarouselBtn").className = isCarousel ? "action active-btn" : "action";
+  $("modeFixedBtn").className = !isCarousel ? "action active-btn" : "action";
+
+  $("playPausePhotoBtn").style.display = isCarousel ? "inline-block" : "none";
+  $("intervalRow").style.display = isCarousel ? "block" : "none";
+  $("stageProgressWrap").style.display = isCarousel ? "block" : "none";
+  $("zenPlayPauseBtn").style.display = isCarousel ? "inline-block" : "none";
+
+  var playLabel = frameState.playing ? "PAUSAR" : "INICIAR";
+  $("playPausePhotoBtn").innerHTML = playLabel;
+  $("zenPlayPauseBtn").innerHTML = playLabel;
+
+  var intBtns = document.getElementsByClassName("interval-btn");
+  for (var i = 0; i < intBtns.length; i++) {
+   var sVal = parseInt(intBtns[i].getAttribute("data-sec"), 10);
+   intBtns[i].className = sVal === frameState.intervalSec ? "action interval-btn active-btn" : "action interval-btn";
+  }
+
+  var thumbs = thumbsStrip.getElementsByTagName("div");
+  for (var j = 0; j < thumbs.length; j++) {
+   thumbs[j].className = j === idx ? "thumb-item active" : "thumb-item";
+  }
+
+  applyPhotoFit();
+ }
+
+ function selectPhoto(newIndex, animate) {
+  var total = PHOTOS.length;
+  frameState.index = ((newIndex % total) + total) % total;
+  slideElapsedMs = 0;
+  $("stageProgressBar").style.width = "0%";
+
+  var url = PHOTOS[frameState.index];
+  var mainImg = $("mainPhotoImg");
+  var zenImg = $("zenPhotoImg");
+  var miniImg = $("miniPhotoImg");
+
+  if (animate) {
+   mainImg.className = (frameState.fit === "cover" ? "fit-cover " : "") + "fading";
+   zenImg.className = (frameState.fit === "cover" ? "fit-cover " : "") + "fading";
+   window.setTimeout(function () {
+    mainImg.src = url;
+    zenImg.src = url;
+    miniImg.src = url;
+    applyPhotoFit();
+   }, 160);
+  } else {
+   mainImg.src = url;
+   zenImg.src = url;
+   miniImg.src = url;
+   applyPhotoFit();
+  }
+
+  saveFrameState();
+  updateFrameUI();
+ }
+
+ function nextPhoto(animate) { selectPhoto(frameState.index + 1, animate); }
+ function prevPhoto(animate) { selectPhoto(frameState.index - 1, animate); }
+
+ window.setInterval(function () {
+  if (frameState.mode !== "carousel" || !frameState.playing) {
+   $("stageProgressBar").style.width = "0%";
+   return;
+  }
+  slideElapsedMs += SLIDE_TICK_MS;
+  var targetMs = frameState.intervalSec * 1000;
+  var pct = Math.min(100, (slideElapsedMs / targetMs) * 100);
+  $("stageProgressBar").style.width = pct + "%";
+
+  if (slideElapsedMs >= targetMs) {
+   nextPhoto(true);
+  }
+ }, SLIDE_TICK_MS);
+
+ $("modeCarouselBtn").addEventListener("click", function () {
+  frameState.mode = "carousel";
+  frameState.playing = true;
+  slideElapsedMs = 0;
+  saveFrameState();
+  updateFrameUI();
+  playAudio("beep");
+ }, false);
+
+ $("modeFixedBtn").addEventListener("click", function () {
+  frameState.mode = "fixed";
+  slideElapsedMs = 0;
+  saveFrameState();
+  updateFrameUI();
+  playAudio("beep");
+  showToast("QUADRO FIXO", "Foto estacionada na tela sem troca automática.", false);
+ }, false);
+
+ $("prevPhotoBtn").addEventListener("click", function () { prevPhoto(true); playAudio("tap"); }, false);
+ $("nextPhotoBtn").addEventListener("click", function () { nextPhoto(true); playAudio("tap"); }, false);
+
+ $("playPausePhotoBtn").addEventListener("click", function () {
+  frameState.playing = !frameState.playing;
+  saveFrameState();
+  updateFrameUI();
+  playAudio("beep");
+ }, false);
+
+ $("fitToggleBtn").addEventListener("click", function () {
+  frameState.fit = frameState.fit === "contain" ? "cover" : "contain";
+  saveFrameState();
+  updateFrameUI();
+  playAudio("beep");
+ }, false);
+
+ var intButtons = document.getElementsByClassName("interval-btn");
+ for (var k = 0; k < intButtons.length; k++) {
+  intButtons[k].addEventListener("click", function () {
+   var sec = parseInt(this.getAttribute("data-sec"), 10);
+   if (!isNaN(sec)) {
+    frameState.intervalSec = sec;
+    slideElapsedMs = 0;
+    saveFrameState();
+    updateFrameUI();
+    playAudio("beep");
+   }
+  }, false);
+ }
+
+ // Mini-widget na tela inicial
+ $("miniPrevBtn").addEventListener("click", function () { prevPhoto(true); playAudio("tap"); }, false);
+ $("miniNextBtn").addEventListener("click", function () { nextPhoto(true); playAudio("tap"); }, false);
+ $("miniOpenGalleryBtn").addEventListener("click", function () { goToPage(1); playAudio("beep"); }, false);
+
+ // Deslize direto na moldura principal da aba Fotos
+ var stageEl = $("photoStage");
+ var stageStartX = 0;
+ stageEl.addEventListener("touchstart", function (e) {
+  if (e.touches && e.touches.length === 1) {
+   stageStartX = e.touches[0].pageX;
+   e.stopPropagation();
+  }
+ }, false);
+ stageEl.addEventListener("touchend", function (e) {
+  if (e.changedTouches && e.changedTouches.length) {
+   var dx = e.changedTouches[0].pageX - stageStartX;
+   if (Math.abs(dx) > 35) {
+    if (dx < 0) nextPhoto(true); else prevPhoto(true);
+    playAudio("tap");
+   }
+   e.stopPropagation();
+  }
+ }, false);
+
+ // Modo Quadro Tela Cheia (Zen Frame)
+ var zenHudTimer = null;
+ function showZenHud() {
+  $("zenHud").className = "zen-hud";
+  if (zenHudTimer !== null) window.clearTimeout(zenHudTimer);
+  zenHudTimer = window.setTimeout(function () {
+   $("zenHud").className = "zen-hud hidden";
+  }, 4000);
+ }
+
+ function openZenFrame() {
+  $("zenFrame").className = "zen-frame open";
+  showZenHud();
+  playAudio("beep");
+ }
+
+ function closeZenFrame() {
+  $("zenFrame").className = "zen-frame";
+  if (zenHudTimer !== null) window.clearTimeout(zenHudTimer);
+  playAudio("tap");
+ }
+
+ $("openZenTopBtn").addEventListener("click", openZenFrame, false);
+ $("miniOpenZenBtn").addEventListener("click", openZenFrame, false);
+ $("stageZenBtn").addEventListener("click", function (e) { e.stopPropagation(); openZenFrame(); }, false);
+ $("zenCloseBtn").addEventListener("click", function (e) { e.stopPropagation(); closeZenFrame(); }, false);
+
+ $("zenPrevBtn").addEventListener("click", function (e) { e.stopPropagation(); prevPhoto(true); showZenHud(); playAudio("tap"); }, false);
+ $("zenNextBtn").addEventListener("click", function (e) { e.stopPropagation(); nextPhoto(true); showZenHud(); playAudio("tap"); }, false);
+ $("zenPlayPauseBtn").addEventListener("click", function (e) {
+  e.stopPropagation();
+  frameState.playing = !frameState.playing;
+  saveFrameState();
+  updateFrameUI();
+  showZenHud();
+  playAudio("beep");
+ }, false);
+ $("zenModeToggleBtn").addEventListener("click", function (e) {
+  e.stopPropagation();
+  frameState.mode = frameState.mode === "carousel" ? "fixed" : "carousel";
+  if (frameState.mode === "carousel") frameState.playing = true;
+  slideElapsedMs = 0;
+  saveFrameState();
+  updateFrameUI();
+  showZenHud();
+  playAudio("beep");
+ }, false);
+ $("zenFitToggleBtn").addEventListener("click", function (e) {
+  e.stopPropagation();
+  frameState.fit = frameState.fit === "contain" ? "cover" : "contain";
+  saveFrameState();
+  updateFrameUI();
+  showZenHud();
+  playAudio("beep");
+ }, false);
+
+ var zenTouchStartX = 0;
+ $("zenFrame").addEventListener("touchstart", function (e) {
+  if (e.touches && e.touches.length === 1) zenTouchStartX = e.touches[0].pageX;
+ }, false);
+ $("zenFrame").addEventListener("touchend", function (e) {
+  if (e.changedTouches && e.changedTouches.length) {
+   var dx = e.changedTouches[0].pageX - zenTouchStartX;
+   if (Math.abs(dx) > 40) {
+    if (dx < 0) nextPhoto(true); else prevPhoto(true);
+    playAudio("tap");
+   }
+  }
+  showZenHud();
+ }, false);
+ $("zenFrame").addEventListener("click", function () { showZenHud(); }, false);
+
+ selectPhoto(frameState.index, false);
+
+ /* =========================================================================
     RELÓGIO, TEMAS DE FUNDO E PERÍODO DO DIA
     ========================================================================= */
  var weekdays = ["domingo","segunda-feira","terça-feira","quarta-feira","quinta-feira","sexta-feira","sábado"];
@@ -422,10 +965,13 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:14px 0; }
   var h = now.getHours();
   var m = now.getMinutes();
   var currentHHMM = pad(h) + ":" + pad(m);
+  var dateStr = weekdays[now.getDay()] + ", " + now.getDate() + " de " + months[now.getMonth()] + " de " + now.getFullYear();
 
   $("clock").innerHTML = currentHHMM;
   $("seconds").innerHTML = pad(now.getSeconds());
-  $("date").innerHTML = weekdays[now.getDay()] + ", " + now.getDate() + " de " + months[now.getMonth()] + " de " + now.getFullYear();
+  $("date").innerHTML = dateStr;
+  $("zenClock").innerHTML = currentHHMM;
+  $("zenDate").innerHTML = weekdays[now.getDay()] + ", " + now.getDate() + " de " + months[now.getMonth()];
 
   var greeting, message, period, themeClass, sunColor;
   if (h >= 5 && h < 11) {
@@ -457,27 +1003,28 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:14px 0; }
  }
 
  /* =========================================================================
-    NAVEGAÇÃO POR DESLIZE (SWIPE) E BOTÕES INFERIORES
+    NAVEGAÇÃO POR DESLIZE (SWIPE) E ABAS INFERIORES (4 PÁGINAS)
     ========================================================================= */
  var currentPage = 0, startX = 0, startY = 0, tracking = false;
  var track = $("track"), viewport = $("viewport");
 
  function goToPage(page) {
-  currentPage = Math.max(0, Math.min(2, page));
-  var offset = -(currentPage * 33.333333);
+  currentPage = Math.max(0, Math.min(3, page));
+  var offset = -(currentPage * 25);
   track.style.webkitTransform = "translateX(" + offset + "%)";
   track.style.transform = "translateX(" + offset + "%)";
 
-  var dots = $("navDots").getElementsByTagName("button");
-  for (var i = 0; i < dots.length; i++) {
-   dots[i].className = i === currentPage ? "nav-dot active" : "nav-dot";
+  var tabs = $("navBar").getElementsByTagName("button");
+  for (var i = 0; i < tabs.length; i++) {
+   tabs[i].className = i === currentPage ? "nav-tab active" : "nav-tab";
   }
  }
 
- var dots = $("navDots").getElementsByTagName("button");
- for (var d = 0; d < dots.length; d++) {
-  dots[d].addEventListener("click", function () {
+ var tabs = $("navBar").getElementsByTagName("button");
+ for (var d = 0; d < tabs.length; d++) {
+  tabs[d].addEventListener("click", function () {
    goToPage(parseInt(this.getAttribute("data-page"), 10));
+   playAudio("tap");
   }, false);
  }
 
@@ -530,7 +1077,7 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:14px 0; }
    $("weatherFoot").innerHTML = "Atualizado às " + pad(d.getHours()) + ":" + pad(d.getMinutes()) + " · Natal/RN";
    $("refreshWeather").disabled = false;
    showToast("CLIMA", "Dados de Natal atualizados com sucesso!", false);
-  }, 600);
+  }, 500);
  }
 
  $("refreshWeather").addEventListener("click", function () { loadWeather(); }, false);
