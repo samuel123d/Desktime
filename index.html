@@ -2,506 +2,348 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#101827">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="description" content="DeskTime — seu espaço pessoal de trabalho, organização e música.">
+<meta name="theme-color" content="#101827">
 <title>DeskTime</title>
 <style>
-:root {
-  color-scheme: dark;
-  --text:#f5f7fa; --muted:#9eafc0; --line:rgba(255,255,255,.12);
-  --glass:rgba(255,255,255,.055); --accent:#c3dce6;
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin:0; width:100%; height:100%; overflow:hidden; }
+body { background:#101827; color:#f5f7fa; font-family:Arial, Helvetica, sans-serif; }
+.app { height:100%; width:100%; max-width:1000px; margin:0 auto; padding:12px 16px; }
+header { height:42px; border-bottom:1px solid rgba(255,255,255,.15); }
+.brand { padding-top:12px; font-size:13px; letter-spacing:3px; font-weight:bold; }
+.brand span { color:#91c9d9; }
+.status { float:right; margin-top:-16px; color:#a8b8c8; font-size:10px; letter-spacing:1px; }
+.status i { display:inline-block; width:6px; height:6px; margin-right:6px; background:#83d5ae; border-radius:50%; }
+.viewport { position:relative; height:calc(100% - 58px); margin-top:10px; overflow:hidden; border-radius:14px; }
+.track { width:300%; height:100%; }
+.page { float:left; width:33.333333%; height:100%; padding:18px; overflow-y:auto; -webkit-overflow-scrolling:touch; background:#192638; border:1px solid rgba(255,255,255,.10); border-radius:14px; }
+.kicker { color:#a5bacb; font-size:10px; font-weight:bold; letter-spacing:2px; text-transform:uppercase; }
+h2 { margin:0; font-size:19px; font-weight:normal; }
+.big-title { margin:8px 0; font-size:29px; font-weight:normal; }
+.muted { color:#aabaca; font-size:12px; line-height:1.5; }
+.card { margin-top:16px; padding:15px; background:#223247; border:1px solid rgba(255,255,255,.10); border-radius:13px; }
+.action { padding:11px 13px; border:1px solid rgba(255,255,255,.2); border-radius:9px; background:#304258; color:#f0f5f8; font-size:11px; }
+button { font-family:Arial,Helvetica,sans-serif; cursor:pointer; }
+.greeting { margin-top:18px; color:#b6c8d8; font-size:13px; letter-spacing:2px; }
+.clock { margin-top:8px; color:#f4f7fb; font-size:76px; font-weight:normal; letter-spacing:-4px; white-space:nowrap; }
+.clock small { color:#a8bdce; font-size:22px; letter-spacing:0; }
+.date { color:#d2dce6; font-size:16px; text-transform:capitalize; }
+.message { margin-top:10px; color:#9db1c4; font-size:13px; }
+.sun-area { position:relative; height:95px; margin-top:10px; overflow:hidden; }
+.sun { position:absolute; top:5px; right:22%; width:65px; height:65px; background:#f4d6aa; border-radius:50%; }
+.land { position:absolute; bottom:-105px; width:120%; height:160px; background:#294b5b; border-radius:50%; }
+.land.two { right:-25%; bottom:-125px; background:#111d2c; }
+.weather-row { overflow:hidden; }
+.weather-info { float:left; }
+.weather-button { float:right; }
+.weather-main { margin-top:8px; }
+.temperature { display:inline-block; margin-right:10px; font-size:34px; }
+.weather-icon { display:inline-block; font-size:25px; }
+.weather-description { color:#aabaca; font-size:11px; }
+.weather-details { margin-top:15px; padding-top:12px; border-top:1px solid rgba(255,255,255,.12); overflow:hidden; }
+.weather-details div { float:left; width:33.33%; }
+.weather-details small { display:block; color:#9aafc1; font-size:10px; }
+.weather-details strong { display:block; margin-top:5px; font-size:14px; }
+.page-heading { overflow:hidden; margin-bottom:18px; }
+.count { float:right; margin-top:8px; }
+input { width:100%; min-width:0; padding:12px; color:#fff; background:#142235; border:1px solid rgba(255,255,255,.2); border-radius:9px; font-size:14px; }
+.reminder-form { margin-top:12px; overflow:hidden; }
+.reminder-form input { float:left; width:calc(100% - 55px); }
+.add { float:right; width:45px; height:43px; border:0; border-radius:9px; background:#c3dce6; color:#182b3c; font-size:24px; }
+hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:18px 0; }
+.reminders { list-style:none; margin:0; padding:0; }
+.reminders li { min-height:44px; padding:12px 4px; border-bottom:1px solid rgba(255,255,255,.10); font-size:13px; overflow:hidden; }
+.reminders li span { display:block; float:left; width:82%; overflow-wrap:break-word; }
+.remove { float:right; border:0; background:transparent; color:#aabac9; font-size:22px; }
+.empty-list { color:#9eafc0; }
+.pomodoro-card { margin:20px auto 0; padding:18px 12px; background:#202638; border:1px solid rgba(255,255,255,.16); border-radius:16px; }
+.pomodoro-modes { text-align:center; }
+.pom-mode { margin:3px; padding:9px 11px; border:1px solid rgba(255,255,255,.2); border-radius:20px; background:#303247; color:#eee; font-size:10px; }
+.pom-mode.active { background:#665a78; }
+.timer-face { padding:35px 0 22px; text-align:center; }
+.timer-time { color:#fff; font-size:76px; font-weight:normal; letter-spacing:-4px; }
+.timer-caption { margin-top:10px; color:#d4c7df; font-size:11px; letter-spacing:2px; }
+.pom-progress { max-width:500px; height:5px; margin:0 auto; overflow:hidden; background:#414052; border-radius:5px; }
+.pom-progress div { height:5px; width:100%; background:#e7d8f2; }
+.pom-controls { margin-top:20px; text-align:center; }
+.pom-controls button { margin:4px; min-width:95px; }
+.pom-status { margin:16px auto 0; text-align:center; }
+.pomodoro-tip { margin:18px 4px; }
+.pomodoro-tip p { color:#c3b6ce; font-size:12px; line-height:1.6; }
+@media (max-width:600px) {
+ .app { padding:8px; }
+ .page { padding:14px; }
+ .clock { font-size:61px; }
+ .big-title { font-size:25px; }
+ .timer-time { font-size:64px; }
+ .pom-mode { padding:8px; }
 }
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;color:var(--text)}
-body{background:#101827;transition:background 1s ease}
-body.morning{background:linear-gradient(135deg,#253c50,#647b89)}
-body.day{background:linear-gradient(135deg,#18364d,#315d70)}
-body.evening{background:linear-gradient(135deg,#28233d,#78546b)}
-body.night{background:linear-gradient(135deg,#0b1424,#17243a)}
-button,input{font:inherit}
-button{cursor:pointer}
-button:focus-visible,input:focus-visible{outline:2px solid #b9dce8;outline-offset:3px}
-.app{width:100%;height:100%;max-width:1200px;margin:auto;padding:24px 34px 16px;display:flex;flex-direction:column}
-header{height:48px;min-height:48px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.13)}
-.brand{font-size:13px;letter-spacing:3px;font-weight:600;color:#edf3f8}
-.brand span{color:#91c9d9}
-.status{font-size:10px;color:#a8b8c8;letter-spacing:1px}
-.status i{display:inline-block;width:6px;height:6px;background:#83d5ae;border-radius:50%;margin-right:7px}
-.viewport{width:100%;flex:1;min-height:0;overflow:hidden;position:relative;margin:16px 0 12px;border-radius:22px;touch-action:pan-y}
-.track{height:100%;width:300%;display:flex;transition:transform .48s cubic-bezier(.22,.75,.25,1);-webkit-transition:-webkit-transform .48s cubic-bezier(.22,.75,.25,1);-webkit-backface-visibility:hidden;will-change:transform}
-.page{width:33.333333%;height:100%;flex:0 0 33.333333%;padding:25px;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.10);border-radius:22px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.2) transparent}
-.kicker{font-size:10px;font-weight:600;letter-spacing:2px;color:#a5bacb;text-transform:uppercase}
-hr{border:0;border-top:1px solid rgba(255,255,255,.12);margin:20px 0}
-.muted{color:var(--muted);font-size:12px;line-height:1.55}
-.card{background:var(--glass);border:1px solid rgba(255,255,255,.10);border-radius:17px;padding:18px}
-h2{font-size:19px;font-weight:500;margin:0}
-.action{padding:12px 16px;border:1px solid rgba(255,255,255,.17);border-radius:12px;background:rgba(255,255,255,.07);color:#e8f1f7;font-size:10px;letter-spacing:1px;white-space:nowrap;transition:background .2s,border-color .2s}
-.action:hover{background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.3)}
-.action:disabled{opacity:.45;cursor:wait}
-.home{display:flex;flex-direction:column;justify-content:space-between}
-.greeting{font-size:13px;color:#b6c8d8;letter-spacing:2px;margin-top:12px}
-.clock{font-size:clamp(68px,9vw,104px);font-weight:200;letter-spacing:-6px;line-height:1.1;margin-top:12px;color:#f4f7fb;font-variant-numeric:tabular-nums}
-.clock small{font-size:27px;letter-spacing:0;color:#a8bdce;vertical-align:22px;margin-left:5px}
-.date{font-size:17px;color:#d2dce6;text-transform:capitalize}
-.message{color:#9db1c4;font-size:13px;margin-top:12px}
-.sun-area{position:relative;height:145px;overflow:hidden;margin-top:15px;flex-shrink:0}
-.sun{position:absolute;right:20%;top:3px;width:85px;height:85px;border-radius:50%;background:#f4d6aa;box-shadow:0 0 45px rgba(244,214,170,.16);transition:all 1s ease}
-body.night .sun{width:65px;height:65px;background:#d9e2ef;box-shadow:0 0 30px rgba(220,230,250,.15)}
-.land{position:absolute;bottom:-105px;width:120%;height:180px;border-radius:50%;background:rgba(120,170,180,.18)}
-.land.two{bottom:-130px;right:-25%;background:rgba(5,15,30,.30)}
-.weather-row{display:flex;align-items:center;justify-content:space-between;gap:15px}
-.weather-main{display:flex;align-items:center;gap:13px;margin-top:8px}
-.weather-icon{font-size:35px}
-.temperature{font-size:36px;font-weight:300;font-variant-numeric:tabular-nums}
-.weather-description{font-size:11px;color:#aabaca}
-.weather-details{display:flex;justify-content:space-between;gap:10px;margin-top:18px;padding-top:14px;border-top:1px solid rgba(255,255,255,.10)}
-.weather-details div{flex:1;min-width:0}
-.weather-details small{display:block;color:#9aafc1;font-size:10px}
-.weather-details strong{display:block;font-size:14px;font-weight:500;margin-top:6px}
-.page-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:20px}
-.big-title{font-size:31px;font-weight:300;letter-spacing:-.7px;margin:8px 0}
-.reminder-form,.search,.link-form{display:flex;gap:9px;margin:16px 0}
-input{width:100%;min-width:0;padding:14px;color:white;background:rgba(0,0,0,.15);border:1px solid rgba(255,255,255,.16);border-radius:12px;font-size:13px;outline:none}
-input:focus{border-color:#9ac9da}
-input::placeholder{color:#91a4b5}
-.add{width:47px;flex:0 0 47px;border:0;border-radius:12px;background:#c3dce6;color:#182b3c;font-size:25px}
-.reminders{list-style:none;padding:0;margin:0;overflow-y:auto;max-height:310px}
-.reminders li{display:flex;align-items:center;gap:12px;padding:15px 5px;border-bottom:1px solid rgba(255,255,255,.10);font-size:13px;color:#e4eaf0;overflow-wrap:anywhere}
-.reminders li span{flex:1}
-.remove{flex:0 0 auto;background:transparent;border:0;color:#aabac9;font-size:21px;padding:4px 8px}
-.empty-list{padding:22px 5px;color:#9eafc0;font-size:12px}
-.music-page{display:flex;flex-direction:column;gap:0}
-.music-heading{margin-bottom:4px}
-.search{margin:16px 0 10px}
-.player{width:100%;height:clamp(180px,32vh,330px);flex:0 0 auto;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.12);border-radius:16px;overflow:hidden;display:flex;align-items:center;justify-content:center;margin-top:15px}
-.player iframe{width:100%;height:100%;border:0}
-.player-empty{text-align:center;padding:20px}
-.player-empty strong{font-size:16px;font-weight:500}
-.player-empty p{color:#a3b5c5;font-size:12px;line-height:1.6}
-.music-tools{display:flex;gap:9px;flex-wrap:wrap}
-.results{display:grid;gap:7px;margin-top:12px;max-height:190px;overflow:auto}
-.result{display:flex;align-items:center;gap:11px;text-align:left;width:100%;padding:8px;border:1px solid rgba(255,255,255,.1);border-radius:12px;background:rgba(0,0,0,.12);color:#edf3f8}
-.result img{width:72px;height:42px;object-fit:cover;border-radius:6px;background:#182b3c;flex:0 0 auto}
-.result span{font-size:12px;line-height:1.4;min-width:0}
-.result small{display:block;color:#9eafc0;font-size:10px;margin-top:3px}
-.api-panel{margin-top:12px;padding:12px;border:1px solid rgba(255,255,255,.10);border-radius:13px;background:rgba(0,0,0,.10)}
-.api-panel summary{font-size:11px;color:#c5d7e2;cursor:pointer}
-.api-row{display:flex;gap:8px;margin-top:10px}
-.api-row input{padding:10px}
-.api-row button{flex:0 0 auto}
-
-.visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-@media(max-width:700px){
- .app{padding:13px}.page{padding:19px}.clock{font-size:75px}.sun-area{height:100px}.player{height:190px}
-}
-@media(max-height:600px){
- .app{padding-top:10px;padding-bottom:8px}.clock{font-size:68px}.sun-area{height:65px}.page{padding:16px 22px}.player{height:170px}
-}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important}}
-
-/* Pomodoro */
-.pomodoro-page{justify-content:flex-start}
-.pomodoro-card{width:min(100%,760px);margin:24px auto 0;padding:clamp(18px,3vw,30px);border:1px solid rgba(255,255,255,.16);border-radius:22px;background:rgba(15,10,25,.16);box-shadow:0 18px 50px rgba(15,8,24,.10)}
-.pomodoro-modes{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
-.pom-mode{border:1px solid rgba(255,255,255,.17);background:rgba(255,255,255,.06);color:#e8e5ef;border-radius:999px;padding:10px 16px;font-size:10px;letter-spacing:.08em;cursor:pointer}
-.pom-mode.active{background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.38);color:#fff}
-.timer-face{text-align:center;padding:clamp(26px,6vh,54px) 10px 22px}
-.timer-time{font-size:clamp(72px,13vw,128px);font-weight:300;letter-spacing:-.075em;line-height:1;font-variant-numeric:tabular-nums;color:#fff}
-.timer-caption{margin-top:15px;font-size:11px;letter-spacing:.2em;color:#d4c7df}
-.pom-progress{height:5px;border-radius:99px;background:rgba(255,255,255,.12);overflow:hidden;max-width:520px;margin:0 auto}
-.pom-progress>div{height:100%;width:100%;transform-origin:left;background:#e7d8f2;transition:width .2s linear}
-.pom-controls{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:25px}
-.pom-controls .action{min-width:120px}
-.pom-controls .pom-main{background:rgba(255,255,255,.24);border-color:rgba(255,255,255,.42)}
-.pom-status{text-align:center;margin:18px auto 0;max-width:540px;min-height:20px;font-size:12px;line-height:1.5}
-.pomodoro-tip{width:min(100%,760px);margin:18px auto 0;padding:0 5px}
-.pomodoro-tip p{margin:7px 0 0;color:#c3b6ce;font-size:12px;line-height:1.7}
-@media(max-width:520px){.pom-controls{display:grid;grid-template-columns:1fr 1fr}.pom-controls .pom-main{grid-column:1/-1}.pom-mode{padding:9px 12px}}
 </style>
 </head>
-<body class="night">
+<body>
 <div class="app">
 <header>
-  <div class="brand">DESK<span>TIME</span></div>
-  <div class="status" aria-label="Painel ativo"><i></i> PAINEL ATIVO</div>
+ <div class="brand">DESK<span>TIME</span></div>
+ <div class="status"><i></i>PAINEL ATIVO</div>
 </header>
-
-<main class="viewport" id="viewport" aria-label="Páginas do DeskTime">
+<main class="viewport" id="viewport">
 <div class="track" id="track">
-  <section class="page home" aria-label="Início">
-    <div>
-      <div class="kicker">SEU ESPAÇO</div>
-      <div class="greeting" id="greeting">BOA NOITE</div>
-      <div class="clock"><span id="clock">--:--</span><small id="seconds">--</small></div>
-      <div class="date" id="date">Carregando...</div>
-      <div class="message" id="message">Um ótimo momento para desacelerar.</div>
-    </div>
-    <div class="sun-area" aria-hidden="true"><div class="sun"></div><div class="land"></div><div class="land two"></div></div>
-    <div class="card">
-      <div class="weather-row">
-        <div>
-          <div class="kicker">NATAL · RIO GRANDE DO NORTE</div>
-          <div class="weather-main">
-            <div class="temperature" id="temp">--°</div>
-            <div><div class="weather-icon" id="weatherIcon">☁</div><div class="weather-description" id="weatherDesc" role="status">Consultando...</div></div>
-          </div>
-        </div>
-        <button class="action" id="refreshWeather" type="button">ATUALIZAR</button>
-      </div>
-      <div class="weather-details">
-        <div><small>Sensação</small><strong id="feels">--°</strong></div>
-        <div><small>Umidade</small><strong id="humidity">--%</strong></div>
-        <div><small>Chuva agora</small><strong id="rain">--</strong></div>
-      </div>
-      <div class="muted" id="weatherFoot" style="margin-top:12px">Dados meteorológicos via Open-Meteo</div>
-    </div>
-  </section>
-
-  <section class="page agenda-page" aria-label="Agenda">
-    <div class="page-heading">
-      <div><div class="kicker">ORGANIZAÇÃO PESSOAL</div><div class="big-title">Lembretes.</div><div class="muted">Suas ideias e tarefas em um só lugar.</div></div>
-      <div class="kicker" id="count" aria-live="polite">0 ITENS</div>
-    </div>
-    <div class="card">
-      <div class="kicker">NOVO LEMBRETE</div>
-      <form class="reminder-form" id="reminderForm">
-        <label class="visually-hidden" for="reminderInput">Novo lembrete</label>
-        <input id="reminderInput" placeholder="O que não posso esquecer?" maxlength="100" autocomplete="off">
-        <button class="add" type="submit" aria-label="Adicionar lembrete">+</button>
-      </form>
-    </div>
-    <hr>
-    <div class="kicker">MINHA LISTA</div>
-    <ul class="reminders" id="reminders" aria-live="polite"></ul>
-    <div class="muted" style="margin-top:auto;padding-top:15px">Seus lembretes ficam salvos neste dispositivo.</div>
-  </section>
-
-  <section class="page music-page pomodoro-page" aria-label="Pomodoro">
-    <div class="music-heading">
-      <div class="kicker">FOCO E PRODUTIVIDADE</div>
-      <div class="big-title">Seu momento de foco.</div>
-      <div class="muted">Um passo de cada vez. Trabalhe com atenção e faça pausas.</div>
-    </div>
-    <div class="pomodoro-card">
-      <div class="pomodoro-modes" role="group" aria-label="Tipo de sessão">
-        <button class="pom-mode active" type="button" data-mode="focus" aria-pressed="true">FOCO</button>
-        <button class="pom-mode" type="button" data-mode="short" aria-pressed="false">PAUSA CURTA</button>
-        <button class="pom-mode" type="button" data-mode="long" aria-pressed="false">PAUSA LONGA</button>
-      </div>
-      <div class="timer-face" aria-live="off">
-        <div class="timer-time" id="pomTime">25:00</div>
-        <div class="timer-caption" id="pomCaption">HORA DE CONCENTRAR</div>
-      </div>
-      <div class="pom-progress" aria-hidden="true"><div id="pomProgress"></div></div>
-      <div class="pom-controls">
-        <button class="action pom-main" id="pomStart" type="button">COMEÇAR</button>
-        <button class="action" id="pomReset" type="button">REINICIAR</button>
-        <button class="action" id="pomSkip" type="button">PRÓXIMA ETAPA</button>
-      </div>
-      <div class="pom-status muted" id="pomStatus" role="status">Pronto para começar? Seu ciclo de foco começa quando você clicar.</div>
-    </div>
-    <div class="pomodoro-tip">
-      <span class="kicker">DICA</span>
-      <p>Durante o foco, escolha uma única tarefa e evite distrações. Quando o tempo acabar, aproveite a pausa para descansar.</p>
-    </div>
-  </section>
+<section class="page" aria-label="Início">
+ <div class="kicker">SEU ESPAÇO</div>
+ <div class="greeting" id="greeting">BOA NOITE</div>
+ <div class="clock"><span id="clock">--:--</span> <small id="seconds">--</small></div>
+ <div class="date" id="date">Carregando...</div>
+ <div class="message" id="message">Um ótimo momento para desacelerar.</div>
+ <div class="sun-area"><div class="sun"></div><div class="land"></div><div class="land two"></div></div>
+ <div class="card">
+  <div class="weather-row">
+   <div class="weather-info">
+    <div class="kicker">NATAL · RIO GRANDE DO NORTE</div>
+    <div class="weather-main"><span class="temperature" id="temp">--°</span><span class="weather-icon" id="weatherIcon">☁</span><div class="weather-description" id="weatherDesc">Clima não consultado</div></div>
+   </div>
+   <button class="action weather-button" id="refreshWeather" type="button">ATUALIZAR</button>
+  </div>
+  <div class="weather-details">
+   <div><small>Sensação</small><strong id="feels">--°</strong></div>
+   <div><small>Umidade</small><strong id="humidity">--%</strong></div>
+   <div><small>Chuva agora</small><strong id="rain">--</strong></div>
+  </div>
+  <div class="muted" id="weatherFoot" style="margin-top:10px">Clima via Open-Meteo</div>
+ </div>
+ <p class="muted">Deslize para a esquerda para ver seus lembretes.</p>
+</section>
+<section class="page" aria-label="Agenda">
+ <div class="page-heading">
+  <div class="count kicker" id="count">0 ITENS</div>
+  <div class="kicker">ORGANIZAÇÃO PESSOAL</div>
+  <div class="big-title">Lembretes.</div>
+  <div class="muted">Suas ideias e tarefas em um só lugar.</div>
+ </div>
+ <div class="card">
+  <div class="kicker">NOVO LEMBRETE</div>
+  <form class="reminder-form" id="reminderForm">
+   <input id="reminderInput" placeholder="O que não posso esquecer?" maxlength="100" autocomplete="off">
+   <button class="add" type="submit">+</button>
+  </form>
+ </div>
+ <hr>
+ <div class="kicker">MINHA LISTA</div>
+ <ul class="reminders" id="reminders"></ul>
+ <p class="muted">Seus lembretes ficam salvos neste dispositivo.</p>
+</section>
+<section class="page" aria-label="Pomodoro">
+ <div class="kicker">FOCO E PRODUTIVIDADE</div>
+ <div class="big-title">Seu momento de foco.</div>
+ <div class="muted">Um passo de cada vez. Trabalhe com atenção e faça pausas.</div>
+ <div class="pomodoro-card">
+  <div class="pomodoro-modes">
+   <button class="pom-mode active" data-mode="focus" type="button">FOCO</button>
+   <button class="pom-mode" data-mode="short" type="button">PAUSA CURTA</button>
+   <button class="pom-mode" data-mode="long" type="button">PAUSA LONGA</button>
+  </div>
+  <div class="timer-face">
+   <div class="timer-time" id="pomTime">25:00</div>
+   <div class="timer-caption" id="pomCaption">HORA DE CONCENTRAR</div>
+  </div>
+  <div class="pom-progress"><div id="pomProgress"></div></div>
+  <div class="pom-controls">
+   <button class="action" id="pomStart" type="button">COMEÇAR</button>
+   <button class="action" id="pomReset" type="button">REINICIAR</button>
+   <button class="action" id="pomSkip" type="button">PRÓXIMA ETAPA</button>
+  </div>
+  <div class="pom-status muted" id="pomStatus">Pronto para começar? Clique em começar.</div>
+ </div>
+ <div class="pomodoro-tip"><span class="kicker">DICA</span><p>Durante o foco, escolha uma única tarefa e evite distrações. Quando o tempo acabar, aproveite a pausa para descansar.</p></div>
+</section>
 </div>
 </main>
-
 </div>
-
-<script>
+<script type="text/javascript">
 (function () {
-  "use strict";
+ var $ = function (id) { return document.getElementById(id); };
+ function pad(n) { return n < 10 ? "0" + n : String(n); }
 
-  const $ = (id) => document.getElementById(id);
-  const pad = (value) => String(value).padStart(2, "0");
-  const dateFormatter = new Intl.DateTimeFormat("pt-BR", {
-    weekday: "long", day: "numeric", month: "long", year: "numeric"
-  });
+ /* Relógio simples, sem Intl nem recursos recentes do JavaScript. */
+ var weekdays = ["domingo","segunda-feira","terça-feira","quarta-feira","quinta-feira","sexta-feira","sábado"];
+ var months = ["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
+ function updateClock() {
+  var now = new Date(), h = now.getHours(), theme, greeting, message;
+  $("clock").innerHTML = pad(h) + ":" + pad(now.getMinutes());
+  $("seconds").innerHTML = pad(now.getSeconds());
+  $("date").innerHTML = weekdays[now.getDay()] + ", " + now.getDate() + " de " + months[now.getMonth()] + " de " + now.getFullYear();
+  if (h >= 5 && h < 11) { theme="morning"; greeting="BOM DIA"; message="Que seu dia comece com boas ideias."; }
+  else if (h >= 11 && h < 17) { theme="day"; greeting="BOA TARDE"; message="Um bom momento para fazer acontecer."; }
+  else if (h >= 17 && h < 19) { theme="evening"; greeting="FIM DE TARDE"; message="A luz muda, o ritmo também."; }
+  else { theme="night"; greeting="BOA NOITE"; message="Um ótimo momento para desacelerar."; }
+  $("greeting").innerHTML = greeting; $("message").innerHTML = message;
+  document.body.style.background = theme === "morning" ? "#344f61" : theme === "day" ? "#244b60" : theme === "evening" ? "#49364e" : "#101827";
+ }
+ updateClock();
+ window.setInterval(updateClock, 1000);
 
-  // Relógio: atualiza uma vez por segundo e mantém o tema sincronizado.
-  let lastTheme = "";
-  function updateClock() {
-    const now = new Date();
-    const hour = now.getHours();
-    $("clock").textContent = pad(hour) + ":" + pad(now.getMinutes());
-    $("seconds").textContent = pad(now.getSeconds());
-    $("date").textContent = dateFormatter.format(now);
+ /* Navegação por toque: compatível com Safari antigo do iPad. */
+ var currentPage = 0, startX = 0, startY = 0, tracking = false;
+ var track = $("track"), viewport = $("viewport");
+ function goToPage(page) {
+  currentPage = Math.max(0, Math.min(2, page));
+  track.style.webkitTransform = "translateX(-" + (currentPage * 33.333333) + "%)";
+  track.style.transform = "translateX(-" + (currentPage * 33.333333) + "%)";
+ }
+ viewport.addEventListener("touchstart", function (e) {
+  if (e.touches && e.touches.length === 1) { startX=e.touches[0].pageX; startY=e.touches[0].pageY; tracking=true; }
+ }, false);
+ viewport.addEventListener("touchend", function (e) {
+  if (!tracking || !e.changedTouches || !e.changedTouches.length) return;
+  var dx=e.changedTouches[0].pageX-startX, dy=e.changedTouches[0].pageY-startY;
+  if (Math.abs(dx)>55 && Math.abs(dx)>Math.abs(dy)*1.2) goToPage(currentPage+(dx<0?1:-1));
+  tracking=false;
+ }, false);
+ viewport.addEventListener("touchcancel", function () { tracking=false; }, false);
+ goToPage(0);
 
-    let theme, greeting, message;
-    if (hour >= 5 && hour < 11) {
-      theme = "morning"; greeting = "BOM DIA"; message = "Que seu dia comece com boas ideias.";
-    } else if (hour >= 11 && hour < 17) {
-      theme = "day"; greeting = "BOA TARDE"; message = "Um bom momento para fazer acontecer.";
-    } else if (hour >= 17 && hour < 19) {
-      theme = "evening"; greeting = "FIM DE TARDE"; message = "A luz muda, o ritmo também.";
-    } else {
-      theme = "night"; greeting = "BOA NOITE"; message = "Um ótimo momento para desacelerar.";
-    }
-    if (theme !== lastTheme) {
-      document.body.classList.remove("morning", "day", "evening", "night");
-      document.body.classList.add(theme);
-      $("greeting").textContent = greeting;
-      $("message").textContent = message;
-      lastTheme = theme;
-    }
-  }
-  updateClock();
-  window.setInterval(updateClock, 1000);
-
-  // Navegação: o iframe do YouTube fica dentro do DOM e nunca é recriado ao trocar de página.
-  let currentPage = 0;
-  const track = $("track");
-  const viewport = $("viewport");
-  function goToPage(page) {
-    currentPage = Math.max(0, Math.min(2, page));
-    track.style.transform = "translate3d(-" + (currentPage * (100 / 3)) + "%,0,0)";
-  }
-
-  let pointerStart = null;
-  viewport.addEventListener("pointerdown", (event) => {
-    if (event.pointerType === "mouse" && event.button !== 0) return;
-    pointerStart = { x: event.clientX, y: event.clientY };
-  });
-  viewport.addEventListener("pointerup", (event) => {
-    if (!pointerStart) return;
-    const dx = event.clientX - pointerStart.x;
-    const dy = event.clientY - pointerStart.y;
-    if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy) * 1.25) {
-      goToPage(currentPage + (dx < 0 ? 1 : -1));
-    }
-    pointerStart = null;
-  });
-  viewport.addEventListener("pointercancel", () => { pointerStart = null; });
-  document.addEventListener("keydown", (event) => {
-    if (event.altKey || event.ctrlKey || event.metaKey) return;
-    const target = event.target;
-    if (target && /INPUT|TEXTAREA|SELECT/.test(target.tagName)) return;
-    if (event.key === "ArrowRight") goToPage(currentPage + 1);
-    if (event.key === "ArrowLeft") goToPage(currentPage - 1);
-  });
-  goToPage(0);
-
-  // Clima Open-Meteo — Natal/RN. Cache em memória, intervalo de 30 min e proteção contra chamadas concorrentes.
-  const weatherURL = "https://api.open-meteo.com/v1/forecast?latitude=-5.7945&longitude=-35.211&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code&timezone=America%2FSao_Paulo";
-  const WEATHER_INTERVAL = 30 * 60 * 1000;
-  let lastWeatherFetch = 0;
-  let weatherRequest = null;
-
-  function weatherCondition(code) {
-    if (code === 0) return ["Céu limpo", "☀"];
-    if (code <= 2) return ["Poucas nuvens", "🌤"];
-    if (code === 3) return ["Nublado", "☁"];
-    if (code <= 48) return ["Neblina", "〰"];
-    if (code <= 57) return ["Garoa", "🌦"];
-    if (code <= 67) return ["Chuva", "🌧"];
-    if (code <= 77) return ["Neve", "❄"];
-    if (code <= 82) return ["Pancadas de chuva", "🌦"];
-    if (code <= 86) return ["Pancadas de neve", "❄"];
-    if (code >= 95) return ["Tempestade", "⛈"];
-    return ["Condição variável", "☁"];
-  }
-
-  async function loadWeather(force) {
-    if (weatherRequest) return weatherRequest;
-    if (!force && lastWeatherFetch && Date.now() - lastWeatherFetch < WEATHER_INTERVAL) return;
-    const button = $("refreshWeather");
-    button.disabled = true;
-    $("weatherDesc").textContent = "Consultando o céu...";
-    weatherRequest = (async () => {
-      const controller = new AbortController();
-      const timeout = window.setTimeout(() => controller.abort(), 12000);
-      try {
-        const response = await fetch(weatherURL, { signal: controller.signal, cache: "no-store" });
-        if (!response.ok) throw new Error("HTTP " + response.status);
-        const data = await response.json();
-        if (!data.current) throw new Error("Resposta meteorológica incompleta");
-        const current = data.current;
-        const condition = weatherCondition(Number(current.weather_code));
-        $("temp").textContent = Math.round(current.temperature_2m) + "°";
-        $("feels").textContent = Math.round(current.apparent_temperature) + "°";
-        $("humidity").textContent = Math.round(current.relative_humidity_2m) + "%";
-        $("rain").textContent = Number(current.precipitation) > 0 ? "Sim" : "Não";
-        $("weatherDesc").textContent = condition[0];
-        $("weatherIcon").textContent = condition[1];
-        const now = new Date();
-        $("weatherFoot").textContent = "Atualizado às " + pad(now.getHours()) + ":" + pad(now.getMinutes()) + " · Open-Meteo";
-        lastWeatherFetch = Date.now();
-      } catch (error) {
-        $("weatherDesc").textContent = error.name === "AbortError" ? "Tempo de consulta excedido" : "Clima indisponível";
-        $("weatherFoot").textContent = "Verifique sua conexão e tente novamente · Open-Meteo";
-      } finally {
-        window.clearTimeout(timeout);
-        button.disabled = false;
-        weatherRequest = null;
-      }
-    })();
-    return weatherRequest;
-  }
-  loadWeather(false);
-  window.setInterval(() => loadWeather(false), WEATHER_INTERVAL);
-  $("refreshWeather").addEventListener("click", () => loadWeather(true));
-
-  // Agenda: lê uma vez, mantém estado em memória e salva a cada alteração.
-  const STORAGE_KEY = "desktime_items";
-  let reminders = [];
-  try {
-    const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-    if (Array.isArray(stored)) reminders = stored.filter(item => typeof item === "string").slice(0, 500);
-  } catch (error) {
-    reminders = [];
-  }
-  function saveReminders() {
+ /* Clima por XMLHttpRequest, sem fetch, async/await ou AbortController. */
+ var weatherURL = "https://api.open-meteo.com/v1/forecast?latitude=-5.7945&longitude=-35.211&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code&timezone=America%2FSao_Paulo";
+ var lastWeather = 0, weatherBusy = false;
+ function weatherCondition(code) {
+  if (code===0) return ["Céu limpo","☀"];
+  if (code<=2) return ["Poucas nuvens","🌤"];
+  if (code===3) return ["Nublado","☁"];
+  if (code<=48) return ["Neblina","〰"];
+  if (code<=57) return ["Garoa","🌦"];
+  if (code<=67) return ["Chuva","🌧"];
+  if (code<=77) return ["Neve","❄"];
+  if (code<=82) return ["Pancadas de chuva","🌦"];
+  if (code<=86) return ["Pancadas de neve","❄"];
+  if (code>=95) return ["Tempestade","⛈"];
+  return ["Condição variável","☁"];
+ }
+ function loadWeather(force) {
+  if (weatherBusy || (!force && new Date().getTime()-lastWeather<1800000)) return;
+  weatherBusy=true; $("weatherDesc").innerHTML="Consultando...";
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", weatherURL, true); xhr.timeout=12000;
+  xhr.onreadystatechange=function () {
+   if (xhr.readyState!==4) return;
+   weatherBusy=false;
+   if (xhr.status>=200 && xhr.status<300) {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(reminders));
-    } catch (error) {
-      $("count").title = "Não foi possível salvar neste navegador.";
-    }
-  }
-  function renderReminders() {
-    const list = $("reminders");
-    const fragment = document.createDocumentFragment();
-    $("count").textContent = reminders.length + (reminders.length === 1 ? " ITEM" : " ITENS");
-    if (!reminders.length) {
-      const empty = document.createElement("li");
-      empty.className = "empty-list";
-      empty.textContent = "Nenhum lembrete por enquanto.";
-      fragment.appendChild(empty);
-    } else {
-      reminders.forEach((item, index) => {
-        const li = document.createElement("li");
-        const text = document.createElement("span");
-        text.textContent = item;
-        const remove = document.createElement("button");
-        remove.type = "button";
-        remove.className = "remove";
-        remove.textContent = "×";
-        remove.setAttribute("aria-label", "Excluir lembrete: " + item);
-        remove.addEventListener("click", () => {
-          reminders.splice(index, 1);
-          saveReminders();
-          renderReminders();
-        });
-        li.append(text, remove);
-        fragment.appendChild(li);
-      });
-    }
-    list.replaceChildren(fragment);
-  }
-  $("reminderForm").addEventListener("submit", (event) => {
-    event.preventDefault();
-    const input = $("reminderInput");
-    const value = input.value.trim();
-    if (!value) { input.focus(); return; }
-    reminders.unshift(value);
-    saveReminders();
-    input.value = "";
-    renderReminders();
-    input.focus();
-  });
-  renderReminders();
-
-  // Pomodoro: usa um horário final para manter a contagem precisa ao alternar de aba.
-  const pomModes = {
-    focus: { seconds: 25 * 60, label: "HORA DE CONCENTRAR" },
-    short: { seconds: 5 * 60, label: "PAUSA CURTA" },
-    long: { seconds: 15 * 60, label: "PAUSA LONGA" }
+     var data=JSON.parse(xhr.responseText), c=data.current, cond;
+     if (!c) throw new Error("sem dados");
+     cond=weatherCondition(Number(c.weather_code));
+     $("temp").innerHTML=Math.round(c.temperature_2m)+"°";
+     $("feels").innerHTML=Math.round(c.apparent_temperature)+"°";
+     $("humidity").innerHTML=Math.round(c.relative_humidity_2m)+"%";
+     $("rain").innerHTML=Number(c.precipitation)>0?"Sim":"Não";
+     $("weatherDesc").innerHTML=cond[0]; $("weatherIcon").innerHTML=cond[1];
+     var d=new Date(); $("weatherFoot").innerHTML="Atualizado às "+pad(d.getHours())+":"+pad(d.getMinutes())+" · Open-Meteo";
+     lastWeather=d.getTime();
+    } catch(err) { $("weatherDesc").innerHTML="Clima indisponível"; }
+   } else { $("weatherDesc").innerHTML="Clima indisponível"; }
+   $("refreshWeather").disabled=false;
   };
-  let pomMode = "focus";
-  let pomRemaining = pomModes.focus.seconds;
-  let pomDeadline = 0;
-  let pomRunning = false;
-  let pomInterval = null;
+  xhr.onerror=function () { weatherBusy=false; $("weatherDesc").innerHTML="Sem conexão"; $("refreshWeather").disabled=false; };
+  xhr.ontimeout=function () { weatherBusy=false; $("weatherDesc").innerHTML="Tempo de consulta excedido"; $("refreshWeather").disabled=false; };
+  $("refreshWeather").disabled=true;
+  try { xhr.send(null); } catch(err) { weatherBusy=false; $("refreshWeather").disabled=false; $("weatherDesc").innerHTML="Clima indisponível"; }
+ }
+ $("refreshWeather").addEventListener("click", function () { loadWeather(true); }, false);
+ loadWeather(false);
+ window.setInterval(function () { loadWeather(false); }, 1800000);
 
-  function renderPomodoro() {
-    const minutes = Math.floor(pomRemaining / 60);
-    const seconds = pomRemaining % 60;
-    $("pomTime").textContent = pad(minutes) + ":" + pad(seconds);
-    $("pomCaption").textContent = pomModes[pomMode].label;
-    $("pomProgress").style.width = (pomRemaining / pomModes[pomMode].seconds * 100) + "%";
-    $("pomStart").textContent = pomRunning ? "PAUSAR" : (pomRemaining === pomModes[pomMode].seconds ? "COMEÇAR" : "CONTINUAR");
-    document.title = (pomRunning ? pad(minutes) + ":" + pad(seconds) + " · " : "") + "DeskTime";
+ /* Lembretes salvos no próprio iPad. */
+ var STORAGE_KEY="desktime_items", reminders=[];
+ try {
+  var stored=localStorage.getItem(STORAGE_KEY);
+  if (stored) { stored=JSON.parse(stored); if (stored instanceof Array) reminders=stored; }
+ } catch(err) { reminders=[]; }
+ function saveReminders() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(reminders)); }
+  catch(err) { $("count").title="Não foi possível salvar neste navegador."; }
+ }
+ function renderReminders() {
+  var list=$("reminders"), i, li, span, btn;
+  while (list.firstChild) list.removeChild(list.firstChild);
+  $("count").innerHTML=reminders.length+(reminders.length===1?" ITEM":" ITENS");
+  if (!reminders.length) { li=document.createElement("li"); li.className="empty-list"; li.innerHTML="Nenhum lembrete por enquanto."; list.appendChild(li); return; }
+  for (i=0;i<reminders.length;i++) {
+   li=document.createElement("li"); span=document.createElement("span"); span.appendChild(document.createTextNode(reminders[i]));
+   btn=document.createElement("button"); btn.className="remove"; btn.type="button"; btn.innerHTML="×"; btn.setAttribute("data-index",i);
+   li.appendChild(span); li.appendChild(btn); list.appendChild(li);
   }
-  function stopPomodoroInterval() {
-    if (pomInterval !== null) { window.clearInterval(pomInterval); pomInterval = null; }
+ }
+ $("reminderForm").addEventListener("submit", function (e) {
+  e.preventDefault(); var input=$("reminderInput"), value=input.value.replace(/^\s+|\s+$/g,"");
+  if (!value) return;
+  reminders.unshift(value); if (reminders.length>100) reminders.length=100;
+  saveReminders(); input.value=""; renderReminders();
+ }, false);
+ $("reminders").addEventListener("click", function (e) {
+  var target=e.target || e.srcElement, index;
+  if (target && target.className==="remove") {
+   index=parseInt(target.getAttribute("data-index"),10);
+   if (!isNaN(index)) { reminders.splice(index,1); saveReminders(); renderReminders(); }
   }
-  function finishPomodoro() {
-    pomRunning = false;
-    pomRemaining = 0;
-    stopPomodoroInterval();
-    renderPomodoro();
-    $("pomStatus").textContent = pomMode === "focus"
-      ? "Ciclo concluído! Faça uma pausa e recarregue as energias."
-      : "Pausa concluída! Quando estiver pronto, volte ao foco.";
-    $("pomStart").textContent = "COMEÇAR NOVAMENTE";
-    try {
-      if ("Notification" in window && Notification.permission === "granted") {
-        new Notification("DeskTime · Pomodoro", { body: pomMode === "focus" ? "Seu foco terminou. Hora de descansar!" : "Sua pausa terminou. Hora de voltar!" });
-      }
-    } catch (error) {}
+ }, false);
+ renderReminders();
+
+ /* Pomodoro: usa horário final para não perder tempo ao alternar de página. */
+ var modes={focus:{seconds:1500,label:"HORA DE CONCENTRAR"},short:{seconds:300,label:"PAUSA CURTA"},long:{seconds:900,label:"PAUSA LONGA"}};
+ var mode="focus", remaining=1500, deadline=0, running=false, timer=null;
+ function renderPomodoro() {
+  var mins=Math.floor(remaining/60), secs=remaining%60;
+  $("pomTime").innerHTML=pad(mins)+":"+pad(secs);
+  $("pomCaption").innerHTML=modes[mode].label;
+  $("pomProgress").style.width=(remaining/modes[mode].seconds*100)+"%";
+  $("pomStart").innerHTML=running?"PAUSAR":(remaining===modes[mode].seconds?"COMEÇAR":"CONTINUAR");
+  document.title=(running?pad(mins)+":"+pad(secs)+" · ":"")+"DeskTime";
+ }
+ function stopTimer() { if (timer!==null) { window.clearInterval(timer); timer=null; } }
+ function tick() {
+  if (!running) return;
+  remaining=Math.max(0,Math.ceil((deadline-new Date().getTime())/1000));
+  if (remaining<=0) {
+   running=false; stopTimer(); remaining=0; renderPomodoro();
+   $("pomStatus").innerHTML=mode==="focus"?"Ciclo concluído! Faça uma pausa e recarregue as energias.":"Pausa concluída! Quando estiver pronto, volte ao foco.";
+  } else renderPomodoro();
+ }
+ function setMode(next) {
+  if (!modes[next]) return;
+  running=false; stopTimer(); mode=next; remaining=modes[mode].seconds;
+  var buttons=document.getElementsByClassName("pom-mode"), i;
+  for (i=0;i<buttons.length;i++) {
+   if (buttons[i].getAttribute("data-mode")===mode) buttons[i].className="pom-mode active";
+   else buttons[i].className="pom-mode";
   }
-  function tickPomodoro() {
-    if (!pomRunning) return;
-    pomRemaining = Math.max(0, Math.ceil((pomDeadline - Date.now()) / 1000));
-    if (pomRemaining <= 0) finishPomodoro();
-    else renderPomodoro();
-  }
-  function setPomodoroMode(mode) {
-    if (!pomModes[mode]) return;
-    pomRunning = false;
-    stopPomodoroInterval();
-    pomMode = mode;
-    pomRemaining = pomModes[mode].seconds;
-    document.querySelectorAll(".pom-mode").forEach(button => {
-      const active = button.dataset.mode === mode;
-      button.classList.toggle("active", active);
-      button.setAttribute("aria-pressed", String(active));
-    });
-    $("pomStatus").textContent = mode === "focus"
-      ? "Reserve este período para uma única tarefa."
-      : "Desconecte um pouco e descanse.";
-    renderPomodoro();
-  }
-  document.querySelectorAll(".pom-mode").forEach(button => {
-    button.addEventListener("click", () => setPomodoroMode(button.dataset.mode));
-  });
-  $("pomStart").addEventListener("click", () => {
-    if (pomRunning) {
-      pomRemaining = Math.max(0, Math.ceil((pomDeadline - Date.now()) / 1000));
-      pomRunning = false;
-      stopPomodoroInterval();
-      $("pomStatus").textContent = "Cronômetro pausado. Continue quando quiser.";
-      renderPomodoro();
-      return;
-    }
-    if (pomRemaining <= 0) pomRemaining = pomModes[pomMode].seconds;
-    pomDeadline = Date.now() + pomRemaining * 1000;
-    pomRunning = true;
-    $("pomStatus").textContent = pomMode === "focus" ? "Foco em andamento. Você consegue!" : "Pausa em andamento. Respire e relaxe.";
-    stopPomodoroInterval();
-    pomInterval = window.setInterval(tickPomodoro, 250);
-    renderPomodoro();
-  });
-  $("pomReset").addEventListener("click", () => {
-    pomRunning = false;
-    stopPomodoroInterval();
-    pomRemaining = pomModes[pomMode].seconds;
-    $("pomStatus").textContent = "Cronômetro reiniciado.";
-    renderPomodoro();
-  });
-  $("pomSkip").addEventListener("click", () => {
-    const nextMode = pomMode === "focus" ? "short" : "focus";
-    setPomodoroMode(nextMode);
-    $("pomStatus").textContent = nextMode === "short" ? "Etapa de foco encerrada. Faça uma pausa." : "Pausa encerrada. Vamos voltar ao foco!";
-  });
-  document.addEventListener("visibilitychange", () => {
-    if (!document.hidden && pomRunning) tickPomodoro();
-  });
+  $("pomStatus").innerHTML=mode==="focus"?"Reserve este período para uma única tarefa.":"Desconecte um pouco e descanse.";
   renderPomodoro();
+ }
+ var modeButtons=document.getElementsByClassName("pom-mode"), j;
+ for (j=0;j<modeButtons.length;j++) {
+  modeButtons[j].addEventListener("click", function () { setMode(this.getAttribute("data-mode")); }, false);
+ }
+ $("pomStart").addEventListener("click", function () {
+  if (running) {
+   remaining=Math.max(0,Math.ceil((deadline-new Date().getTime())/1000)); running=false; stopTimer();
+   $("pomStatus").innerHTML="Cronômetro pausado. Continue quando quiser."; renderPomodoro(); return;
+  }
+  if (remaining<=0) remaining=modes[mode].seconds;
+  deadline=new Date().getTime()+remaining*1000; running=true;
+  $("pomStatus").innerHTML=mode==="focus"?"Foco em andamento. Você consegue!":"Pausa em andamento. Respire e relaxe.";
+  stopTimer(); timer=window.setInterval(tick,1000); renderPomodoro();
+ }, false);
+ $("pomReset").addEventListener("click", function () {
+  running=false; stopTimer(); remaining=modes[mode].seconds;
+  $("pomStatus").innerHTML="Cronômetro reiniciado."; renderPomodoro();
+ }, false);
+ $("pomSkip").addEventListener("click", function () {
+  setMode(mode==="focus"?"short":"focus");
+  $("pomStatus").innerHTML=mode==="short"?"Etapa de foco encerrada. Faça uma pausa.":"Pausa encerrada. Vamos voltar ao foco!";
+ }, false);
+ document.addEventListener("visibilitychange", function () { if (!document.hidden && running) tick(); }, false);
+ renderPomodoro();
 })();
 </script>
 </body>
