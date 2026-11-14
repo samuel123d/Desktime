@@ -6,7 +6,6 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="DeskTime">
-<meta name="referrer" content="no-referrer">
 <meta name="theme-color" content="#101827">
 <title>DeskTime</title>
 <style>
@@ -56,8 +55,10 @@ header { height:42px; border-bottom:1px solid rgba(255,255,255,.15); -webkit-fle
 .big-title { margin:4px 0; font-size:24px; font-weight:normal; }
 .muted { color:#aabaca; font-size:12px; line-height:1.4; }
 .card { margin-top:12px; padding:13px; background:rgba(24,35,54,0.82); border:1px solid rgba(255,255,255,.12); border-radius:13px; }
-.action { padding:9px 11px; border:1px solid rgba(255,255,255,.22); border-radius:9px; background:#24334d; color:#f0f5f8; font-size:11px; letter-spacing:0.5px; }
+.action { display:inline-block; padding:9px 11px; border:1px solid rgba(255,255,255,.22); border-radius:9px; background:#24334d; color:#f0f5f8; font-size:11px; letter-spacing:0.5px; text-align:center; vertical-align:middle; }
 .action.active-btn { background:#4b648a; border-color:#91c9d9; color:#ffffff; font-weight:bold; }
+.action.install-btn { background:#2a5c54; border-color:#83d5ae; color:#ffffff; font-weight:bold; cursor:pointer; }
+.action.danger-btn { background:#4a2634; border-color:#e08a9e; color:#ffd6df; }
 button { font-family:Arial,Helvetica,sans-serif; cursor:pointer; }
 
 /* Página 1: Início */
@@ -89,7 +90,7 @@ button { font-family:Arial,Helvetica,sans-serif; cursor:pointer; }
 .mini-frame-box img { position:absolute; top:0; bottom:0; left:0; right:0; margin:auto; max-width:100%; max-height:100%; width:auto; height:auto; }
 .mini-frame-info { overflow:hidden; }
 .mini-frame-actions { margin-top:8px; }
-.mini-frame-actions button { padding:6px 9px; font-size:10px; margin-right:4px; margin-bottom:4px; }
+.mini-frame-actions button, .mini-frame-actions label { padding:6px 9px; font-size:10px; margin-right:4px; margin-bottom:4px; }
 
 /* Página 2: Porta-Retrato & Carrossel */
 .frame-header { overflow:hidden; margin-bottom:8px; }
@@ -98,30 +99,30 @@ button { font-family:Arial,Helvetica,sans-serif; cursor:pointer; }
 .mode-pill { display:inline-block; padding:4px 9px; border-radius:12px; font-size:10px; font-weight:bold; letter-spacing:1px; background:#243b57; color:#91c9d9; border:1px solid #91c9d9; }
 .mode-pill.fixed { background:#3d2f4d; color:#f4d6aa; border-color:#f4d6aa; }
 
-.photo-stage { position:relative; width:100%; height:310px; background: -webkit-radial-gradient(center, ellipse cover, #182336 0%, #070b12 100%); background: radial-gradient(ellipse at center, #182336 0%, #070b12 100%); border:1px solid rgba(255,255,255,.18); border-radius:14px; overflow:hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.45); }
+.photo-stage { position:relative; width:100%; height:295px; background: -webkit-radial-gradient(center, ellipse cover, #182336 0%, #070b12 100%); background: radial-gradient(ellipse at center, #182336 0%, #070b12 100%); border:1px solid rgba(255,255,255,.18); border-radius:14px; overflow:hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.45); }
 .photo-stage img { position:absolute; top:0; bottom:0; left:0; right:0; margin:auto; max-width:100%; max-height:100%; width:auto; height:auto; -webkit-transition: opacity 0.45s ease; transition: opacity 0.45s ease; }
-.photo-stage img.fit-cover { width:100%; height:100%; max-width:none; max-height:none; object-fit:cover; }
+.photo-stage img.fit-cover { width:100%; height:100%; max-width:none; max-height:none; }
 .photo-stage img.fading { opacity: 0.15; }
 
-.stage-badge { position:absolute; top:10px; left:10px; background:rgba(10,16,28,0.78); color:#f5f7fa; font-size:10px; letter-spacing:1.5px; padding:5px 9px; border-radius:8px; border:1px solid rgba(255,255,255,.16); z-index:2; }
-.stage-fullscreen-btn { position:absolute; top:10px; right:10px; background:rgba(10,16,28,0.82); color:#91c9d9; font-size:10px; font-weight:bold; letter-spacing:1px; padding:6px 10px; border-radius:8px; border:1px solid #91c9d9; z-index:2; }
-.stage-progress { position:absolute; bottom:0; left:0; width:100%; height:4px; background:rgba(255,255,255,0.12); z-index:2; }
+.stage-badge { position:absolute; top:10px; left:10px; background:rgba(10,16,28,0.82); color:#f5f7fa; font-size:10px; letter-spacing:1.2px; padding:5px 9px; border-radius:8px; border:1px solid rgba(255,255,255,.16); z-index:4; }
+.stage-fullscreen-btn { position:absolute; top:10px; right:10px; background:rgba(10,16,28,0.85); color:#91c9d9; font-size:10px; font-weight:bold; letter-spacing:1px; padding:6px 10px; border-radius:8px; border:1px solid #91c9d9; z-index:4; }
+.stage-progress { position:absolute; bottom:0; left:0; width:100%; height:4px; background:rgba(255,255,255,0.12); z-index:4; }
 .stage-progress-bar { height:4px; width:0%; background:#91c9d9; }
 
 .frame-controls { margin-top:10px; padding:10px; background:rgba(24,35,54,0.82); border:1px solid rgba(255,255,255,.12); border-radius:12px; text-align:center; }
 .control-row { margin-bottom:8px; }
 .control-row:last-child { margin-bottom:0; }
-.frame-controls button { margin:2px; }
+.frame-controls button, .frame-controls label { margin:2px; }
 
 .thumbs-strip { margin-top:10px; overflow:hidden; text-align:center; }
-.thumb-item { display:inline-block; position:relative; width:14.5%; height:58px; margin:0 0.8%; background:#080d16; border:2px solid rgba(255,255,255,.18); border-radius:8px; overflow:hidden; vertical-align:top; cursor:pointer; }
+.thumb-item { display:inline-block; position:relative; width:14.5%; height:56px; margin:0 0.8% 6px 0.8%; background:#080d16; border:2px solid rgba(255,255,255,.18); border-radius:8px; overflow:hidden; vertical-align:top; cursor:pointer; }
 .thumb-item.active { border-color:#91c9d9; box-shadow:0 0 10px rgba(145,201,217,0.55); }
 .thumb-item img { position:absolute; top:0; bottom:0; left:0; right:0; margin:auto; max-width:100%; max-height:100%; width:auto; height:auto; }
 
 /* Página 3: Lembretes */
 .page-heading { overflow:hidden; margin-bottom:12px; }
 .count { float:right; margin-top:6px; }
-input { min-width:0; padding:11px; color:#fff; background:rgba(16,24,39,0.9); border:1px solid rgba(255,255,255,.2); border-radius:9px; font-size:14px; }
+input[type="text"], input:not([type]) { min-width:0; padding:11px; color:#fff; background:rgba(16,24,39,0.9); border:1px solid rgba(255,255,255,.2); border-radius:9px; font-size:14px; }
 .reminder-form { margin-top:10px; overflow:hidden; }
 .reminder-text { float:left; width:calc(100% - 132px); margin-right:6px; }
 .reminder-time { float:left; width:76px; margin-right:6px; text-align:center; padding:11px 4px; }
@@ -160,7 +161,7 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
 .zen-frame { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#04070d; z-index:900; overflow:hidden; }
 .zen-frame.open { display:block; }
 .zen-frame img { position:absolute; top:0; bottom:0; left:0; right:0; margin:auto; max-width:100%; max-height:100%; width:auto; height:auto; -webkit-transition: opacity 0.5s ease; transition: opacity 0.5s ease; }
-.zen-frame img.fit-cover { width:100%; height:100%; max-width:none; max-height:none; object-fit:cover; }
+.zen-frame img.fit-cover { width:100%; height:100%; max-width:none; max-height:none; }
 .zen-frame img.fading { opacity:0.1; }
 
 .zen-clock-widget { position:absolute; bottom:18px; left:18px; background:rgba(10,16,28,0.68); border:1px solid rgba(255,255,255,.16); border-radius:14px; padding:10px 16px; z-index:910; pointer-events:none; }
@@ -176,7 +177,7 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
  .brand { font-size: 11px; letter-spacing: 2px; }
  .top-btn { padding: 4px 6px; font-size: 9px; margin-right: 3px; }
  .status { display: none; }
- .photo-stage { height: 230px; }
+ .photo-stage { height: 225px; }
  .thumb-item { height: 44px; }
 }
 </style>
@@ -184,6 +185,9 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
 <body>
 
 <div class="stars" id="starsContainer"></div>
+
+<!-- Input nativo oculto acionado via <label for="photoFileInput"> -->
+<input type="file" id="photoFileInput" accept="image/*" multiple style="position:absolute; left:-9999px; width:1px; height:1px; opacity:0;">
 
 <div class="app">
 <header>
@@ -242,7 +246,7 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
 
  <div class="mini-frame-card">
   <div class="mini-frame-box" id="miniFrameBox">
-   <img id="miniPhotoImg" referrerpolicy="no-referrer" alt="Foto em destaque">
+   <img id="miniPhotoImg" alt="Foto em destaque">
   </div>
   <div class="mini-frame-info">
    <div class="kicker">PORTA-RETRATO · <span id="miniModeLabel">CARROSSEL</span></div>
@@ -257,7 +261,7 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
  </div>
 </section>
 
-<!-- PÁGINA 2: FOTOS (CARROSSEL & QUADRO FIXO) -->
+<!-- PÁGINA 2: FOTOS (CARROSSEL & QUADRO FIXO COM ARQUIVOS LOCAIS DA PASTA) -->
 <section class="page" aria-label="Fotos">
  <div class="frame-header">
   <div class="frame-header-left">
@@ -272,7 +276,7 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
  <div class="photo-stage" id="photoStage">
   <div class="stage-badge" id="stageCounter">FOTO 1 / 6</div>
   <button class="stage-fullscreen-btn" id="stageZenBtn" type="button">TELA CHEIA</button>
-  <img id="mainPhotoImg" referrerpolicy="no-referrer" alt="Foto do porta-retrato">
+  <img id="mainPhotoImg" alt="Foto do porta-retrato">
   <div class="stage-progress" id="stageProgressWrap"><div class="stage-progress-bar" id="stageProgressBar"></div></div>
  </div>
 
@@ -280,6 +284,7 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
   <div class="control-row">
    <button class="action active-btn" id="modeCarouselBtn" type="button">MODO CARROSSEL</button>
    <button class="action" id="modeFixedBtn" type="button">QUADRO FIXO (RETRATO)</button>
+   <label for="photoFileInput" class="action install-btn">+ FOTOS</label>
   </div>
   <div class="control-row">
    <button class="action" id="prevPhotoBtn" type="button">◀ ANTERIOR</button>
@@ -288,11 +293,12 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
    <button class="action" id="fitToggleBtn" type="button">FOTO: INTEIRA</button>
   </div>
   <div class="control-row" id="intervalRow">
-   <span class="kicker" style="margin-right:6px;">TEMPO:</span>
+   <span class="kicker" style="margin-right:4px;">TEMPO:</span>
    <button class="action interval-btn" data-sec="5" type="button">5s</button>
    <button class="action interval-btn active-btn" data-sec="10" type="button">10s</button>
    <button class="action interval-btn" data-sec="20" type="button">20s</button>
    <button class="action interval-btn" data-sec="60" type="button">60s</button>
+   <button class="action danger-btn" id="resetPhotosBtn" type="button" style="display:none;">PADRÃO</button>
   </div>
  </div>
 
@@ -360,7 +366,7 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
 
 <!-- MODO QUADRO TELA CHEIA (ZEN FRAME) -->
 <div class="zen-frame" id="zenFrame">
- <img id="zenPhotoImg" referrerpolicy="no-referrer" alt="Quadro Tela Cheia">
+ <img id="zenPhotoImg" alt="Quadro Tela Cheia">
  <div class="zen-clock-widget">
   <div class="zen-clock-time" id="zenClock">--:--</div>
   <div class="zen-clock-date" id="zenDate">--</div>
@@ -629,33 +635,51 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
  updateFullscreenLabel();
 
  /* =========================================================================
-    PORTA-RETRATO DIGITAL & CARROSSEL DE FOTOS (6 FOTOS INTEIRAS)
+    PORTA-RETRATO DIGITAL (CAMINHOS RELATIVOS LOCAIS NA MESMA PASTA DO INDEX)
     ========================================================================= */
- var PHOTOS = [
-  "https://i.imgur.com/7nzMxXZ.jpeg",
-  "https://i.imgur.com/wljNssa.png",
-  "https://i.imgur.com/ezxXsV1.jpeg",
-  "https://i.imgur.com/FWNYSS3.jpeg",
-  "https://i.imgur.com/DQ9yS7M.jpeg",
-  "https://i.imgur.com/5SXBXwJ.jpeg"
+ var DEFAULT_PHOTOS = [
+  "7nzMxXZ.jpeg",
+  "wljNssa.png",
+  "ezxXsV1.jpeg",
+  "FWNYSS3.jpeg",
+  "DQ9yS7M.jpeg",
+  "5SXBXwJ.jpeg"
  ];
 
- // Pré-carregamento em segundo plano para troca instantânea no iPad 2
+ // Pré-carregamento em segundo plano para troca suave no iPad 2
  var preloadedImgs = [];
- for (var p = 0; p < PHOTOS.length; p++) {
+ for (var p = 0; p < DEFAULT_PHOTOS.length; p++) {
   var pre = new Image();
-  pre.referrerPolicy = "no-referrer";
-  pre.src = PHOTOS[p];
+  pre.src = DEFAULT_PHOTOS[p];
   preloadedImgs.push(pre);
  }
 
+ var INSTALLED_PHOTOS_KEY = "desktime_installed_base64_v1";
  var FRAME_PREFS_KEY = "desktime_frame_prefs_v1";
+ var installedPhotos = [];
+ var isUsingInstalled = false;
+
+ try {
+  var rawInstalled = localStorage.getItem(INSTALLED_PHOTOS_KEY);
+  if (rawInstalled) {
+   var arr = JSON.parse(rawInstalled);
+   if (arr instanceof Array && arr.length > 0) {
+    installedPhotos = arr;
+    isUsingInstalled = true;
+   }
+  }
+ } catch (e) { installedPhotos = []; }
+
+ function getActivePhotos() {
+  return (isUsingInstalled && installedPhotos.length > 0) ? installedPhotos : DEFAULT_PHOTOS;
+ }
+
  var frameState = {
   index: 0,
-  mode: "carousel", // "carousel" ou "fixed"
+  mode: "carousel",
   playing: true,
   intervalSec: 10,
-  fit: "contain" // "contain" (foto inteira) por padrão
+  fit: "contain"
  };
 
  try {
@@ -663,7 +687,7 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
   if (savedFrame) {
    var parsed = JSON.parse(savedFrame);
    if (parsed) {
-    if (typeof parsed.index === "number" && parsed.index >= 0 && parsed.index < PHOTOS.length) frameState.index = parsed.index;
+    if (typeof parsed.index === "number" && parsed.index >= 0) frameState.index = parsed.index;
     if (parsed.mode === "carousel" || parsed.mode === "fixed") frameState.mode = parsed.mode;
     if (typeof parsed.playing === "boolean") frameState.playing = parsed.playing;
     if (typeof parsed.intervalSec === "number" && parsed.intervalSec >= 3) frameState.intervalSec = parsed.intervalSec;
@@ -676,25 +700,28 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
   try { localStorage.setItem(FRAME_PREFS_KEY, JSON.stringify(frameState)); } catch (e) {}
  }
 
- // Construir miniaturas
- var thumbsStrip = $("thumbsStrip");
- for (var t = 0; t < PHOTOS.length; t++) {
-  var tBox = document.createElement("div");
-  tBox.className = "thumb-item";
-  tBox.setAttribute("data-idx", t);
-  var tImg = document.createElement("img");
-  tImg.referrerPolicy = "no-referrer";
-  tImg.src = PHOTOS[t];
-  tImg.alt = "Miniatura " + (t + 1);
-  tBox.appendChild(tImg);
-  tBox.addEventListener("click", function () {
-   var chosen = parseInt(this.getAttribute("data-idx"), 10);
-   if (!isNaN(chosen)) {
-    selectPhoto(chosen, true);
-    playAudio("beep");
-   }
-  }, false);
-  thumbsStrip.appendChild(tBox);
+ function rebuildThumbs() {
+  var thumbsStrip = $("thumbsStrip");
+  while (thumbsStrip.firstChild) thumbsStrip.removeChild(thumbsStrip.firstChild);
+  var list = getActivePhotos();
+
+  for (var t = 0; t < list.length; t++) {
+   var tBox = document.createElement("div");
+   tBox.className = (t === frameState.index) ? "thumb-item active" : "thumb-item";
+   tBox.setAttribute("data-idx", t);
+   var tImg = document.createElement("img");
+   tImg.alt = "Miniatura " + (t + 1);
+   tImg.src = list[t];
+   tBox.appendChild(tImg);
+   tBox.addEventListener("click", function () {
+    var chosen = parseInt(this.getAttribute("data-idx"), 10);
+    if (!isNaN(chosen)) {
+     selectPhoto(chosen, true);
+     playAudio("beep");
+    }
+   }, false);
+   thumbsStrip.appendChild(tBox);
+  }
  }
 
  var slideElapsedMs = 0;
@@ -709,12 +736,15 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
  }
 
  function updateFrameUI() {
+  var list = getActivePhotos();
+  var total = list.length;
+  if (frameState.index >= total) frameState.index = 0;
   var idx = frameState.index;
-  var total = PHOTOS.length;
   var isCarousel = frameState.mode === "carousel";
 
   $("stageCounter").innerHTML = "FOTO " + (idx + 1) + " / " + total;
   $("miniPhotoCaption").innerHTML = "Foto " + (idx + 1) + " de " + total + (frameState.fit === "contain" ? " (Inteira)" : " (Preencher)");
+  $("resetPhotosBtn").style.display = isUsingInstalled ? "inline-block" : "none";
 
   var badge = $("frameModeBadge");
   if (isCarousel) {
@@ -747,7 +777,7 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
    intBtns[i].className = sVal === frameState.intervalSec ? "action interval-btn active-btn" : "action interval-btn";
   }
 
-  var thumbs = thumbsStrip.getElementsByTagName("div");
+  var thumbs = $("thumbsStrip").getElementsByTagName("div");
   for (var j = 0; j < thumbs.length; j++) {
    thumbs[j].className = j === idx ? "thumb-item active" : "thumb-item";
   }
@@ -756,12 +786,13 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
  }
 
  function selectPhoto(newIndex, animate) {
-  var total = PHOTOS.length;
+  var list = getActivePhotos();
+  var total = list.length;
   frameState.index = ((newIndex % total) + total) % total;
   slideElapsedMs = 0;
   $("stageProgressBar").style.width = "0%";
 
-  var url = PHOTOS[frameState.index];
+  var url = list[frameState.index];
   var mainImg = $("mainPhotoImg");
   var zenImg = $("zenPhotoImg");
   var miniImg = $("miniPhotoImg");
@@ -788,6 +819,111 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
 
  function nextPhoto(animate) { selectPhoto(frameState.index + 1, animate); }
  function prevPhoto(animate) { selectPhoto(frameState.index - 1, animate); }
+
+ /* =========================================================================
+    INSTALADOR OPCIONAL DE FOTOS EXTRAS DA GALERIA DO IPAD (BASE64)
+    ========================================================================= */
+ function compressImageFileToBase64(file, callback) {
+  var reader = new FileReader();
+  reader.onerror = function () { callback(null); };
+  reader.onload = function (evt) {
+   var img = new Image();
+   img.onerror = function () { callback(null); };
+   img.onload = function () {
+    try {
+     var maxSide = 960;
+     var w = img.width;
+     var h = img.height;
+     if (w > maxSide || h > maxSide) {
+      if (w >= h) {
+       h = Math.round(h * (maxSide / w));
+       w = maxSide;
+      } else {
+       w = Math.round(w * (maxSide / h));
+       h = maxSide;
+      }
+     }
+     var canvas = document.createElement("canvas");
+     canvas.width = w;
+     canvas.height = h;
+     var ctx = canvas.getContext("2d");
+     ctx.fillStyle = "#080d16";
+     ctx.fillRect(0, 0, w, h);
+     ctx.drawImage(img, 0, 0, w, h);
+     var dataUrl = canvas.toDataURL("image/jpeg", 0.80);
+     callback(dataUrl);
+    } catch (err) {
+     callback(null);
+    }
+   };
+   img.src = evt.target.result;
+  };
+  reader.readAsDataURL(file);
+ }
+
+ $("photoFileInput").addEventListener("change", function () {
+  var files = this.files;
+  if (!files || !files.length) return;
+
+  var totalToProcess = Math.min(files.length, 20);
+  var newBase64List = [];
+  var idx = 0;
+
+  showToast("ADICIONANDO FOTOS", "Processando " + totalToProcess + " foto(s)...", false);
+  playAudio("beep");
+
+  function processNext() {
+   if (idx >= totalToProcess) {
+    if (newBase64List.length > 0) {
+     try {
+      localStorage.setItem(INSTALLED_PHOTOS_KEY, JSON.stringify(newBase64List));
+      installedPhotos = newBase64List;
+      isUsingInstalled = true;
+      frameState.index = 0;
+      rebuildThumbs();
+      selectPhoto(0, false);
+      playAudio("go");
+      showToast("FOTOS SALVAS!", newBase64List.length + " foto(s) adicionadas com sucesso!", true);
+     } catch (quotaErr) {
+      while (newBase64List.length > 1) {
+       newBase64List.pop();
+       try {
+        localStorage.setItem(INSTALLED_PHOTOS_KEY, JSON.stringify(newBase64List));
+        installedPhotos = newBase64List;
+        isUsingInstalled = true;
+        frameState.index = 0;
+        rebuildThumbs();
+        selectPhoto(0, false);
+        showToast("FOTOS SALVAS", newBase64List.length + " foto(s) salvas na memória do iPad.", true);
+        break;
+       } catch (e2) {}
+      }
+     }
+    }
+    $("photoFileInput").value = "";
+    return;
+   }
+
+   compressImageFileToBase64(files[idx], function (dataUrl) {
+    if (dataUrl) newBase64List.push(dataUrl);
+    idx++;
+    window.setTimeout(processNext, 40);
+   });
+  }
+
+  processNext();
+ }, false);
+
+ $("resetPhotosBtn").addEventListener("click", function () {
+  try { localStorage.removeItem(INSTALLED_PHOTOS_KEY); } catch (e) {}
+  installedPhotos = [];
+  isUsingInstalled = false;
+  frameState.index = 0;
+  rebuildThumbs();
+  selectPhoto(0, false);
+  playAudio("beep");
+  showToast("FOTOS PADRÃO", "Voltando para as 6 fotos da pasta.", false);
+ }, false);
 
  window.setInterval(function () {
   if (frameState.mode !== "carousel" || !frameState.playing) {
@@ -950,6 +1086,7 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
  }, false);
  $("zenFrame").addEventListener("click", function () { showZenHud(); }, false);
 
+ rebuildThumbs();
  selectPhoto(frameState.index, false);
 
  /* =========================================================================
