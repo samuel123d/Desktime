@@ -9,86 +9,103 @@
 <title>DeskTime</title>
 <style>
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-html, body { margin:0; width:100%; height:100%; overflow:hidden; }
+html, body { margin:0; width:100%; height:100%; overflow:hidden; background:#101827; }
 body { background:#101827; color:#f5f7fa; font-family:Arial, Helvetica, sans-serif; }
-.app { height:100%; width:100%; max-width:1000px; margin:0 auto; padding:12px 16px; }
-header { height:42px; border-bottom:1px solid rgba(255,255,255,.15); }
-.brand { padding-top:12px; font-size:13px; letter-spacing:3px; font-weight:bold; }
+.app { height:100%; width:100%; max-width:1000px; margin:0 auto; padding:10px 14px; background:#101827; display:-webkit-flex; display:flex; -webkit-flex-direction:column; flex-direction:column; }
+header { height:40px; border-bottom:1px solid rgba(255,255,255,.15); -webkit-flex-shrink:0; flex-shrink:0; }
+.brand { float:left; padding-top:10px; font-size:13px; letter-spacing:3px; font-weight:bold; }
 .brand span { color:#91c9d9; }
-.status { float:right; margin-top:-16px; color:#a8b8c8; font-size:10px; letter-spacing:1px; }
-.status i { display:inline-block; width:6px; height:6px; margin-right:6px; background:#83d5ae; border-radius:50%; }
-.viewport { position:relative; height:calc(100% - 58px); margin-top:10px; overflow:hidden; border-radius:14px; }
-.track { width:300%; height:100%; }
-.page { float:left; width:33.333333%; height:100%; padding:18px; overflow-y:auto; -webkit-overflow-scrolling:touch; background:#192638; border:1px solid rgba(255,255,255,.10); border-radius:14px; }
+.status-group { float:right; padding-top:8px; }
+.sound-btn { background:#182336; border:1px solid rgba(255,255,255,.2); color:#91c9d9; font-size:10px; padding:4px 8px; border-radius:6px; margin-right:8px; letter-spacing:1px; }
+.status { display:inline-block; color:#a8b8c8; font-size:10px; letter-spacing:1px; }
+.status i { display:inline-block; width:6px; height:6px; margin-right:5px; background:#83d5ae; border-radius:50%; }
+
+/* Notificações flutuantes (Período e Alarme de Lembrete) */
+.toast-box { position:absolute; top:50px; left:14px; right:14px; z-index:999; pointer-events:none; text-align:center; }
+.toast { display:inline-block; max-width:95%; background:#24334d; color:#f5f7fa; padding:10px 16px; border-radius:12px; font-size:12px; letter-spacing:0.5px; border:1px solid #91c9d9; box-shadow:0 6px 20px rgba(0,0,0,0.6); margin-bottom:6px; pointer-events:auto; }
+.toast strong { color:#91c9d9; display:block; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:3px; }
+.toast-close { margin-left:10px; background:#91c9d9; color:#101827; border:0; border-radius:4px; padding:2px 7px; font-size:10px; font-weight:bold; }
+
+.viewport { position:relative; -webkit-flex-grow:1; flex-grow:1; margin-top:8px; overflow:hidden; border-radius:14px; background:#101827; }
+.track { width:300%; height:100%; position:absolute; top:0; left:0; -webkit-transition: -webkit-transform 0.28s ease; transition: transform 0.28s ease; }
+.page { float:left; width:33.333333%; height:100%; padding:14px; overflow-y:auto; -webkit-overflow-scrolling:touch; background:#101827; border:1px solid rgba(255,255,255,.08); border-radius:14px; }
 .kicker { color:#a5bacb; font-size:10px; font-weight:bold; letter-spacing:2px; text-transform:uppercase; }
-h2 { margin:0; font-size:19px; font-weight:normal; }
-.big-title { margin:8px 0; font-size:29px; font-weight:normal; }
-.muted { color:#aabaca; font-size:12px; line-height:1.5; }
-.card { margin-top:16px; padding:15px; background:#223247; border:1px solid rgba(255,255,255,.10); border-radius:13px; }
-.action { padding:11px 13px; border:1px solid rgba(255,255,255,.2); border-radius:9px; background:#304258; color:#f0f5f8; font-size:11px; }
+.big-title { margin:6px 0; font-size:26px; font-weight:normal; }
+.muted { color:#aabaca; font-size:12px; line-height:1.4; }
+.card { margin-top:14px; padding:14px; background:#182336; border:1px solid rgba(255,255,255,.10); border-radius:13px; }
+.action { padding:10px 12px; border:1px solid rgba(255,255,255,.2); border-radius:9px; background:#24334d; color:#f0f5f8; font-size:11px; }
 button { font-family:Arial,Helvetica,sans-serif; cursor:pointer; }
-.greeting { margin-top:18px; color:#b6c8d8; font-size:13px; letter-spacing:2px; }
-.clock { margin-top:8px; color:#f4f7fb; font-size:76px; font-weight:normal; letter-spacing:-4px; white-space:nowrap; }
-.clock small { color:#a8bdce; font-size:22px; letter-spacing:0; }
-.date { color:#d2dce6; font-size:16px; text-transform:capitalize; }
-.message { margin-top:10px; color:#9db1c4; font-size:13px; }
-.sun-area { position:relative; height:95px; margin-top:10px; overflow:hidden; }
-.sun { position:absolute; top:5px; right:22%; width:65px; height:65px; background:#f4d6aa; border-radius:50%; }
-.land { position:absolute; bottom:-105px; width:120%; height:160px; background:#294b5b; border-radius:50%; }
-.land.two { right:-25%; bottom:-125px; background:#111d2c; }
+.greeting { margin-top:12px; color:#b6c8d8; font-size:13px; letter-spacing:2px; }
+.clock { margin-top:6px; color:#f4f7fb; font-size:68px; font-weight:normal; letter-spacing:-3px; white-space:nowrap; }
+.clock small { color:#a8bdce; font-size:20px; letter-spacing:0; }
+.date { color:#d2dce6; font-size:15px; text-transform:capitalize; }
+.message { margin-top:8px; color:#9db1c4; font-size:12px; }
+.sun-area { position:relative; height:75px; margin-top:8px; overflow:hidden; }
+.sun { position:absolute; top:5px; right:22%; width:52px; height:52px; background:#f4d6aa; border-radius:50%; }
+.land { position:absolute; bottom:-95px; width:120%; height:140px; background:#1e3647; border-radius:50%; }
+.land.two { right:-25%; bottom:-115px; background:#142233; }
 .weather-row { overflow:hidden; }
 .weather-info { float:left; }
 .weather-button { float:right; }
-.weather-main { margin-top:8px; }
-.temperature { display:inline-block; margin-right:10px; font-size:34px; }
-.weather-icon { display:inline-block; font-size:25px; }
+.weather-main { margin-top:6px; }
+.temperature { display:inline-block; margin-right:8px; font-size:30px; }
+.weather-icon { display:inline-block; font-size:22px; }
 .weather-description { color:#aabaca; font-size:11px; }
-.weather-details { margin-top:15px; padding-top:12px; border-top:1px solid rgba(255,255,255,.12); overflow:hidden; }
+.weather-details { margin-top:12px; padding-top:10px; border-top:1px solid rgba(255,255,255,.12); overflow:hidden; }
 .weather-details div { float:left; width:33.33%; }
 .weather-details small { display:block; color:#9aafc1; font-size:10px; }
-.weather-details strong { display:block; margin-top:5px; font-size:14px; }
-.page-heading { overflow:hidden; margin-bottom:18px; }
-.count { float:right; margin-top:8px; }
-input { width:100%; min-width:0; padding:12px; color:#fff; background:#142235; border:1px solid rgba(255,255,255,.2); border-radius:9px; font-size:14px; }
-.reminder-form { margin-top:12px; overflow:hidden; }
-.reminder-form input { float:left; width:calc(100% - 55px); }
-.add { float:right; width:45px; height:43px; border:0; border-radius:9px; background:#c3dce6; color:#182b3c; font-size:24px; }
-hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:18px 0; }
+.weather-details strong { display:block; margin-top:4px; font-size:13px; }
+.page-heading { overflow:hidden; margin-bottom:14px; }
+.count { float:right; margin-top:6px; }
+
+/* Formulário de Lembrete com Hora */
+input { min-width:0; padding:11px; color:#fff; background:#101827; border:1px solid rgba(255,255,255,.2); border-radius:9px; font-size:14px; }
+.reminder-form { margin-top:10px; overflow:hidden; }
+.reminder-text { float:left; width:calc(100% - 132px); margin-right:6px; }
+.reminder-time { float:left; width:76px; margin-right:6px; text-align:center; padding:11px 4px; }
+.add { float:right; width:44px; height:41px; border:0; border-radius:9px; background:#c3dce6; color:#182b3c; font-size:22px; font-weight:bold; }
+
+hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:14px 0; }
 .reminders { list-style:none; margin:0; padding:0; }
-.reminders li { min-height:44px; padding:12px 4px; border-bottom:1px solid rgba(255,255,255,.10); font-size:13px; overflow:hidden; }
-.reminders li span { display:block; float:left; width:82%; overflow-wrap:break-word; }
-.remove { float:right; border:0; background:transparent; color:#aabac9; font-size:22px; }
+.reminders li { min-height:44px; padding:10px 4px; border-bottom:1px solid rgba(255,255,255,.10); font-size:13px; overflow:hidden; }
+.reminders li .rem-content { float:left; width:82%; overflow-wrap:break-word; }
+.rem-badge { display:inline-block; background:#24334d; color:#91c9d9; font-size:11px; padding:2px 6px; border-radius:5px; margin-right:6px; font-weight:bold; border:1px solid rgba(145,201,217,0.3); }
+.rem-badge.done { background:#182336; color:#748699; border-color:transparent; text-decoration:line-through; }
+.remove { float:right; border:0; background:transparent; color:#aabac9; font-size:22px; padding:0 6px; }
 .empty-list { color:#9eafc0; }
-.pomodoro-card { margin:20px auto 0; padding:18px 12px; background:#202638; border:1px solid rgba(255,255,255,.16); border-radius:16px; }
+
+/* Pomodoro */
+.pomodoro-card { margin:12px auto 0; padding:14px 10px; background:#182336; border:1px solid rgba(255,255,255,.16); border-radius:16px; }
 .pomodoro-modes { text-align:center; }
-.pom-mode { margin:3px; padding:9px 11px; border:1px solid rgba(255,255,255,.2); border-radius:20px; background:#303247; color:#eee; font-size:10px; }
-.pom-mode.active { background:#665a78; }
-.timer-face { padding:35px 0 22px; text-align:center; }
-.timer-time { color:#fff; font-size:76px; font-weight:normal; letter-spacing:-4px; }
-.timer-caption { margin-top:10px; color:#d4c7df; font-size:11px; letter-spacing:2px; }
-.pom-progress { max-width:500px; height:5px; margin:0 auto; overflow:hidden; background:#414052; border-radius:5px; }
-.pom-progress div { height:5px; width:100%; background:#e7d8f2; }
-.pom-controls { margin-top:20px; text-align:center; }
-.pom-controls button { margin:4px; min-width:95px; }
-.pom-status { margin:16px auto 0; text-align:center; }
-.pomodoro-tip { margin:18px 4px; }
-.pomodoro-tip p { color:#c3b6ce; font-size:12px; line-height:1.6; }
-@media (max-width:600px) {
- .app { padding:8px; }
- .page { padding:14px; }
- .clock { font-size:61px; }
- .big-title { font-size:25px; }
- .timer-time { font-size:64px; }
- .pom-mode { padding:8px; }
-}
+.pom-mode { margin:2px; padding:8px 10px; border:1px solid rgba(255,255,255,.2); border-radius:20px; background:#24334d; color:#eee; font-size:10px; }
+.pom-mode.active { background:#4b648a; border-color:#91c9d9; }
+.timer-face { padding:20px 0 15px; text-align:center; }
+.timer-time { color:#fff; font-size:64px; font-weight:normal; letter-spacing:-3px; }
+.timer-caption { margin-top:6px; color:#b6c8d8; font-size:11px; letter-spacing:2px; }
+.pom-progress { max-width:500px; height:5px; margin:0 auto; overflow:hidden; background:#24334d; border-radius:5px; }
+.pom-progress div { height:5px; width:100%; background:#91c9d9; }
+.pom-controls { margin-top:15px; text-align:center; }
+.pom-controls button { margin:3px; min-width:85px; }
+.pom-status { margin:12px auto 0; text-align:center; }
+.pomodoro-tip { margin:12px 4px; }
+.pomodoro-tip p { color:#aabaca; font-size:11px; line-height:1.5; }
+.nav-dots { text-align:center; padding-top:6px; -webkit-flex-shrink:0; flex-shrink:0; }
+.nav-dot { display:inline-block; width:24px; height:6px; margin:0 4px; border-radius:3px; background:#24334d; border:0; padding:0; }
+.nav-dot.active { background:#91c9d9; }
 </style>
 </head>
 <body>
 <div class="app">
 <header>
  <div class="brand">DESK<span>TIME</span></div>
- <div class="status"><i></i>PAINEL ATIVO</div>
+ <div class="status-group">
+  <button class="sound-btn" id="soundToggle" type="button">SOM: ATIVO</button>
+  <div class="status"><i></i>ATIVO</div>
+ </div>
 </header>
+
+<div class="toast-box" id="toastBox"></div>
+
 <main class="viewport" id="viewport">
 <div class="track" id="track">
 <section class="page" aria-label="Início">
@@ -111,29 +128,32 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:18px 0; }
    <div><small>Umidade</small><strong id="humidity">--%</strong></div>
    <div><small>Chuva agora</small><strong id="rain">--</strong></div>
   </div>
-  <div class="muted" id="weatherFoot" style="margin-top:10px">Clima via Open-Meteo</div>
+  <div class="muted" id="weatherFoot" style="margin-top:8px">Clima via Open-Meteo</div>
  </div>
- <p class="muted">Deslize para a esquerda para ver seus lembretes.</p>
+ <p class="muted" style="margin-top:12px;">Deslize para o lado ou toque nas barras abaixo para navegar.</p>
 </section>
+
 <section class="page" aria-label="Agenda">
  <div class="page-heading">
   <div class="count kicker" id="count">0 ITENS</div>
   <div class="kicker">ORGANIZAÇÃO PESSOAL</div>
   <div class="big-title">Lembretes.</div>
-  <div class="muted">Suas ideias e tarefas em um só lugar.</div>
+  <div class="muted">Defina um horário para receber o aviso na tela e som.</div>
  </div>
  <div class="card">
-  <div class="kicker">NOVO LEMBRETE</div>
+  <div class="kicker">NOVO LEMBRETE + HORA</div>
   <form class="reminder-form" id="reminderForm">
-   <input id="reminderInput" placeholder="O que não posso esquecer?" maxlength="100" autocomplete="off">
+   <input class="reminder-text" id="reminderInput" placeholder="O que lembrar?" maxlength="90" autocomplete="off">
+   <input class="reminder-time" id="reminderTime" placeholder="HH:MM" maxlength="5" autocomplete="off">
    <button class="add" type="submit">+</button>
   </form>
  </div>
  <hr>
  <div class="kicker">MINHA LISTA</div>
  <ul class="reminders" id="reminders"></ul>
- <p class="muted">Seus lembretes ficam salvos neste dispositivo.</p>
+ <p class="muted">Os avisos tocam na hora exata marcada.</p>
 </section>
+
 <section class="page" aria-label="Pomodoro">
  <div class="kicker">FOCO E PRODUTIVIDADE</div>
  <div class="big-title">Seu momento de foco.</div>
@@ -156,56 +176,260 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:18px 0; }
   </div>
   <div class="pom-status muted" id="pomStatus">Pronto para começar? Clique em começar.</div>
  </div>
- <div class="pomodoro-tip"><span class="kicker">DICA</span><p>Durante o foco, escolha uma única tarefa e evite distrações. Quando o tempo acabar, aproveite a pausa para descansar.</p></div>
+ <div class="pomodoro-tip"><span class="kicker">DICA</span><p>Ao clicar em começar, uma contagem 1, 2, 3 tocará antes do tempo iniciar.</p></div>
 </section>
 </div>
 </main>
+
+<div class="nav-dots" id="navDots">
+ <button class="nav-dot active" data-page="0" type="button" aria-label="Início"></button>
+ <button class="nav-dot" data-page="1" type="button" aria-label="Lembretes"></button>
+ <button class="nav-dot" data-page="2" type="button" aria-label="Pomodoro"></button>
 </div>
+</div>
+
 <script type="text/javascript">
 (function () {
  var $ = function (id) { return document.getElementById(id); };
  function pad(n) { return n < 10 ? "0" + n : String(n); }
 
- /* Relógio simples, sem Intl nem recursos recentes do JavaScript. */
+ /* =========================================================================
+    GERADOR DE ÁUDIO WAV NATIVO (100% compatível com Safari antigo / iPad 2)
+    ========================================================================= */
+ var soundEnabled = true;
+ var sounds = {};
+
+ function createWavDataURI(freq, durationSec, volume) {
+  var sampleRate = 8000;
+  var numSamples = Math.floor(sampleRate * durationSec);
+  var dataSize = numSamples;
+  var buffer = new Array(44 + dataSize);
+
+  function writeStr(offset, str) {
+   for (var i = 0; i < str.length; i++) buffer[offset + i] = str.charCodeAt(i);
+  }
+  function write32(offset, val) {
+   buffer[offset] = val & 255;
+   buffer[offset + 1] = (val >> 8) & 255;
+   buffer[offset + 2] = (val >> 16) & 255;
+   buffer[offset + 3] = (val >> 24) & 255;
+  }
+  function write16(offset, val) {
+   buffer[offset] = val & 255;
+   buffer[offset + 1] = (val >> 8) & 255;
+  }
+
+  writeStr(0, "RIFF");
+  write32(4, 36 + dataSize);
+  writeStr(8, "WAVE");
+  writeStr(12, "fmt ");
+  write32(16, 16);
+  write16(20, 1); // PCM
+  write16(22, 1); // Mono
+  write32(24, sampleRate);
+  write32(28, sampleRate);
+  write16(32, 1);
+  write16(34, 8); // 8-bit
+  writeStr(36, "data");
+  write32(40, dataSize);
+
+  for (var i = 0; i < numSamples; i++) {
+   var t = i / sampleRate;
+   var env = 1 - (i / numSamples); // Fade-out suave
+   var sample = Math.sin(2 * Math.PI * freq * t) * env * (volume || 0.5);
+   buffer[44 + i] = Math.floor((sample + 1) * 127.5);
+  }
+
+  var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+  var b64 = "";
+  for (var j = 0; j < buffer.length; j += 3) {
+   var b1 = buffer[j];
+   var b2 = j + 1 < buffer.length ? buffer[j + 1] : 0;
+   var b3 = j + 2 < buffer.length ? buffer[j + 2] : 0;
+   b64 += chars[b1 >> 2];
+   b64 += chars[((b1 & 3) << 4) | (b2 >> 4)];
+   b64 += j + 1 < buffer.length ? chars[((b2 & 15) << 2) | (b3 >> 6)] : "=";
+   b64 += j + 2 < buffer.length ? chars[b3 & 63] : "=";
+  }
+  return "data:audio/wav;base64," + b64;
+ }
+
+ try {
+  sounds.tap = new Audio(createWavDataURI(750, 0.045, 0.35));
+  sounds.beep = new Audio(createWavDataURI(520, 0.14, 0.55));
+  sounds.go = new Audio(createWavDataURI(880, 0.28, 0.65));
+  sounds.alarm = new Audio(createWavDataURI(980, 0.35, 0.75));
+ } catch (e) {}
+
+ var audioUnlocked = false;
+ function unlockAudio() {
+  if (audioUnlocked) return;
+  try {
+   for (var key in sounds) {
+    if (sounds.hasOwnProperty(key) && sounds[key]) {
+     sounds[key].volume = 0.01;
+     sounds[key].play();
+     sounds[key].pause();
+     sounds[key].currentTime = 0;
+     sounds[key].volume = 1.0;
+    }
+   }
+   audioUnlocked = true;
+  } catch (e) {}
+ }
+
+ function playAudio(name) {
+  if (!soundEnabled || !sounds[name]) return;
+  try {
+   sounds[name].pause();
+   sounds[name].currentTime = 0;
+   sounds[name].play();
+  } catch (e) {}
+ }
+
+ /* Som em QUALQUER toque/clique no site inteiro */
+ document.addEventListener("touchstart", function () {
+  unlockAudio();
+  playAudio("tap");
+ }, false);
+
+ document.addEventListener("mousedown", function (e) {
+  // Evita som duplo em telas touch que disparam touchstart + mousedown
+  if (!("ontouchstart" in window)) {
+   unlockAudio();
+   playAudio("tap");
+  }
+ }, false);
+
+ $("soundToggle").addEventListener("click", function (e) {
+  e.stopPropagation();
+  soundEnabled = !soundEnabled;
+  this.innerHTML = soundEnabled ? "SOM: ATIVO" : "SOM: MUDO";
+  if (soundEnabled) { unlockAudio(); playAudio("beep"); }
+ }, false);
+
+ /* =========================================================================
+    NOTIFICAÇÕES NA TELA (Toasts)
+    ========================================================================= */
+ function showToast(title, text, persistent) {
+  var box = $("toastBox");
+  var div = document.createElement("div");
+  div.className = "toast";
+  div.innerHTML = "<strong>" + title + "</strong>" + text;
+
+  if (persistent) {
+   var closeBtn = document.createElement("button");
+   closeBtn.className = "toast-close";
+   closeBtn.type = "button";
+   closeBtn.innerHTML = "OK";
+   closeBtn.onclick = function () {
+    playAudio("tap");
+    if (div.parentNode) div.parentNode.removeChild(div);
+   };
+   div.appendChild(closeBtn);
+  } else {
+   window.setTimeout(function () {
+    if (div.parentNode) div.parentNode.removeChild(div);
+   }, 4500);
+  }
+  box.appendChild(div);
+ }
+
+ /* =========================================================================
+    RELÓGIO E VERIFICAÇÃO DE PERÍODO + LEMBRETES
+    ========================================================================= */
  var weekdays = ["domingo","segunda-feira","terça-feira","quarta-feira","quinta-feira","sexta-feira","sábado"];
  var months = ["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
+ var lastPeriod = "";
+ var lastMinuteChecked = "";
+
  function updateClock() {
-  var now = new Date(), h = now.getHours(), theme, greeting, message;
-  $("clock").innerHTML = pad(h) + ":" + pad(now.getMinutes());
+  var now = new Date();
+  var h = now.getHours();
+  var m = now.getMinutes();
+  var currentHHMM = pad(h) + ":" + pad(m);
+
+  $("clock").innerHTML = currentHHMM;
   $("seconds").innerHTML = pad(now.getSeconds());
   $("date").innerHTML = weekdays[now.getDay()] + ", " + now.getDate() + " de " + months[now.getMonth()] + " de " + now.getFullYear();
-  if (h >= 5 && h < 11) { theme="morning"; greeting="BOM DIA"; message="Que seu dia comece com boas ideias."; }
-  else if (h >= 11 && h < 17) { theme="day"; greeting="BOA TARDE"; message="Um bom momento para fazer acontecer."; }
-  else if (h >= 17 && h < 19) { theme="evening"; greeting="FIM DE TARDE"; message="A luz muda, o ritmo também."; }
-  else { theme="night"; greeting="BOA NOITE"; message="Um ótimo momento para desacelerar."; }
-  $("greeting").innerHTML = greeting; $("message").innerHTML = message;
-  document.body.style.background = theme === "morning" ? "#344f61" : theme === "day" ? "#244b60" : theme === "evening" ? "#49364e" : "#101827";
- }
- updateClock();
- window.setInterval(updateClock, 1000);
 
- /* Navegação por toque: compatível com Safari antigo do iPad. */
+  var greeting, message, period;
+  if (h >= 5 && h < 11) { period = "morning"; greeting = "BOM DIA"; message = "Que seu dia comece com boas ideias."; }
+  else if (h >= 11 && h < 17) { period = "day"; greeting = "BOA TARDE"; message = "Um bom momento para fazer acontecer."; }
+  else if (h >= 17 && h < 19) { period = "evening"; greeting = "FIM DE TARDE"; message = "A luz muda, o ritmo também."; }
+  else { period = "night"; greeting = "BOA NOITE"; message = "Um ótimo momento para desacelerar."; }
+
+  if (lastPeriod && lastPeriod !== period) {
+   playAudio("beep");
+   showToast("MUDANÇA DE PERÍODO", "Agora é " + greeting.toLowerCase() + "!", false);
+  }
+  lastPeriod = period;
+
+  $("greeting").innerHTML = greeting;
+  $("message").innerHTML = message;
+
+  /* Checa lembretes na virada do minuto */
+  if (lastMinuteChecked !== currentHHMM) {
+   lastMinuteChecked = currentHHMM;
+   checkRemindersAlarm(currentHHMM);
+  }
+ }
+
+ /* =========================================================================
+    NAVEGAÇÃO POR DESLIZE (SWIPE) E BOTÕES INFERIORES
+    ========================================================================= */
  var currentPage = 0, startX = 0, startY = 0, tracking = false;
  var track = $("track"), viewport = $("viewport");
+
  function goToPage(page) {
   currentPage = Math.max(0, Math.min(2, page));
-  track.style.webkitTransform = "translateX(-" + (currentPage * 33.333333) + "%)";
-  track.style.transform = "translateX(-" + (currentPage * 33.333333) + "%)";
+  var offset = -(currentPage * 33.333333);
+  track.style.webkitTransform = "translateX(" + offset + "%)";
+  track.style.transform = "translateX(" + offset + "%)";
+
+  var dots = $("navDots").getElementsByTagName("button");
+  for (var i = 0; i < dots.length; i++) {
+   dots[i].className = i === currentPage ? "nav-dot active" : "nav-dot";
+  }
  }
+
+ var dots = $("navDots").getElementsByTagName("button");
+ for (var d = 0; d < dots.length; d++) {
+  dots[d].addEventListener("click", function () {
+   goToPage(parseInt(this.getAttribute("data-page"), 10));
+  }, false);
+ }
+
  viewport.addEventListener("touchstart", function (e) {
-  if (e.touches && e.touches.length === 1) { startX=e.touches[0].pageX; startY=e.touches[0].pageY; tracking=true; }
+  if (e.touches && e.touches.length === 1) {
+   startX = e.touches[0].pageX;
+   startY = e.touches[0].pageY;
+   tracking = true;
+  }
  }, false);
+
+ viewport.addEventListener("touchmove", function (e) {
+  if (!tracking) return;
+  var dx = e.touches[0].pageX - startX;
+  var dy = e.touches[0].pageY - startY;
+  if (Math.abs(dy) > Math.abs(dx)) { tracking = false; }
+ }, false);
+
  viewport.addEventListener("touchend", function (e) {
   if (!tracking || !e.changedTouches || !e.changedTouches.length) return;
-  var dx=e.changedTouches[0].pageX-startX, dy=e.changedTouches[0].pageY-startY;
-  if (Math.abs(dx)>55 && Math.abs(dx)>Math.abs(dy)*1.2) goToPage(currentPage+(dx<0?1:-1));
-  tracking=false;
+  var dx = e.changedTouches[0].pageX - startX;
+  var dy = e.changedTouches[0].pageY - startY;
+  if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+   goToPage(currentPage + (dx < 0 ? 1 : -1));
+  }
+  tracking = false;
  }, false);
- viewport.addEventListener("touchcancel", function () { tracking=false; }, false);
+ viewport.addEventListener("touchcancel", function () { tracking = false; }, false);
  goToPage(0);
 
- /* Clima por XMLHttpRequest, sem fetch, async/await ou AbortController. */
- var weatherURL = "https://api.open-meteo.com/v1/forecast?latitude=-5.7945&longitude=-35.211&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code&timezone=America%2FSao_Paulo";
+ /* =========================================================================
+    CLIMA VIA OPEN-METEO
+    ========================================================================= */
  var lastWeather = 0, weatherBusy = false;
  function weatherCondition(code) {
   if (code===0) return ["Céu limpo","☀"];
@@ -214,135 +438,271 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:18px 0; }
   if (code<=48) return ["Neblina","〰"];
   if (code<=57) return ["Garoa","🌦"];
   if (code<=67) return ["Chuva","🌧"];
-  if (code<=77) return ["Neve","❄"];
-  if (code<=82) return ["Pancadas de chuva","🌦"];
-  if (code<=86) return ["Pancadas de neve","❄"];
   if (code>=95) return ["Tempestade","⛈"];
   return ["Condição variável","☁"];
  }
- function loadWeather(force) {
-  if (weatherBusy || (!force && new Date().getTime()-lastWeather<1800000)) return;
-  weatherBusy=true; $("weatherDesc").innerHTML="Consultando...";
+
+ function applyOpenMeteo(data) {
+  var c = data.current || data.current_weather;
+  if (!c) return false;
+  var temp = c.temperature_2m !== undefined ? c.temperature_2m : c.temperature;
+  var code = c.weather_code !== undefined ? c.weather_code : c.weathercode;
+  var feels = c.apparent_temperature !== undefined ? c.apparent_temperature : temp;
+  var hum = c.relative_humidity_2m !== undefined ? c.relative_humidity_2m : "--";
+  var rain = c.precipitation !== undefined ? (Number(c.precipitation) > 0 ? "Sim" : "Não") : "Não";
+  var cond = weatherCondition(Number(code));
+
+  $("temp").innerHTML = Math.round(temp) + "°";
+  $("feels").innerHTML = Math.round(feels) + "°";
+  $("humidity").innerHTML = hum !== "--" ? Math.round(hum) + "%" : "--%";
+  $("rain").innerHTML = rain;
+  $("weatherDesc").innerHTML = cond[0];
+  $("weatherIcon").innerHTML = cond[1];
+  var d = new Date();
+  $("weatherFoot").innerHTML = "Atualizado às " + pad(d.getHours()) + ":" + pad(d.getMinutes()) + " · Open-Meteo";
+  lastWeather = d.getTime();
+  return true;
+ }
+
+ function requestWeather(urls, index) {
+  if (index >= urls.length) {
+   weatherBusy = false;
+   $("refreshWeather").disabled = false;
+   $("weatherDesc").innerHTML = "Clima indisponível (SSL)";
+   return;
+  }
   var xhr = new XMLHttpRequest();
-  xhr.open("GET", weatherURL, true); xhr.timeout=12000;
-  xhr.onreadystatechange=function () {
-   if (xhr.readyState!==4) return;
-   weatherBusy=false;
-   if (xhr.status>=200 && xhr.status<300) {
+  xhr.open("GET", urls[index], true);
+  xhr.timeout = 7000;
+  xhr.onreadystatechange = function () {
+   if (xhr.readyState !== 4) return;
+   if (xhr.status >= 200 && xhr.status < 300) {
     try {
-     var data=JSON.parse(xhr.responseText), c=data.current, cond;
-     if (!c) throw new Error("sem dados");
-     cond=weatherCondition(Number(c.weather_code));
-     $("temp").innerHTML=Math.round(c.temperature_2m)+"°";
-     $("feels").innerHTML=Math.round(c.apparent_temperature)+"°";
-     $("humidity").innerHTML=Math.round(c.relative_humidity_2m)+"%";
-     $("rain").innerHTML=Number(c.precipitation)>0?"Sim":"Não";
-     $("weatherDesc").innerHTML=cond[0]; $("weatherIcon").innerHTML=cond[1];
-     var d=new Date(); $("weatherFoot").innerHTML="Atualizado às "+pad(d.getHours())+":"+pad(d.getMinutes())+" · Open-Meteo";
-     lastWeather=d.getTime();
-    } catch(err) { $("weatherDesc").innerHTML="Clima indisponível"; }
-   } else { $("weatherDesc").innerHTML="Clima indisponível"; }
-   $("refreshWeather").disabled=false;
+     var data = JSON.parse(xhr.responseText);
+     if (applyOpenMeteo(data)) {
+      weatherBusy = false;
+      $("refreshWeather").disabled = false;
+      return;
+     }
+    } catch (e) {}
+   }
+   requestWeather(urls, index + 1);
   };
-  xhr.onerror=function () { weatherBusy=false; $("weatherDesc").innerHTML="Sem conexão"; $("refreshWeather").disabled=false; };
-  xhr.ontimeout=function () { weatherBusy=false; $("weatherDesc").innerHTML="Tempo de consulta excedido"; $("refreshWeather").disabled=false; };
-  $("refreshWeather").disabled=true;
-  try { xhr.send(null); } catch(err) { weatherBusy=false; $("refreshWeather").disabled=false; $("weatherDesc").innerHTML="Clima indisponível"; }
+  xhr.onerror = function () { requestWeather(urls, index + 1); };
+  xhr.ontimeout = function () { requestWeather(urls, index + 1); };
+  try { xhr.send(null); } catch (e) { requestWeather(urls, index + 1); }
+ }
+
+ function loadWeather(force) {
+  if (weatherBusy || (!force && new Date().getTime() - lastWeather < 1800000)) return;
+  weatherBusy = true;
+  $("refreshWeather").disabled = true;
+  $("weatherDesc").innerHTML = "Consultando...";
+  var query = "latitude=-5.7945&longitude=-35.211&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code&current_weather=true&timezone=America%2FSao_Paulo";
+  requestWeather(["https://api.open-meteo.com/v1/forecast?" + query, "http://api.open-meteo.com/v1/forecast?" + query], 0);
  }
  $("refreshWeather").addEventListener("click", function () { loadWeather(true); }, false);
  loadWeather(false);
- window.setInterval(function () { loadWeather(false); }, 1800000);
 
- /* Lembretes salvos no próprio iPad. */
- var STORAGE_KEY="desktime_items", reminders=[];
+ /* =========================================================================
+    LEMBRETES COM HORA E AVISO SONORO
+    ========================================================================= */
+ var STORAGE_KEY = "desktime_items_v2", reminders = [];
  try {
-  var stored=localStorage.getItem(STORAGE_KEY);
-  if (stored) { stored=JSON.parse(stored); if (stored instanceof Array) reminders=stored; }
- } catch(err) { reminders=[]; }
- function saveReminders() {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(reminders)); }
-  catch(err) { $("count").title="Não foi possível salvar neste navegador."; }
- }
- function renderReminders() {
-  var list=$("reminders"), i, li, span, btn;
-  while (list.firstChild) list.removeChild(list.firstChild);
-  $("count").innerHTML=reminders.length+(reminders.length===1?" ITEM":" ITENS");
-  if (!reminders.length) { li=document.createElement("li"); li.className="empty-list"; li.innerHTML="Nenhum lembrete por enquanto."; list.appendChild(li); return; }
-  for (i=0;i<reminders.length;i++) {
-   li=document.createElement("li"); span=document.createElement("span"); span.appendChild(document.createTextNode(reminders[i]));
-   btn=document.createElement("button"); btn.className="remove"; btn.type="button"; btn.innerHTML="×"; btn.setAttribute("data-index",i);
-   li.appendChild(span); li.appendChild(btn); list.appendChild(li);
+  var stored = localStorage.getItem(STORAGE_KEY);
+  if (stored) {
+   stored = JSON.parse(stored);
+   if (stored instanceof Array) reminders = stored;
   }
- }
- $("reminderForm").addEventListener("submit", function (e) {
-  e.preventDefault(); var input=$("reminderInput"), value=input.value.replace(/^\s+|\s+$/g,"");
-  if (!value) return;
-  reminders.unshift(value); if (reminders.length>100) reminders.length=100;
-  saveReminders(); input.value=""; renderReminders();
- }, false);
- $("reminders").addEventListener("click", function (e) {
-  var target=e.target || e.srcElement, index;
-  if (target && target.className==="remove") {
-   index=parseInt(target.getAttribute("data-index"),10);
-   if (!isNaN(index)) { reminders.splice(index,1); saveReminders(); renderReminders(); }
-  }
- }, false);
- renderReminders();
+ } catch (err) { reminders = []; }
 
- /* Pomodoro: usa horário final para não perder tempo ao alternar de página. */
- var modes={focus:{seconds:1500,label:"HORA DE CONCENTRAR"},short:{seconds:300,label:"PAUSA CURTA"},long:{seconds:900,label:"PAUSA LONGA"}};
- var mode="focus", remaining=1500, deadline=0, running=false, timer=null;
- function renderPomodoro() {
-  var mins=Math.floor(remaining/60), secs=remaining%60;
-  $("pomTime").innerHTML=pad(mins)+":"+pad(secs);
-  $("pomCaption").innerHTML=modes[mode].label;
-  $("pomProgress").style.width=(remaining/modes[mode].seconds*100)+"%";
-  $("pomStart").innerHTML=running?"PAUSAR":(remaining===modes[mode].seconds?"COMEÇAR":"CONTINUAR");
-  document.title=(running?pad(mins)+":"+pad(secs)+" · ":"")+"DeskTime";
+ function saveReminders() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(reminders)); } catch (err) {}
  }
- function stopTimer() { if (timer!==null) { window.clearInterval(timer); timer=null; } }
+
+ /* Formatação automática de hora HH:MM enquanto digita */
+ $("reminderTime").addEventListener("input", function () {
+  var v = this.value.replace(/\D/g, "");
+  if (v.length >= 3) v = v.slice(0, 2) + ":" + v.slice(2, 4);
+  this.value = v;
+ }, false);
+
+ function renderReminders() {
+  var list = $("reminders"), i, li, content, badge, btn;
+  while (list.firstChild) list.removeChild(list.firstChild);
+  $("count").innerHTML = reminders.length + (reminders.length === 1 ? " ITEM" : " ITENS");
+  if (!reminders.length) {
+   li = document.createElement("li"); li.className = "empty-list"; li.innerHTML = "Nenhum lembrete por enquanto."; list.appendChild(li); return;
+  }
+  for (i = 0; i < reminders.length; i++) {
+   li = document.createElement("li");
+   content = document.createElement("div");
+   content.className = "rem-content";
+
+   if (reminders[i].time) {
+    badge = document.createElement("span");
+    badge.className = reminders[i].notified ? "rem-badge done" : "rem-badge";
+    badge.appendChild(document.createTextNode(reminders[i].time));
+    content.appendChild(badge);
+   }
+   content.appendChild(document.createTextNode(reminders[i].text));
+
+   btn = document.createElement("button");
+   btn.className = "remove"; btn.type = "button"; btn.innerHTML = "×"; btn.setAttribute("data-index", i);
+   li.appendChild(content); li.appendChild(btn); list.appendChild(li);
+  }
+ }
+
+ $("reminderForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+  var input = $("reminderInput");
+  var timeInput = $("reminderTime");
+  var textVal = input.value.replace(/^\s+|\s+$/g, "");
+  var timeVal = timeInput.value.replace(/^\s+|\s+$/g, "");
+
+  if (!textVal) return;
+
+  // Valida formato HH:MM
+  if (timeVal && !/^([01]\d|2[0-3]):([0-5]\d)$/.test(timeVal)) {
+   showToast("HORÁRIO INVÁLIDO", "Use o formato HH:MM (ex: 14:30)", false);
+   playAudio("beep");
+   return;
+  }
+
+  reminders.unshift({ text: textVal, time: timeVal, notified: false });
+  if (reminders.length > 100) reminders.length = 100;
+  saveReminders();
+  input.value = "";
+  timeInput.value = "";
+  renderReminders();
+  playAudio("beep");
+ }, false);
+
+ $("reminders").addEventListener("click", function (e) {
+  var target = e.target || e.srcElement, index;
+  if (target && target.className === "remove") {
+   index = parseInt(target.getAttribute("data-index"), 10);
+   if (!isNaN(index)) { reminders.splice(index, 1); saveReminders(); renderReminders(); }
+  }
+ }, false);
+
+ function checkRemindersAlarm(currentHHMM) {
+  var changed = false;
+  for (var i = 0; i < reminders.length; i++) {
+   if (reminders[i].time === currentHHMM && !reminders[i].notified) {
+    reminders[i].notified = true;
+    changed = true;
+    playAudio("alarm");
+    window.setTimeout(function () { playAudio("alarm"); }, 450);
+    showToast("LEMBRETE · " + currentHHMM, reminders[i].text, true);
+   }
+  }
+  if (changed) { saveReminders(); renderReminders(); }
+ }
+
+ renderReminders();
+ updateClock();
+ window.setInterval(updateClock, 1000);
+
+ /* =========================================================================
+    POMODORO COM CONTAGEM 1, 2, 3 SONORA E VISUAL
+    ========================================================================= */
+ var modes = { focus: { seconds: 1500, label: "HORA DE CONCENTRAR" }, short: { seconds: 300, label: "PAUSA CURTA" }, long: { seconds: 900, label: "PAUSA LONGA" } };
+ var mode = "focus", remaining = 1500, deadline = 0, running = false, countingDown = false, timer = null, countTimer = null;
+
+ function renderPomodoro() {
+  var mins = Math.floor(remaining / 60), secs = remaining % 60;
+  $("pomTime").innerHTML = pad(mins) + ":" + pad(secs);
+  $("pomCaption").innerHTML = modes[mode].label;
+  $("pomProgress").style.width = (remaining / modes[mode].seconds * 100) + "%";
+  $("pomStart").innerHTML = (running || countingDown) ? "PAUSAR" : (remaining === modes[mode].seconds ? "COMEÇAR" : "CONTINUAR");
+ }
+
+ function stopTimers() {
+  if (timer !== null) { window.clearInterval(timer); timer = null; }
+  if (countTimer !== null) { window.clearTimeout(countTimer); countTimer = null; }
+  countingDown = false;
+ }
+
  function tick() {
   if (!running) return;
-  remaining=Math.max(0,Math.ceil((deadline-new Date().getTime())/1000));
-  if (remaining<=0) {
-   running=false; stopTimer(); remaining=0; renderPomodoro();
-   $("pomStatus").innerHTML=mode==="focus"?"Ciclo concluído! Faça uma pausa e recarregue as energias.":"Pausa concluída! Quando estiver pronto, volte ao foco.";
-  } else renderPomodoro();
+  remaining = Math.max(0, Math.ceil((deadline - new Date().getTime()) / 1000));
+  if (remaining <= 0) {
+   running = false; stopTimers(); remaining = 0; renderPomodoro();
+   playAudio("alarm");
+   window.setTimeout(function () { playAudio("alarm"); }, 450);
+   showToast("POMODORO CONCLUÍDO", mode === "focus" ? "Hora de fazer uma pausa!" : "Pausa encerrada! Volte ao foco.", true);
+   $("pomStatus").innerHTML = mode === "focus" ? "Ciclo concluído! Faça uma pausa." : "Pausa concluída! Volte ao foco.";
+  } else {
+   renderPomodoro();
+  }
  }
+
  function setMode(next) {
   if (!modes[next]) return;
-  running=false; stopTimer(); mode=next; remaining=modes[mode].seconds;
-  var buttons=document.getElementsByClassName("pom-mode"), i;
-  for (i=0;i<buttons.length;i++) {
-   if (buttons[i].getAttribute("data-mode")===mode) buttons[i].className="pom-mode active";
-   else buttons[i].className="pom-mode";
+  running = false; stopTimers(); mode = next; remaining = modes[mode].seconds;
+  var buttons = document.getElementsByClassName("pom-mode"), i;
+  for (i = 0; i < buttons.length; i++) {
+   buttons[i].className = buttons[i].getAttribute("data-mode") === mode ? "pom-mode active" : "pom-mode";
   }
-  $("pomStatus").innerHTML=mode==="focus"?"Reserve este período para uma única tarefa.":"Desconecte um pouco e descanse.";
+  $("pomStatus").innerHTML = mode === "focus" ? "Reserve este período para uma única tarefa." : "Desconecte um pouco e descanse.";
   renderPomodoro();
  }
- var modeButtons=document.getElementsByClassName("pom-mode"), j;
- for (j=0;j<modeButtons.length;j++) {
+
+ var modeButtons = document.getElementsByClassName("pom-mode");
+ for (var j = 0; j < modeButtons.length; j++) {
   modeButtons[j].addEventListener("click", function () { setMode(this.getAttribute("data-mode")); }, false);
  }
+
  $("pomStart").addEventListener("click", function () {
-  if (running) {
-   remaining=Math.max(0,Math.ceil((deadline-new Date().getTime())/1000)); running=false; stopTimer();
-   $("pomStatus").innerHTML="Cronômetro pausado. Continue quando quiser."; renderPomodoro(); return;
+  if (running || countingDown) {
+   if (running) remaining = Math.max(0, Math.ceil((deadline - new Date().getTime()) / 1000));
+   running = false; stopTimers();
+   $("pomStatus").innerHTML = "Cronômetro pausado."; renderPomodoro(); return;
   }
-  if (remaining<=0) remaining=modes[mode].seconds;
-  deadline=new Date().getTime()+remaining*1000; running=true;
-  $("pomStatus").innerHTML=mode==="focus"?"Foco em andamento. Você consegue!":"Pausa em andamento. Respire e relaxe.";
-  stopTimer(); timer=window.setInterval(tick,1000); renderPomodoro();
+  if (remaining <= 0) remaining = modes[mode].seconds;
+
+  /* Sequência sonora 1, 2, 3 */
+  countingDown = true;
+  renderPomodoro();
+
+  $("pomStatus").innerHTML = "Preparando... 1";
+  playAudio("beep");
+
+  countTimer = window.setTimeout(function () {
+   if (!countingDown) return;
+   $("pomStatus").innerHTML = "Preparando... 2";
+   playAudio("beep");
+
+   countTimer = window.setTimeout(function () {
+    if (!countingDown) return;
+    $("pomStatus").innerHTML = "Preparando... 3";
+    playAudio("beep");
+
+    countTimer = window.setTimeout(function () {
+     if (!countingDown) return;
+     countingDown = false;
+     playAudio("go");
+     deadline = new Date().getTime() + remaining * 1000;
+     running = true;
+     $("pomStatus").innerHTML = mode === "focus" ? "Foco em andamento!" : "Pausa em andamento.";
+     timer = window.setInterval(tick, 1000);
+     renderPomodoro();
+    }, 650);
+   }, 650);
+  }, 650);
  }, false);
+
  $("pomReset").addEventListener("click", function () {
-  running=false; stopTimer(); remaining=modes[mode].seconds;
-  $("pomStatus").innerHTML="Cronômetro reiniciado."; renderPomodoro();
+  running = false; stopTimers(); remaining = modes[mode].seconds;
+  $("pomStatus").innerHTML = "Cronômetro reiniciado."; renderPomodoro();
  }, false);
+
  $("pomSkip").addEventListener("click", function () {
-  setMode(mode==="focus"?"short":"focus");
-  $("pomStatus").innerHTML=mode==="short"?"Etapa de foco encerrada. Faça uma pausa.":"Pausa encerrada. Vamos voltar ao foco!";
+  setMode(mode === "focus" ? "short" : "focus");
+  $("pomStatus").innerHTML = "Etapa alternada.";
  }, false);
- document.addEventListener("visibilitychange", function () { if (!document.hidden && running) tick(); }, false);
+
  renderPomodoro();
 })();
 </script>
