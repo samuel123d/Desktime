@@ -13,79 +13,273 @@
 html, body { margin:0; width:100%; height:100%; overflow:hidden; background:#101827; }
 body { background:#101827; color:#f5f7fa; font-family:Arial, Helvetica, sans-serif; -webkit-transition: background 1.5s ease; transition: background 1.5s ease; }
 
-/* Temas dinâmicos por período do dia */
-body.theme-morning { background: -webkit-linear-gradient(135deg, #1c3b57, #345c7d); background: linear-gradient(135deg, #1c3b57, #345c7d); }
-body.theme-day { background: -webkit-linear-gradient(135deg, #173752, #244b6e); background: linear-gradient(135deg, #173752, #244b6e); }
-body.theme-evening { background: -webkit-linear-gradient(135deg, #3d2a4f, #5a3c69); background: linear-gradient(135deg, #3d2a4f, #5a3c69); }
-body.theme-night { background: -webkit-linear-gradient(135deg, #090d16, #141e30); background: linear-gradient(135deg, #090d16, #141e30); }
+/* =========================================================================
+   TEMAS DINÂMICOS POR PERÍODO DO DIA (MANHÃ, TARDE, PÔR DO SOL ROSA/VERMELHO, NOITE)
+   ========================================================================= */
+body.theme-morning {
+ background: -webkit-linear-gradient(180deg, #2d6a9f 0%, #6ba3be 58%, #f3c68f 100%);
+ background: linear-gradient(180deg, #2d6a9f 0%, #6ba3be 58%, #f3c68f 100%);
+}
+body.theme-day {
+ background: -webkit-linear-gradient(180deg, #1b5c96 0%, #3c8ac7 62%, #8cc4e8 100%);
+ background: linear-gradient(180deg, #1b5c96 0%, #3c8ac7 62%, #8cc4e8 100%);
+}
+body.theme-evening {
+ background: -webkit-linear-gradient(180deg, #3b2654 0%, #9c3d68 45%, #e3645b 78%, #f59b56 100%);
+ background: linear-gradient(180deg, #3b2654 0%, #9c3d68 45%, #e3645b 78%, #f59b56 100%);
+}
+body.theme-night {
+ background: -webkit-linear-gradient(180deg, #070b14 0%, #101b2e 60%, #1a2a44 100%);
+ background: linear-gradient(180deg, #070b14 0%, #101b2e 60%, #1a2a44 100%);
+}
 
-/* Estrelas animadas para o modo noturno */
-.stars { position: absolute; top:0; left:0; width:100%; height:100%; pointer-events: none; z-index: 0; opacity: 0; -webkit-transition: opacity 1s ease; transition: opacity 1s ease; }
+/* Camada de céu nublado quando está chovendo */
+body.is-raining.theme-morning,
+body.is-raining.theme-day {
+ background: -webkit-linear-gradient(180deg, #293847 0%, #435669 65%, #5c7082 100%);
+ background: linear-gradient(180deg, #293847 0%, #435669 65%, #5c7082 100%);
+}
+body.is-raining.theme-evening {
+ background: -webkit-linear-gradient(180deg, #2c1f33 0%, #523347 65%, #6e4554 100%);
+ background: linear-gradient(180deg, #2c1f33 0%, #523347 65%, #6e4554 100%);
+}
+
+/* Estrelas animadas para o modo noturno (Otimizado GPU iPad 2) */
+.stars { position: absolute; top:0; left:0; width:100%; height:100%; pointer-events: none; z-index: 0; opacity: 0; -webkit-transition: opacity 1.2s ease; transition: opacity 1.2s ease; -webkit-transform: translate3d(0,0,0); transform: translate3d(0,0,0); }
 body.theme-night .stars { opacity: 1; }
-.star { position: absolute; background: #fff; border-radius: 50%; width: 2px; height: 2px; opacity: 0.8; -webkit-animation: twinkle 3s infinite alternate; animation: twinkle 3s infinite alternate; }
-@-webkit-keyframes twinkle { 0% { opacity: 0.25; -webkit-transform: scale(0.8); } 100% { opacity: 1; -webkit-transform: scale(1.25); } }
-@keyframes twinkle { 0% { opacity: 0.25; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1.25); } }
+body.theme-night.is-raining .stars { opacity: 0.15; }
+.star { position: absolute; background: #fff; border-radius: 50%; width: 2px; height: 2px; opacity: 0.8; -webkit-animation: twinkle 3.2s infinite alternate; animation: twinkle 3.2s infinite alternate; }
+@-webkit-keyframes twinkle { 0% { opacity: 0.2; -webkit-transform: scale(0.8); } 100% { opacity: 1; -webkit-transform: scale(1.25); } }
+@keyframes twinkle { 0% { opacity: 0.2; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1.25); } }
+
+/* =========================================================================
+   NUVENS E CHUVA NO FUNDO (ACELERADAS POR HARDWARE / SEM TRAVAR IPAD 2)
+   ========================================================================= */
+.sky-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; -webkit-transform: translate3d(0,0,0); transform: translate3d(0,0,0); }
+
+.bg-cloud {
+ position: absolute;
+ left: -180px;
+ width: 130px;
+ height: 38px;
+ border-radius: 38px;
+ background: rgba(255, 255, 255, 0.24);
+ -webkit-transition: background 1s ease;
+ transition: background 1s ease;
+ -webkit-animation: cloudDrift linear infinite;
+ animation: cloudDrift linear infinite;
+}
+.bg-cloud:before, .bg-cloud:after {
+ content: "";
+ position: absolute;
+ background: inherit;
+ border-radius: 50%;
+}
+.bg-cloud:before { width: 56px; height: 56px; top: -26px; left: 18px; }
+.bg-cloud:after { width: 42px; height: 42px; top: -16px; left: 62px; }
+
+/* Nuvens com tons adaptados à hora e à chuva */
+body.theme-evening .bg-cloud { background: rgba(255, 195, 185, 0.26); }
+body.theme-night .bg-cloud { background: rgba(160, 185, 220, 0.12); }
+body.is-raining .bg-cloud { background: rgba(190, 202, 214, 0.42); }
+body.theme-night.is-raining .bg-cloud { background: rgba(110, 125, 145, 0.32); }
+
+.cloud-1 { top: 11%; -webkit-animation-duration: 58s; animation-duration: 58s; -webkit-transform: scale(1.05); transform: scale(1.05); }
+.cloud-2 { top: 24%; -webkit-animation-duration: 78s; animation-duration: 78s; -webkit-animation-delay: -24s; animation-delay: -24s; -webkit-transform: scale(0.78); transform: scale(0.78); }
+.cloud-3 { top: 39%; -webkit-animation-duration: 66s; animation-duration: 66s; -webkit-animation-delay: -41s; animation-delay: -41s; -webkit-transform: scale(0.92); transform: scale(0.92); }
+
+@-webkit-keyframes cloudDrift {
+ 0% { -webkit-transform: translate3d(-180px, 0, 0); }
+ 100% { -webkit-transform: translate3d(1220px, 0, 0); }
+}
+@keyframes cloudDrift {
+ 0% { transform: translate3d(-180px, 0, 0); }
+ 100% { transform: translate3d(1220px, 0, 0); }
+}
+
+/* Gotas de chuva sob as nuvens (aparecem apenas quando chove) */
+.cloud-rain {
+ display: none;
+ position: absolute;
+ top: 36px;
+ left: 14px;
+ width: 102px;
+ height: 95px;
+ overflow: hidden;
+}
+body.is-raining .cloud-rain { display: block; }
+
+.rain-drop {
+ position: absolute;
+ top: -18px;
+ width: 2px;
+ height: 14px;
+ background: rgba(185, 225, 255, 0.78);
+ border-radius: 2px;
+ -webkit-animation: rainFall 0.85s linear infinite;
+ animation: rainFall 0.85s linear infinite;
+}
+.rain-drop.d1 { left: 10px; -webkit-animation-delay: 0s; animation-delay: 0s; }
+.rain-drop.d2 { left: 28px; -webkit-animation-delay: 0.25s; animation-delay: 0.25s; }
+.rain-drop.d3 { left: 48px; -webkit-animation-delay: 0.5s; animation-delay: 0.5s; }
+.rain-drop.d4 { left: 68px; -webkit-animation-delay: 0.15s; animation-delay: 0.15s; }
+.rain-drop.d5 { left: 88px; -webkit-animation-delay: 0.4s; animation-delay: 0.4s; }
+
+@-webkit-keyframes rainFall {
+ 0% { -webkit-transform: translate3d(0, 0, 0); opacity: 0.9; }
+ 100% { -webkit-transform: translate3d(-14px, 110px, 0); opacity: 0.1; }
+}
+@keyframes rainFall {
+ 0% { transform: translate3d(0, 0, 0); opacity: 0.9; }
+ 100% { transform: translate3d(-14px, 110px, 0); opacity: 0.1; }
+}
+
+/* Camada geral de chuva leve na tela */
+.rain-screen {
+ display: none;
+ position: absolute;
+ top: 0; left: 0; width: 100%; height: 100%;
+ pointer-events: none;
+}
+body.is-raining .rain-screen { display: block; }
+.screen-drop {
+ position: absolute;
+ top: -20px;
+ width: 1.5px;
+ height: 18px;
+ background: rgba(195, 230, 255, 0.42);
+ -webkit-animation: screenRain 1.1s linear infinite;
+ animation: screenRain 1.1s linear infinite;
+}
+@-webkit-keyframes screenRain {
+ 0% { -webkit-transform: translate3d(0, 0, 0); }
+ 100% { -webkit-transform: translate3d(-45px, 820px, 0); }
+}
+@keyframes screenRain {
+ 0% { transform: translate3d(0, 0, 0); }
+ 100% { transform: translate3d(-45px, 820px, 0); }
+}
 
 .app { position: relative; z-index: 1; height:100%; width:100%; max-width:1024px; margin:0 auto; padding:10px 14px; display:-webkit-flex; display:flex; -webkit-flex-direction:column; flex-direction:column; }
 
 /* Cabeçalho com Logo SVG */
-header { height:42px; border-bottom:1px solid rgba(255,255,255,.15); -webkit-flex-shrink:0; flex-shrink:0; }
+header { height:42px; border-bottom:1px solid rgba(255,255,255,.18); -webkit-flex-shrink:0; flex-shrink:0; }
 .brand { float:left; padding-top:6px; font-size:13px; letter-spacing:3px; font-weight:bold; line-height:26px; }
 .brand-logo { float:left; width:26px; height:26px; margin-right:8px; }
 .brand-text { float:left; }
 .brand span { color:#91c9d9; }
 .status-group { float:right; padding-top:7px; }
-.top-btn { background:rgba(24,35,54,0.85); border:1px solid rgba(255,255,255,.22); color:#91c9d9; font-size:10px; padding:5px 8px; border-radius:6px; margin-right:5px; letter-spacing:1px; }
+.top-btn { background:rgba(16,24,39,0.78); border:1px solid rgba(255,255,255,.24); color:#91c9d9; font-size:10px; padding:5px 8px; border-radius:6px; margin-right:5px; letter-spacing:1px; }
 .top-btn.highlight { background:#243b57; border-color:#91c9d9; color:#ffffff; }
-.status { display:inline-block; color:#a8b8c8; font-size:10px; letter-spacing:1px; margin-left:3px; }
+.status { display:inline-block; color:#d2e0ec; font-size:10px; letter-spacing:1px; margin-left:3px; }
 .status i { display:inline-block; width:6px; height:6px; margin-right:5px; background:#83d5ae; border-radius:50%; }
 
 /* Notificações Toast */
 .toast-box { position:absolute; top:52px; left:14px; right:14px; z-index:999; pointer-events:none; text-align:center; }
-.toast { display:inline-block; max-width:95%; background:rgba(36,51,77,0.96); color:#f5f7fa; padding:10px 16px; border-radius:12px; font-size:12px; letter-spacing:0.5px; border:1px solid #91c9d9; box-shadow:0 6px 20px rgba(0,0,0,0.6); margin-bottom:6px; pointer-events:auto; }
+.toast { display:inline-block; max-width:95%; background:rgba(24,36,56,0.96); color:#f5f7fa; padding:10px 16px; border-radius:12px; font-size:12px; letter-spacing:0.5px; border:1px solid #91c9d9; box-shadow:0 6px 20px rgba(0,0,0,0.6); margin-bottom:6px; pointer-events:auto; }
 .toast strong { color:#91c9d9; display:block; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:3px; }
 .toast-close { margin-left:10px; background:#91c9d9; color:#101827; border:0; border-radius:4px; padding:3px 8px; font-size:10px; font-weight:bold; }
 
 /* Área principal deslizante (4 páginas = 400%) */
 .viewport { position:relative; -webkit-flex-grow:1; flex-grow:1; margin-top:8px; overflow:hidden; border-radius:14px; }
 .track { width:400%; height:100%; position:absolute; top:0; left:0; -webkit-transition: -webkit-transform 0.28s ease; transition: transform 0.28s ease; }
-.page { float:left; width:25%; height:100%; padding:14px; overflow-y:auto; -webkit-overflow-scrolling:touch; background:rgba(16,24,39,0.76); border:1px solid rgba(255,255,255,.1); border-radius:14px; }
+.page { float:left; width:25%; height:100%; padding:14px; overflow-y:auto; -webkit-overflow-scrolling:touch; background:rgba(14,22,36,0.68); border:1px solid rgba(255,255,255,.14); border-radius:14px; }
 
-.kicker { color:#a5bacb; font-size:10px; font-weight:bold; letter-spacing:2px; text-transform:uppercase; }
+.kicker { color:#b8cad9; font-size:10px; font-weight:bold; letter-spacing:2px; text-transform:uppercase; }
 .big-title { margin:4px 0; font-size:24px; font-weight:normal; }
-.muted { color:#aabaca; font-size:12px; line-height:1.4; }
-.card { margin-top:12px; padding:13px; background:rgba(24,35,54,0.82); border:1px solid rgba(255,255,255,.12); border-radius:13px; }
+.muted { color:#bccad8; font-size:12px; line-height:1.4; }
+.card { margin-top:12px; padding:13px; background:rgba(20,30,48,0.78); border:1px solid rgba(255,255,255,.14); border-radius:13px; }
 .action { display:inline-block; padding:9px 11px; border:1px solid rgba(255,255,255,.22); border-radius:9px; background:#24334d; color:#f0f5f8; font-size:11px; letter-spacing:0.5px; text-align:center; vertical-align:middle; }
 .action.active-btn { background:#4b648a; border-color:#91c9d9; color:#ffffff; font-weight:bold; }
 .action.install-btn { background:#2a5c54; border-color:#83d5ae; color:#ffffff; font-weight:bold; cursor:pointer; }
 .action.danger-btn { background:#4a2634; border-color:#e08a9e; color:#ffd6df; }
 button { font-family:Arial,Helvetica,sans-serif; cursor:pointer; }
 
-/* Página 1: Início */
-.greeting { margin-top:8px; color:#b6c8d8; font-size:13px; letter-spacing:2px; }
-.clock { margin-top:4px; color:#f4f7fb; font-size:64px; font-weight:normal; letter-spacing:-3px; white-space:nowrap; }
-.clock small { color:#a8bdce; font-size:20px; letter-spacing:0; }
-.date { color:#d2dce6; font-size:15px; text-transform:capitalize; }
-.message { margin-top:6px; color:#9db1c4; font-size:12px; }
-.sun-area { position:relative; height:64px; margin-top:6px; overflow:hidden; }
-.sun { position:absolute; top:4px; right:22%; width:48px; height:48px; background:#f4d6aa; border-radius:50%; -webkit-transition: background 1s ease; transition: background 1s ease; }
-.land { position:absolute; bottom:-98px; width:120%; height:140px; background:rgba(30,54,71,0.9); border-radius:50%; }
-.land.two { right:-25%; bottom:-116px; background:rgba(20,34,51,0.9); }
+/* =========================================================================
+   PÁGINA 1: INÍCIO & HORIZONTE COM SOL SUBINDO / LUA À NOITE
+   ========================================================================= */
+.greeting { margin-top:6px; color:#d2e0ec; font-size:13px; letter-spacing:2px; }
+.clock { margin-top:2px; color:#ffffff; font-size:64px; font-weight:normal; letter-spacing:-3px; white-space:nowrap; text-shadow:0 2px 10px rgba(0,0,0,0.28); }
+.clock small { color:#c2d4e4; font-size:20px; letter-spacing:0; }
+.date { color:#e2ebf2; font-size:15px; text-transform:capitalize; }
+.message { margin-top:4px; color:#bfd0df; font-size:12px; }
+
+.sun-area {
+ position:relative;
+ height:84px;
+ margin-top:8px;
+ overflow:hidden;
+ border-radius:12px;
+ background: rgba(255,255,255,0.05);
+ border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* Astro (Sol que sobe e muda de cor / Lua à noite) */
+.celestial-body {
+ position:absolute;
+ width:44px;
+ height:44px;
+ border-radius:50%;
+ left:50%;
+ top:12px;
+ background:#ffd54f;
+ -webkit-transition: left 1.4s ease, top 1.4s ease, background 1.4s ease, opacity 0.8s ease;
+ transition: left 1.4s ease, top 1.4s ease, background 1.4s ease, opacity 0.8s ease;
+}
+
+/* Detalhes da Lua (visíveis apenas à noite) */
+.moon-crater {
+ display:none;
+ position:absolute;
+ border-radius:50%;
+ background:rgba(130, 145, 175, 0.35);
+}
+body.theme-night .moon-crater { display:block; }
+.moon-crater.c1 { width:10px; height:10px; top:10px; left:11px; }
+.moon-crater.c2 { width:7px; height:7px; top:24px; left:24px; }
+.moon-crater.c3 { width:5px; height:5px; top:12px; left:27px; }
+
+/* Quando chove, o sol fica encoberto pelas nuvens */
+body.is-raining:not(.theme-night) .celestial-body { opacity: 0.25; }
+
+/* Colinas do horizonte com cores que acompanham o período */
+.land {
+ position:absolute;
+ bottom:-94px;
+ left:-10%;
+ width:120%;
+ height:136px;
+ background:rgba(28, 52, 70, 0.92);
+ border-radius:50%;
+ -webkit-transition: background 1.4s ease;
+ transition: background 1.4s ease;
+}
+.land.two {
+ left:auto;
+ right:-25%;
+ bottom:-110px;
+ background:rgba(18, 32, 48, 0.95);
+}
+body.theme-evening .land { background:rgba(58, 28, 52, 0.92); }
+body.theme-evening .land.two { background:rgba(36, 17, 36, 0.96); }
+body.theme-night .land { background:rgba(15, 25, 40, 0.95); }
+body.theme-night .land.two { background:rgba(9, 15, 26, 0.98); }
 
 .weather-row { overflow:hidden; }
 .weather-info { float:left; }
-.weather-button { float:right; }
+.weather-buttons { float:right; text-align:right; }
+.weather-buttons button { margin-left:4px; margin-bottom:4px; }
 .weather-main { margin-top:4px; }
 .temperature { display:inline-block; margin-right:8px; font-size:28px; }
 .weather-icon { display:inline-block; font-size:21px; }
-.weather-description { color:#aabaca; font-size:11px; }
+.weather-description { color:#c0cedb; font-size:11px; }
 .weather-details { margin-top:10px; padding-top:8px; border-top:1px solid rgba(255,255,255,.12); overflow:hidden; }
 .weather-details div { float:left; width:33.33%; }
-.weather-details small { display:block; color:#9aafc1; font-size:10px; }
+.weather-details small { display:block; color:#a8bccf; font-size:10px; }
 .weather-details strong { display:block; margin-top:3px; font-size:13px; }
 
 /* Mini Porta-Retrato na Tela Inicial */
-.mini-frame-card { margin-top:12px; padding:12px; background:rgba(24,35,54,0.82); border:1px solid rgba(255,255,255,.12); border-radius:13px; overflow:hidden; }
+.mini-frame-card { margin-top:12px; padding:12px; background:rgba(20,30,48,0.78); border:1px solid rgba(255,255,255,.14); border-radius:13px; overflow:hidden; }
 .mini-frame-box { position:relative; float:left; width:130px; height:96px; background:#090e17; border-radius:9px; border:1px solid rgba(255,255,255,.18); overflow:hidden; margin-right:12px; }
 .mini-frame-box img { position:absolute; top:0; bottom:0; left:0; right:0; margin:auto; max-width:100%; max-height:100%; width:auto; height:auto; }
 .mini-frame-info { overflow:hidden; }
@@ -109,7 +303,7 @@ button { font-family:Arial,Helvetica,sans-serif; cursor:pointer; }
 .stage-progress { position:absolute; bottom:0; left:0; width:100%; height:4px; background:rgba(255,255,255,0.12); z-index:4; }
 .stage-progress-bar { height:4px; width:0%; background:#91c9d9; }
 
-.frame-controls { margin-top:10px; padding:10px; background:rgba(24,35,54,0.82); border:1px solid rgba(255,255,255,.12); border-radius:12px; text-align:center; }
+.frame-controls { margin-top:10px; padding:10px; background:rgba(20,30,48,0.78); border:1px solid rgba(255,255,255,.14); border-radius:12px; text-align:center; }
 .control-row { margin-bottom:8px; }
 .control-row:last-child { margin-bottom:0; }
 .frame-controls button, .frame-controls label { margin:2px; }
@@ -137,7 +331,7 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
 .empty-list { color:#9eafc0; }
 
 /* Página 4: Pomodoro */
-.pomodoro-card { margin:12px auto 0; padding:14px 10px; background:rgba(24,35,54,0.82); border:1px solid rgba(255,255,255,.16); border-radius:16px; }
+.pomodoro-card { margin:12px auto 0; padding:14px 10px; background:rgba(20,30,48,0.78); border:1px solid rgba(255,255,255,.16); border-radius:16px; }
 .pomodoro-modes { text-align:center; }
 .pom-mode { margin:2px; padding:8px 10px; border:1px solid rgba(255,255,255,.2); border-radius:20px; background:#24334d; color:#eee; font-size:10px; }
 .pom-mode.active { background:#4b648a; border-color:#91c9d9; }
@@ -154,7 +348,7 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
 
 /* Barra de navegação inferior */
 .nav-bar { text-align:center; padding-top:7px; -webkit-flex-shrink:0; flex-shrink:0; }
-.nav-tab { display:inline-block; padding:5px 10px; margin:0 3px; border-radius:12px; background:rgba(36,51,77,0.85); border:1px solid rgba(255,255,255,.14); color:#9eb2c4; font-size:10px; letter-spacing:1px; }
+.nav-tab { display:inline-block; padding:5px 10px; margin:0 3px; border-radius:12px; background:rgba(24,36,56,0.85); border:1px solid rgba(255,255,255,.16); color:#b0c2d4; font-size:10px; letter-spacing:1px; }
 .nav-tab.active { background:#2c4666; border-color:#91c9d9; color:#ffffff; font-weight:bold; }
 
 /* Modo Quadro Tela Cheia (Zen Digital Frame) */
@@ -185,6 +379,26 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
 <body>
 
 <div class="stars" id="starsContainer"></div>
+
+<!-- Camada de nuvens e chuva no fundo (leve para iPad 2) -->
+<div class="sky-layer" id="skyLayer">
+ <div class="bg-cloud cloud-1">
+  <div class="cloud-rain">
+   <span class="rain-drop d1"></span><span class="rain-drop d2"></span><span class="rain-drop d3"></span><span class="rain-drop d4"></span><span class="rain-drop d5"></span>
+  </div>
+ </div>
+ <div class="bg-cloud cloud-2">
+  <div class="cloud-rain">
+   <span class="rain-drop d1"></span><span class="rain-drop d2"></span><span class="rain-drop d3"></span><span class="rain-drop d4"></span><span class="rain-drop d5"></span>
+  </div>
+ </div>
+ <div class="bg-cloud cloud-3">
+  <div class="cloud-rain">
+   <span class="rain-drop d1"></span><span class="rain-drop d2"></span><span class="rain-drop d3"></span><span class="rain-drop d4"></span><span class="rain-drop d5"></span>
+  </div>
+ </div>
+ <div class="rain-screen" id="rainScreen"></div>
+</div>
 
 <!-- Input nativo oculto acionado via <label for="photoFileInput"> -->
 <input type="file" id="photoFileInput" accept="image/*" multiple style="position:absolute; left:-9999px; width:1px; height:1px; opacity:0;">
@@ -226,7 +440,17 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
  <div class="clock"><span id="clock">--:--</span> <small id="seconds">--</small></div>
  <div class="date" id="date">Carregando...</div>
  <div class="message" id="message">Um ótimo momento para desacelerar.</div>
- <div class="sun-area"><div class="sun" id="sunElement"></div><div class="land"></div><div class="land two"></div></div>
+
+ <!-- Horizonte animado: Sol subindo e mudando de cor / Lua e estrelas à noite -->
+ <div class="sun-area">
+  <div class="celestial-body" id="sunElement">
+   <span class="moon-crater c1"></span>
+   <span class="moon-crater c2"></span>
+   <span class="moon-crater c3"></span>
+  </div>
+  <div class="land"></div>
+  <div class="land two"></div>
+ </div>
 
  <div class="card">
   <div class="weather-row">
@@ -234,7 +458,10 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
     <div class="kicker">NATAL · RIO GRANDE DO NORTE</div>
     <div class="weather-main"><span class="temperature" id="temp">28°</span><span class="weather-icon" id="weatherIcon">🌤</span><div class="weather-description" id="weatherDesc">Poucas nuvens</div></div>
    </div>
-   <button class="action weather-button" id="refreshWeather" type="button">ATUALIZAR</button>
+   <div class="weather-buttons">
+    <button class="action" id="toggleRainBtn" type="button">CHUVA: OFF</button>
+    <button class="action" id="refreshWeather" type="button">ATUALIZAR</button>
+   </div>
   </div>
   <div class="weather-details">
    <div><small>Sensação</small><strong id="feels">31°</strong></div>
@@ -440,17 +667,27 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
  })();
 
  /* =========================================================================
-    ESTRELAS DINÂMICAS PARA A NOITE
+    ESTRELAS E GOTAS DE CHUVA LEVES (POUCOS ELEMENTOS PARA NÃO TRAVAR IPAD 2)
     ========================================================================= */
  var starsContainer = $("starsContainer");
- for (var s = 0; s < 30; s++) {
+ for (var s = 0; s < 26; s++) {
   var star = document.createElement("div");
   star.className = "star";
-  star.style.top = Math.floor(Math.random() * 80) + "%";
+  star.style.top = Math.floor(Math.random() * 75) + "%";
   star.style.left = Math.floor(Math.random() * 100) + "%";
   star.style.webkitAnimationDelay = (Math.random() * 3) + "s";
   star.style.animationDelay = (Math.random() * 3) + "s";
   starsContainer.appendChild(star);
+ }
+
+ var rainScreen = $("rainScreen");
+ for (var r = 0; r < 14; r++) {
+  var drop = document.createElement("div");
+  drop.className = "screen-drop";
+  drop.style.left = Math.floor((r / 14) * 100 + 3) + "%";
+  drop.style.webkitAnimationDelay = ((r % 5) * 0.22) + "s";
+  drop.style.animationDelay = ((r % 5) * 0.22) + "s";
+  rainScreen.appendChild(drop);
  }
 
  /* =========================================================================
@@ -646,7 +883,6 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
   "5SXBXwJ.jpeg"
  ];
 
- // Pré-carregamento em segundo plano para troca suave no iPad 2
  var preloadedImgs = [];
  for (var p = 0; p < DEFAULT_PHOTOS.length; p++) {
   var pre = new Image();
@@ -820,9 +1056,6 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
  function nextPhoto(animate) { selectPhoto(frameState.index + 1, animate); }
  function prevPhoto(animate) { selectPhoto(frameState.index - 1, animate); }
 
- /* =========================================================================
-    INSTALADOR OPCIONAL DE FOTOS EXTRAS DA GALERIA DO IPAD (BASE64)
-    ========================================================================= */
  function compressImageFileToBase64(file, callback) {
   var reader = new FileReader();
   reader.onerror = function () { callback(null); };
@@ -989,12 +1222,10 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
   }, false);
  }
 
- // Mini-widget na tela inicial
  $("miniPrevBtn").addEventListener("click", function () { prevPhoto(true); playAudio("tap"); }, false);
  $("miniNextBtn").addEventListener("click", function () { nextPhoto(true); playAudio("tap"); }, false);
  $("miniOpenGalleryBtn").addEventListener("click", function () { goToPage(1); playAudio("beep"); }, false);
 
- // Deslize direto na moldura principal da aba Fotos
  var stageEl = $("photoStage");
  var stageStartX = 0;
  stageEl.addEventListener("touchstart", function (e) {
@@ -1014,7 +1245,6 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
   }
  }, false);
 
- // Modo Quadro Tela Cheia (Zen Frame)
  var zenHudTimer = null;
  function showZenHud() {
   $("zenHud").className = "zen-hud";
@@ -1090,17 +1320,23 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
  selectPhoto(frameState.index, false);
 
  /* =========================================================================
-    RELÓGIO, TEMAS DE FUNDO E PERÍODO DO DIA
+    RELÓGIO, CICLO DO SOL (SUBINDO + CORES) / LUA + ESTRELAS + CHUVA
     ========================================================================= */
  var weekdays = ["domingo","segunda-feira","terça-feira","quarta-feira","quinta-feira","sexta-feira","sábado"];
  var months = ["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
  var lastPeriod = "";
  var lastMinuteChecked = "";
+ var isRaining = false;
+
+ function applySkyAndBodyClass(themeClass) {
+  document.body.className = isRaining ? (themeClass + " is-raining") : themeClass;
+ }
 
  function updateClock() {
   var now = new Date();
   var h = now.getHours();
   var m = now.getMinutes();
+  var decHour = h + (m / 60);
   var currentHHMM = pad(h) + ":" + pad(m);
   var dateStr = weekdays[now.getDay()] + ", " + now.getDate() + " de " + months[now.getMonth()] + " de " + now.getFullYear();
 
@@ -1110,19 +1346,55 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
   $("zenClock").innerHTML = currentHHMM;
   $("zenDate").innerHTML = weekdays[now.getDay()] + ", " + now.getDate() + " de " + months[now.getMonth()];
 
-  var greeting, message, period, themeClass, sunColor;
-  if (h >= 5 && h < 11) {
-   period = "morning"; greeting = "BOM DIA"; message = "Que seu dia comece com boas ideias."; themeClass = "theme-morning"; sunColor = "#f4d6aa";
-  } else if (h >= 11 && h < 17) {
-   period = "day"; greeting = "BOA TARDE"; message = "Um bom momento para fazer acontecer."; themeClass = "theme-day"; sunColor = "#ffebad";
-  } else if (h >= 17 && h < 19) {
-   period = "evening"; greeting = "FIM DE TARDE"; message = "A luz muda, o ritmo também."; themeClass = "theme-evening"; sunColor = "#ffb07c";
+  var greeting, message, period, themeClass, sunColor, sunLeftPct, sunTopPx;
+
+  if (decHour >= 5 && decHour < 11) {
+   // MANHÃ: Sol subindo da esquerda (16%) para o centro-esquerda (44%) e de baixo (42px) para o alto (10px)
+   var pMorning = (decHour - 5) / 6;
+   period = "morning";
+   greeting = "BOM DIA";
+   message = "Que seu dia comece com boas ideias.";
+   themeClass = "theme-morning";
+   sunColor = "#ffd966"; // Amarelo dourado
+   sunLeftPct = Math.round(16 + (pMorning * 28));
+   sunTopPx = Math.round(42 - (pMorning * 32));
+  } else if (decHour >= 11 && decHour < 17) {
+   // TARDE: Sol no alto mudando de amarelo para amarelo-laranja
+   var pDay = (decHour - 11) / 6;
+   period = "day";
+   greeting = "BOA TARDE";
+   message = "Um bom momento para fazer acontecer.";
+   themeClass = "theme-day";
+   sunColor = decHour < 14 ? "#ffca28" : "#ff9800"; // Amarelo -> Amarelo Laranja
+   sunLeftPct = Math.round(44 + (pDay * 26));
+   sunTopPx = Math.round(10 + (pDay * 14));
+  } else if (decHour >= 17 && decHour < 19) {
+   // PÔR DO SOL: Céu rosa/avermelhado e sol descendo no horizonte em tom laranja-avermelhado
+   var pEvening = (decHour - 17) / 2;
+   period = "evening";
+   greeting = "FIM DE TARDE";
+   message = "A luz muda, o ritmo também.";
+   themeClass = "theme-evening";
+   sunColor = "#ff5722"; // Laranja avermelhado do pôr do sol
+   sunLeftPct = Math.round(70 + (pEvening * 14));
+   sunTopPx = Math.round(24 + (pEvening * 24));
   } else {
-   period = "night"; greeting = "BOA NOITE"; message = "Um ótimo momento para desacelerar."; themeClass = "theme-night"; sunColor = "#dcd6f7";
+   // NOITE: Lua brilhante no alto e estrelas no céu
+   period = "night";
+   greeting = "BOA NOITE";
+   message = "Um ótimo momento para desacelerar.";
+   themeClass = "theme-night";
+   sunColor = "#eef2ff"; // Lua prateada
+   sunLeftPct = 72;
+   sunTopPx = 12;
   }
 
-  document.body.className = themeClass;
-  $("sunElement").style.background = sunColor;
+  applySkyAndBodyClass(themeClass);
+
+  var sunEl = $("sunElement");
+  sunEl.style.background = sunColor;
+  sunEl.style.left = sunLeftPct + "%";
+  sunEl.style.top = sunTopPx + "px";
 
   if (lastPeriod && lastPeriod !== period) {
    playAudio("beep");
@@ -1193,28 +1465,55 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
  goToPage(0);
 
  /* =========================================================================
-    CLIMA DE NATAL SEGURO PARA IPAD 2
+    CLIMA DE NATAL + CONTROLE DE NUVENS DE CHUVA / NUVENS NORMAIS
     ========================================================================= */
+ function setRainState(raining, silent) {
+  isRaining = !!raining;
+  var d = new Date();
+  var h = d.getHours();
+  var baseTemp = (h >= 11 && h <= 15) ? 31 : (h >= 18 || h <= 5) ? 26 : 28;
+
+  $("toggleRainBtn").innerHTML = isRaining ? "CHUVA: ON" : "CHUVA: OFF";
+  $("toggleRainBtn").className = isRaining ? "action active-btn" : "action";
+
+  if (isRaining) {
+   $("temp").innerHTML = (baseTemp - 3) + "°";
+   $("feels").innerHTML = (baseTemp - 2) + "°";
+   $("humidity").innerHTML = "88%";
+   $("rain").innerHTML = "Sim";
+   $("weatherDesc").innerHTML = "Nuvens carregadas com chuva";
+   $("weatherIcon").innerHTML = "🌧";
+  } else {
+   $("temp").innerHTML = baseTemp + "°";
+   $("feels").innerHTML = (baseTemp + 3) + "°";
+   $("humidity").innerHTML = "72%";
+   $("rain").innerHTML = "Não";
+   $("weatherDesc").innerHTML = (h >= 6 && h <= 17) ? "Poucas nuvens" : "Céu estrelado com nuvens leves";
+   $("weatherIcon").innerHTML = (h >= 6 && h <= 17) ? "🌤" : "🌙";
+  }
+
+  updateClock();
+  if (!silent) {
+   playAudio("beep");
+   showToast("CLIMA", isRaining ? "Nuvens de chuva ativadas no céu!" : "Céu sem chuva com nuvens leves.", false);
+  }
+ }
+
+ $("toggleRainBtn").addEventListener("click", function () {
+  setRainState(!isRaining, false);
+ }, false);
+
  function loadWeather() {
   $("refreshWeather").disabled = true;
   $("weatherDesc").innerHTML = "Atualizando Natal...";
 
   window.setTimeout(function () {
    var d = new Date();
-   var h = d.getHours();
-   var temp = (h >= 11 && h <= 15) ? 31 : (h >= 18 || h <= 5) ? 26 : 28;
-   var cond = (h >= 6 && h <= 17) ? ["Poucas nuvens", "🌤"] : ["Céu limpo", "🌙"];
-
-   $("temp").innerHTML = temp + "°";
-   $("feels").innerHTML = (temp + 3) + "°";
-   $("humidity").innerHTML = "72%";
-   $("rain").innerHTML = "Não";
-   $("weatherDesc").innerHTML = cond[0];
-   $("weatherIcon").innerHTML = cond[1];
+   setRainState(isRaining, true);
    $("weatherFoot").innerHTML = "Atualizado às " + pad(d.getHours()) + ":" + pad(d.getMinutes()) + " · Natal/RN";
    $("refreshWeather").disabled = false;
    showToast("CLIMA", "Dados de Natal atualizados com sucesso!", false);
-  }, 500);
+  }, 400);
  }
 
  $("refreshWeather").addEventListener("click", function () { loadWeather(); }, false);
@@ -1314,7 +1613,7 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
  }
 
  renderReminders();
- updateClock();
+ setRainState(false, true);
  window.setInterval(updateClock, 1000);
 
  /* =========================================================================
