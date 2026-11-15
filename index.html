@@ -78,7 +78,6 @@ body.theme-night.is-raining .stars { opacity: 0.15; }
 .bg-cloud:before { width: 56px; height: 56px; top: -26px; left: 18px; }
 .bg-cloud:after { width: 42px; height: 42px; top: -16px; left: 62px; }
 
-/* Nuvens com tons adaptados à hora e à chuva */
 body.theme-evening .bg-cloud { background: rgba(255, 195, 185, 0.26); }
 body.theme-night .bg-cloud { background: rgba(160, 185, 220, 0.12); }
 body.is-raining .bg-cloud { background: rgba(190, 202, 214, 0.42); }
@@ -97,7 +96,6 @@ body.theme-night.is-raining .bg-cloud { background: rgba(110, 125, 145, 0.32); }
  100% { transform: translate3d(1220px, 0, 0); }
 }
 
-/* Gotas de chuva sob as nuvens (aparecem apenas quando chove) */
 .cloud-rain {
  display: none;
  position: absolute;
@@ -134,7 +132,6 @@ body.is-raining .cloud-rain { display: block; }
  100% { transform: translate3d(-14px, 110px, 0); opacity: 0.1; }
 }
 
-/* Camada geral de chuva leve na tela */
 .rain-screen {
  display: none;
  position: absolute;
@@ -196,7 +193,7 @@ header { height:42px; border-bottom:1px solid rgba(255,255,255,.18); -webkit-fle
 button { font-family:Arial,Helvetica,sans-serif; cursor:pointer; }
 
 /* =========================================================================
-   PÁGINA 1: INÍCIO & HORIZONTE COM SOL SUBINDO / LUA À NOITE
+   PÁGINA 1: INÍCIO & HORIZONTE COM SOL SUBINDO VERTICALMENTE / LUA À NOITE
    ========================================================================= */
 .greeting { margin-top:6px; color:#d2e0ec; font-size:13px; letter-spacing:2px; }
 .clock { margin-top:2px; color:#ffffff; font-size:64px; font-weight:normal; letter-spacing:-3px; white-space:nowrap; text-shadow:0 2px 10px rgba(0,0,0,0.28); }
@@ -206,25 +203,53 @@ button { font-family:Arial,Helvetica,sans-serif; cursor:pointer; }
 
 .sun-area {
  position:relative;
- height:84px;
+ height:102px;
  margin-top:8px;
  overflow:hidden;
- border-radius:12px;
- background: rgba(255,255,255,0.05);
- border: 1px solid rgba(255,255,255,0.08);
+ border-radius:14px;
+ background: -webkit-linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,220,160,0.14) 100%);
+ background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,220,160,0.14) 100%);
+ border: 1px solid rgba(255,255,255,0.12);
+}
+body.theme-evening .sun-area {
+ background: -webkit-linear-gradient(180deg, rgba(255,120,140,0.08) 0%, rgba(255,140,90,0.28) 100%);
+ background: linear-gradient(180deg, rgba(255,120,140,0.08) 0%, rgba(255,140,90,0.28) 100%);
+}
+body.theme-night .sun-area {
+ background: -webkit-linear-gradient(180deg, rgba(10,18,34,0.35) 0%, rgba(30,50,85,0.25) 100%);
+ background: linear-gradient(180deg, rgba(10,18,34,0.35) 0%, rgba(30,50,85,0.25) 100%);
 }
 
-/* Astro (Sol que sobe e muda de cor / Lua à noite) */
-.celestial-body {
+/* Brilho atmosférico suave atrás do Sol / Lua (sem box-shadow pesado) */
+.sun-halo {
  position:absolute;
- width:44px;
- height:44px;
+ width:84px;
+ height:84px;
+ margin-left:-42px;
  border-radius:50%;
  left:50%;
- top:12px;
+ top:-4px;
+ background: rgba(255, 224, 130, 0.24);
+ z-index: 1;
+ -webkit-transition: top 1.4s ease, background 1.4s ease, opacity 0.8s ease;
+ transition: top 1.4s ease, background 1.4s ease, opacity 0.8s ease;
+}
+body.theme-night .sun-halo { background: rgba(200, 218, 255, 0.16); }
+body.is-raining:not(.theme-night) .sun-halo { opacity: 0.15; }
+
+/* Astro centralizado (sobe e desce reto na vertical) */
+.celestial-body {
+ position:absolute;
+ width:48px;
+ height:48px;
+ margin-left:-24px;
+ border-radius:50%;
+ left:50%;
+ top:14px;
  background:#ffd54f;
- -webkit-transition: left 1.4s ease, top 1.4s ease, background 1.4s ease, opacity 0.8s ease;
- transition: left 1.4s ease, top 1.4s ease, background 1.4s ease, opacity 0.8s ease;
+ z-index: 2;
+ -webkit-transition: top 1.4s ease, background 1.4s ease, opacity 0.8s ease;
+ transition: top 1.4s ease, background 1.4s ease, opacity 0.8s ease;
 }
 
 /* Detalhes da Lua (visíveis apenas à noite) */
@@ -232,38 +257,55 @@ button { font-family:Arial,Helvetica,sans-serif; cursor:pointer; }
  display:none;
  position:absolute;
  border-radius:50%;
- background:rgba(130, 145, 175, 0.35);
+ background:rgba(130, 145, 175, 0.34);
 }
 body.theme-night .moon-crater { display:block; }
-.moon-crater.c1 { width:10px; height:10px; top:10px; left:11px; }
-.moon-crater.c2 { width:7px; height:7px; top:24px; left:24px; }
-.moon-crater.c3 { width:5px; height:5px; top:12px; left:27px; }
+.moon-crater.c1 { width:11px; height:11px; top:11px; left:12px; }
+.moon-crater.c2 { width:7px; height:7px; top:26px; left:26px; }
+.moon-crater.c3 { width:5px; height:5px; top:13px; left:29px; }
 
 /* Quando chove, o sol fica encoberto pelas nuvens */
 body.is-raining:not(.theme-night) .celestial-body { opacity: 0.25; }
 
-/* Colinas do horizonte com cores que acompanham o período */
+/* Três camadas de colinas suaves (ficam na frente do Sol quando ele nasce/se põe) */
+.land-back {
+ position:absolute;
+ bottom:-102px;
+ left:15%;
+ width:95%;
+ height:142px;
+ background:rgba(42, 74, 98, 0.72);
+ border-radius:50%;
+ z-index: 3;
+ -webkit-transition: background 1.4s ease;
+ transition: background 1.4s ease;
+}
 .land {
  position:absolute;
- bottom:-94px;
- left:-10%;
- width:120%;
- height:136px;
- background:rgba(28, 52, 70, 0.92);
+ bottom:-96px;
+ left:-14%;
+ width:115%;
+ height:142px;
+ background:rgba(28, 52, 70, 0.94);
  border-radius:50%;
+ z-index: 4;
  -webkit-transition: background 1.4s ease;
  transition: background 1.4s ease;
 }
 .land.two {
  left:auto;
- right:-25%;
+ right:-24%;
  bottom:-110px;
- background:rgba(18, 32, 48, 0.95);
+ background:rgba(18, 32, 48, 0.98);
+ z-index: 5;
 }
-body.theme-evening .land { background:rgba(58, 28, 52, 0.92); }
-body.theme-evening .land.two { background:rgba(36, 17, 36, 0.96); }
+body.theme-evening .land-back { background:rgba(92, 42, 72, 0.72); }
+body.theme-evening .land { background:rgba(58, 28, 52, 0.94); }
+body.theme-evening .land.two { background:rgba(36, 17, 36, 0.98); }
+
+body.theme-night .land-back { background:rgba(24, 38, 60, 0.75); }
 body.theme-night .land { background:rgba(15, 25, 40, 0.95); }
-body.theme-night .land.two { background:rgba(9, 15, 26, 0.98); }
+body.theme-night .land.two { background:rgba(9, 15, 26, 0.99); }
 
 .weather-row { overflow:hidden; }
 .weather-info { float:left; }
@@ -441,13 +483,15 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
  <div class="date" id="date">Carregando...</div>
  <div class="message" id="message">Um ótimo momento para desacelerar.</div>
 
- <!-- Horizonte animado: Sol subindo e mudando de cor / Lua e estrelas à noite -->
+ <!-- Horizonte animado: Sol subindo reto na vertical e mudando de cor / Lua à noite -->
  <div class="sun-area">
+  <div class="sun-halo" id="sunHalo"></div>
   <div class="celestial-body" id="sunElement">
    <span class="moon-crater c1"></span>
    <span class="moon-crater c2"></span>
    <span class="moon-crater c3"></span>
   </div>
+  <div class="land-back"></div>
   <div class="land"></div>
   <div class="land two"></div>
  </div>
@@ -1320,7 +1364,7 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
  selectPhoto(frameState.index, false);
 
  /* =========================================================================
-    RELÓGIO, CICLO DO SOL (SUBINDO + CORES) / LUA + ESTRELAS + CHUVA
+    RELÓGIO, CICLO DO SOL SUBINDO RETO NA VERTICAL / LUA + ESTRELAS + CHUVA
     ========================================================================= */
  var weekdays = ["domingo","segunda-feira","terça-feira","quarta-feira","quinta-feira","sexta-feira","sábado"];
  var months = ["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
@@ -1346,38 +1390,38 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
   $("zenClock").innerHTML = currentHHMM;
   $("zenDate").innerHTML = weekdays[now.getDay()] + ", " + now.getDate() + " de " + months[now.getMonth()];
 
-  var greeting, message, period, themeClass, sunColor, sunLeftPct, sunTopPx;
+  var greeting, message, period, themeClass, sunColor, haloColor, sunTopPx;
 
   if (decHour >= 5 && decHour < 11) {
-   // MANHÃ: Sol subindo da esquerda (16%) para o centro-esquerda (44%) e de baixo (42px) para o alto (10px)
+   // MANHÃ: Sol nascendo atrás das montanhas (66px) e subindo reto até o topo (10px)
    var pMorning = (decHour - 5) / 6;
    period = "morning";
    greeting = "BOM DIA";
    message = "Que seu dia comece com boas ideias.";
    themeClass = "theme-morning";
-   sunColor = "#ffd966"; // Amarelo dourado
-   sunLeftPct = Math.round(16 + (pMorning * 28));
-   sunTopPx = Math.round(42 - (pMorning * 32));
+   sunColor = decHour < 7.5 ? "#ffca28" : "#ffe066"; // Amarelo ouro -> amarelo solar
+   haloColor = "rgba(255, 224, 102, 0.28)";
+   sunTopPx = Math.round(66 - (pMorning * 56));
   } else if (decHour >= 11 && decHour < 17) {
-   // TARDE: Sol no alto mudando de amarelo para amarelo-laranja
+   // TARDE: Sol no alto mudando de amarelo para amarelo-laranja intenso
    var pDay = (decHour - 11) / 6;
    period = "day";
    greeting = "BOA TARDE";
    message = "Um bom momento para fazer acontecer.";
    themeClass = "theme-day";
    sunColor = decHour < 14 ? "#ffca28" : "#ff9800"; // Amarelo -> Amarelo Laranja
-   sunLeftPct = Math.round(44 + (pDay * 26));
+   haloColor = decHour < 14 ? "rgba(255, 202, 40, 0.28)" : "rgba(255, 152, 0, 0.30)";
    sunTopPx = Math.round(10 + (pDay * 14));
   } else if (decHour >= 17 && decHour < 19) {
-   // PÔR DO SOL: Céu rosa/avermelhado e sol descendo no horizonte em tom laranja-avermelhado
+   // PÔR DO SOL: Céu rosa/avermelhado e sol descendo reto por trás das montanhas
    var pEvening = (decHour - 17) / 2;
    period = "evening";
    greeting = "FIM DE TARDE";
    message = "A luz muda, o ritmo também.";
    themeClass = "theme-evening";
    sunColor = "#ff5722"; // Laranja avermelhado do pôr do sol
-   sunLeftPct = Math.round(70 + (pEvening * 14));
-   sunTopPx = Math.round(24 + (pEvening * 24));
+   haloColor = "rgba(255, 110, 90, 0.32)";
+   sunTopPx = Math.round(24 + (pEvening * 44));
   } else {
    // NOITE: Lua brilhante no alto e estrelas no céu
    period = "night";
@@ -1385,16 +1429,18 @@ hr { border:0; border-top:1px solid rgba(255,255,255,.12); margin:12px 0; }
    message = "Um ótimo momento para desacelerar.";
    themeClass = "theme-night";
    sunColor = "#eef2ff"; // Lua prateada
-   sunLeftPct = 72;
-   sunTopPx = 12;
+   haloColor = "rgba(200, 218, 255, 0.18)";
+   sunTopPx = 14;
   }
 
   applySkyAndBodyClass(themeClass);
 
   var sunEl = $("sunElement");
+  var haloEl = $("sunHalo");
   sunEl.style.background = sunColor;
-  sunEl.style.left = sunLeftPct + "%";
   sunEl.style.top = sunTopPx + "px";
+  haloEl.style.background = haloColor;
+  haloEl.style.top = (sunTopPx - 18) + "px";
 
   if (lastPeriod && lastPeriod !== period) {
    playAudio("beep");
